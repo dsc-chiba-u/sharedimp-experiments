@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+# R
+.Rhistory
+.RData
+.Rproj.user/
+*.Rcheck/
+# Official UMFI sources are cloned here at pinned commits, never committed
+external/
+# Downloaded originals of real data (the processed CSVs in data/real/ are tracked)
+data/real/downloads/
+# Large or temporary intermediates
+results/**/cache/
+results/**/*.rds
+results/**/*.pkl
+*.log
+*.tmp
+# Manuscript build products
+paper/*.pdf
+paper/*.tex
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.out
+paper/*_files/
+paper/*_cache/
+# OS / editors
+.DS_Store
+*~

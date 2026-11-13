@@ -1,0 +1,26 @@
+{
+  "job": {
+    "id": "smoke_reg_rf_mse",
+    "dataset": "smoke_reg_n20_p3",
+    "learner": "rand_forest",
+    "metric": "mse",
+    "seed": 1,
+    "parity": "none"
+  },
+  "language": "python",
+  "status": "ok",
+  "jobs_file": "config/01_smoke_jobs.json",
+  "sharedimp_version": "0.1.0",
+  "sharedimp_commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
+  "threads": 1,
+  "run_at_utc": "2026-11-13T07:25:35Z",
+  "dataset_sha256": "879d3197d826d454edef37ac6d9195490aeb0a245e09b94265854969843674e1",
+  "task": "regression",
+  "learner_description": "RandomForestRegressor(n_estimators=500, min_samples_leaf=5, max_features='sqrt', bootstrap=True, n_jobs=1)",
+  "scoring": "mse",
+  "n": 20,
+  "p": 3,
+  "n_splits": 4,
+  "elapsed_seconds": 8.99319646100048,
+  "warnings": []
+}

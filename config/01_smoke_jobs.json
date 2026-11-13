@@ -1,0 +1,14 @@
+{
+  "description": "Experiment A (scripts/01_validate_environment.sh): smoke test on n = 20, p = 3. Every job runs in R and in Python on the same data file and the same fold labels.",
+  "parity_classes": {
+    "exact": {"tolerance": 1e-08, "meaning": "closed-form learner (OLS); common specification section 14"},
+    "logistic": {"tolerance": 1e-06, "meaning": "iteratively fitted binary logistic regression (glm.fit IRLS vs newton-cholesky)"},
+    "multinomial": {"tolerance": 0.001, "meaning": "nnet::multinom (BFGS) vs L-BFGS; agreement limited by R's optimiser"},
+    "none": {"tolerance": null, "meaning": "language-specific learner; difference reported, not checked"}
+  },
+  "jobs": [
+    {"id": "smoke_reg_linear_mse", "dataset": "smoke_reg_n20_p3", "learner": "linear", "metric": "mse", "seed": 1, "parity": "exact"},
+    {"id": "smoke_reg_linear_r2", "dataset": "smoke_reg_n20_p3", "learner": "linear", "metric": "r2", "seed": 1, "parity": "exact"},
+    {"id": "smoke_reg_rf_mse", "dataset": "smoke_reg_n20_p3", "learner": "rand_forest", "metric": "mse", "seed": 1, "parity": "none"}
+  ]
+}

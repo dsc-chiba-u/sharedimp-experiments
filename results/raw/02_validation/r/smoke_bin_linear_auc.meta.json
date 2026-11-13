@@ -1,0 +1,26 @@
+{
+  "job": {
+    "id": "smoke_bin_linear_auc",
+    "dataset": "smoke_bin_n60_p3",
+    "learner": "linear",
+    "metric": "roc_auc",
+    "seed": 1,
+    "parity": "logistic"
+  },
+  "language": "r",
+  "status": "ok",
+  "jobs_file": "config/02_validation_jobs.json",
+  "sharedimp_version": "0.1.0",
+  "sharedimp_commit": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
+  "threads": 1,
+  "run_at_utc": "2026-11-13T07:25:47Z",
+  "dataset_sha256": "1e9eeb90ec2df782cc725bc6a2a358a74665ba02bd7fbff888747e687d453f61",
+  "task": "classification",
+  "learner_description": "linear",
+  "metric": "roc_auc",
+  "n": 60,
+  "p": 3,
+  "n_splits": 3,
+  "elapsed_seconds": 0.0779999999999998,
+  "warnings": []
+}

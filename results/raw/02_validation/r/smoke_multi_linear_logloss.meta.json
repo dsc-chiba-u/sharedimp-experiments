@@ -1,0 +1,26 @@
+{
+  "job": {
+    "id": "smoke_multi_linear_logloss",
+    "dataset": "smoke_multi_n90_p3",
+    "learner": "linear",
+    "metric": "log_loss",
+    "seed": 1,
+    "parity": "multinomial"
+  },
+  "language": "r",
+  "status": "ok",
+  "jobs_file": "config/02_validation_jobs.json",
+  "sharedimp_version": "0.1.0",
+  "sharedimp_commit": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
+  "threads": 1,
+  "run_at_utc": "2026-11-13T07:25:47Z",
+  "dataset_sha256": "74a4b7d52e31d4907b895419ee1f6c331a2245fef8441a58b4dc521a915d1737",
+  "task": "classification",
+  "learner_description": "linear",
+  "metric": "log_loss",
+  "n": 90,
+  "p": 3,
+  "n_splits": 3,
+  "elapsed_seconds": 0.0960000000000001,
+  "warnings": []
+}

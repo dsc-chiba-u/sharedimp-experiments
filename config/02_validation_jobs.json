@@ -1,0 +1,19 @@
+{
+  "description": "scripts/02_validate_implementations.sh: classification smoke tests and the linear-Gaussian positive control. Every job runs in R and in Python on the same data file and the same fold labels.",
+  "parity_classes": {
+    "exact": {"tolerance": 1e-08, "meaning": "closed-form learner (OLS); common specification section 14"},
+    "logistic": {"tolerance": 1e-06, "meaning": "iteratively fitted binary logistic regression (glm.fit IRLS vs newton-cholesky)"},
+    "multinomial": {"tolerance": 0.001, "meaning": "nnet::multinom (BFGS) vs L-BFGS; agreement limited by R's optimiser"},
+    "none": {"tolerance": null, "meaning": "language-specific learner; difference reported, not checked"}
+  },
+  "positive_control": {"dataset": "pc_linear_n2000_p5", "linear_job": "pc_linear_mse", "rand_forest_job": "pc_rf_mse"},
+  "jobs": [
+    {"id": "smoke_bin_linear_logloss", "dataset": "smoke_bin_n60_p3", "learner": "linear", "metric": "log_loss", "seed": 1, "parity": "logistic"},
+    {"id": "smoke_bin_linear_auc", "dataset": "smoke_bin_n60_p3", "learner": "linear", "metric": "roc_auc", "seed": 1, "parity": "logistic"},
+    {"id": "smoke_bin_rf_logloss", "dataset": "smoke_bin_n60_p3", "learner": "rand_forest", "metric": "log_loss", "seed": 1, "parity": "none"},
+    {"id": "smoke_multi_linear_logloss", "dataset": "smoke_multi_n90_p3", "learner": "linear", "metric": "log_loss", "seed": 1, "parity": "multinomial"},
+    {"id": "smoke_multi_rf_accuracy", "dataset": "smoke_multi_n90_p3", "learner": "rand_forest", "metric": "accuracy", "seed": 1, "parity": "none"},
+    {"id": "pc_linear_mse", "dataset": "pc_linear_n2000_p5", "learner": "linear", "metric": "mse", "seed": 1, "parity": "exact"},
+    {"id": "pc_rf_mse", "dataset": "pc_linear_n2000_p5", "learner": "rand_forest", "metric": "mse", "seed": 1, "parity": "none"}
+  ]
+}

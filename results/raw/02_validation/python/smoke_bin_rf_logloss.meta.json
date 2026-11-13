@@ -1,0 +1,26 @@
+{
+  "job": {
+    "id": "smoke_bin_rf_logloss",
+    "dataset": "smoke_bin_n60_p3",
+    "learner": "rand_forest",
+    "metric": "log_loss",
+    "seed": 1,
+    "parity": "none"
+  },
+  "language": "python",
+  "status": "ok",
+  "jobs_file": "config/02_validation_jobs.json",
+  "sharedimp_version": "0.1.0",
+  "sharedimp_commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
+  "threads": 1,
+  "run_at_utc": "2026-11-13T07:26:37Z",
+  "dataset_sha256": "1e9eeb90ec2df782cc725bc6a2a358a74665ba02bd7fbff888747e687d453f61",
+  "task": "classification",
+  "learner_description": "RandomForestClassifier(n_estimators=500, min_samples_leaf=5, max_features='sqrt', bootstrap=True, n_jobs=1)",
+  "scoring": "log_loss",
+  "n": 60,
+  "p": 3,
+  "n_splits": 3,
+  "elapsed_seconds": 9.354515420971438,
+  "warnings": []
+}

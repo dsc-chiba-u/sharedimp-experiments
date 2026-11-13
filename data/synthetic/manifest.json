@@ -1,0 +1,134 @@
+{
+  "description": "Synthetic data of Phase 1; see generator docstrings.",
+  "datasets": {
+    "smoke_reg_n20_p3": {
+      "file": "smoke_reg_n20_p3.csv",
+      "task": "regression",
+      "target": "y",
+      "fold": "fold",
+      "features": [
+        "x1",
+        "x2",
+        "x3"
+      ],
+      "n": 20,
+      "p": 3,
+      "n_folds": 4,
+      "sha256": "879d3197d826d454edef37ac6d9195490aeb0a245e09b94265854969843674e1",
+      "generator": {
+        "script": "python/sharedimp_exp/make_synthetic.py",
+        "decimals": 6,
+        "seed": 20261113,
+        "n": 20,
+        "v": 4,
+        "model": "x1~N(0,1); x2=0.7*x1+0.7*N(0,1); x3~N(0,1); y=1.5*x1-x2+0.5*N(0,1)"
+      }
+    },
+    "smoke_bin_n60_p3": {
+      "file": "smoke_bin_n60_p3.csv",
+      "task": "classification",
+      "target": "y",
+      "fold": "fold",
+      "features": [
+        "x1",
+        "x2",
+        "x3"
+      ],
+      "n": 60,
+      "p": 3,
+      "n_folds": 3,
+      "sha256": "1e9eeb90ec2df782cc725bc6a2a358a74665ba02bd7fbff888747e687d453f61",
+      "generator": {
+        "script": "python/sharedimp_exp/make_synthetic.py",
+        "decimals": 6,
+        "seed": 20261115,
+        "n": 60,
+        "v": 3,
+        "model": "x as in smoke_regression; P(y=b) = logistic(x1 - 0.8*x2); folds stratified by y"
+      },
+      "classes": [
+        "a",
+        "b"
+      ],
+      "class_counts": {
+        "a": 35,
+        "b": 25
+      }
+    },
+    "smoke_multi_n90_p3": {
+      "file": "smoke_multi_n90_p3.csv",
+      "task": "classification",
+      "target": "y",
+      "fold": "fold",
+      "features": [
+        "x1",
+        "x2",
+        "x3"
+      ],
+      "n": 90,
+      "p": 3,
+      "n_folds": 3,
+      "sha256": "74a4b7d52e31d4907b895419ee1f6c331a2245fef8441a58b4dc521a915d1737",
+      "generator": {
+        "script": "python/sharedimp_exp/make_synthetic.py",
+        "decimals": 6,
+        "seed": 20261116,
+        "n": 90,
+        "v": 3,
+        "model": "x as in smoke_regression; softmax(0, x1 - 0.8*x2, -x1 + 0.5*x3); folds stratified by y"
+      },
+      "classes": [
+        "a",
+        "b",
+        "c"
+      ],
+      "class_counts": {
+        "a": 27,
+        "b": 29,
+        "c": 34
+      }
+    },
+    "pc_linear_n2000_p5": {
+      "file": "pc_linear_n2000_p5.csv",
+      "task": "regression",
+      "target": "y",
+      "fold": "fold",
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5"
+      ],
+      "n": 2000,
+      "p": 5,
+      "n_folds": 5,
+      "sha256": "cf1f1e30b450ea39fc3cb9b580e804fb913e7f94156f2c207fbd8571e486fe12",
+      "generator": {
+        "script": "python/sharedimp_exp/make_synthetic.py",
+        "decimals": 6,
+        "seed": 20261114,
+        "n": 2000,
+        "v": 5,
+        "model": "x1,x3,x4~N(0,1); x2=0.8*x1+0.6*N(0,1); x5=x3+0.1*N(0,1); y=2*x1+x3+N(0,1)"
+      },
+      "reference": {
+        "quantity": "MSE importance of UMFI-LR with an OLS learner: Cov(y, x_i)^2 / Var(x_i)",
+        "population": {
+          "x1": 4.0,
+          "x2": 2.5600000000000005,
+          "x3": 1.0,
+          "x4": 0.0,
+          "x5": 0.9900990099009901
+        },
+        "sample_plugin": {
+          "x1": 4.058853998037283,
+          "x2": 2.462419177982748,
+          "x3": 1.0890236892193461,
+          "x4": 0.008264316104840448,
+          "x5": 1.0747247079116822
+        }
+      }
+    }
+  }
+}

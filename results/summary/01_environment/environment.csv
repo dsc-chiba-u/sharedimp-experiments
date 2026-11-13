@@ -1,0 +1,43 @@
+group,item,value
+system,OS,Ubuntu 22.04.5 LTS
+system,kernel,6.8.0-136-generic
+system,CPU,Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz
+system,physical cores,16
+system,logical CPUs,32
+system,memory (GB),93.0
+system,"threads used (BLAS, OpenMP, ranger, joblib)",1
+system,conda environment,sharedimp-exp
+system,ran inside a container,False
+R,R,R version 4.5.3 (2026-03-11)
+R,sharedimp (R),0.1.0 @ cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10
+R,parsnip,1.6.1
+R,rsample,1.3.2
+R,yardstick,1.4.0
+R,ranger,0.18.0
+R,rlang,1.3.0
+R,tibble,3.3.1
+R,nnet,7.3.21
+R,glmnet,5.0
+R,jsonlite,2.0.0
+R,bench,1.1.4
+R,ggplot2,4.0.3
+R,BLAS/LAPACK,libopenblasp-r0.3.34.so (LAPACK 3.12.0)
+Python,Python,3.13.18
+Python,sharedimp (Python),0.1.0 @ bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1
+Python,editable install,False
+Python,scikit-learn,1.9.1
+Python,numpy,2.5.4
+Python,scipy,1.18.1
+Python,pandas,3.1.1
+Python,joblib,1.6.0
+Python,threadpoolctl,3.8.0
+Python,matplotlib,3.11.2
+Python,BLAS,openblas 0.3.34 (libopenblasp-r0.3.34.so)
+pins,installed commits equal config/pins.env,True
+docker,Docker daemon usable on this machine,False
+docker,ghcr.io/dsc-chiba-u/sharedimp-r:latest digest,sha256:869dbec7077cfbfcea4f0da25d8ce51e1c4e6d4297106d11a965cada1d8a0805
+docker,ghcr.io/dsc-chiba-u/sharedimp-r:cf2e1cc digest,sha256:869dbec7077cfbfcea4f0da25d8ce51e1c4e6d4297106d11a965cada1d8a0805
+docker,ghcr.io/dsc-chiba-u/sharedimp-r: latest is the pinned commit,True
+docker,ghcr.io/dsc-chiba-u/sharedimp-py:latest digest,sha256:c88b48a58848d3583d14d60a9b6dabe73e26733c0c24e986153d12981a0edebe
+docker,ghcr.io/dsc-chiba-u/sharedimp-py:bacc5d8 digest,sha256:c88b48a58848d3583d14d60a9b6dabe73e26733c0c24e986153d12981a0edebe
+docker,ghcr.io/dsc-chiba-u/sharedimp-py: latest is the pinned commit,True

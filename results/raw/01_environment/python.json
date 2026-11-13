@@ -1,0 +1,56 @@
+{
+  "language": "python",
+  "python_version": "3.13.18 | packaged by conda-forge | (main, Oct 26 2026, 11:38:18) [GCC 15.3.0]",
+  "implementation": "CPython",
+  "platform": "Linux-6.8.0-136-generic-x86_64-with-glibc2.35",
+  "executable": "/home/koki/anaconda3/envs/sharedimp-exp/bin/python",
+  "sharedimp": {
+    "version": "0.1.0",
+    "commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
+    "install": {
+      "commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
+      "repo": "https://github.com/dsc-chiba-u/sharedimp-py.git",
+      "source": "sibling-checkout",
+      "version": "0.1.0"
+    },
+    "location": "/home/koki/anaconda3/envs/sharedimp-exp/lib/python3.13/site-packages/sharedimp",
+    "editable": false
+  },
+  "packages": {
+    "sharedimp": "0.1.0",
+    "scikit-learn": "1.9.1",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "pandas": "3.1.1",
+    "joblib": "1.6.0",
+    "threadpoolctl": "3.8.0",
+    "matplotlib": "3.11.2"
+  },
+  "threadpools": [
+    {
+      "user_api": "blas",
+      "internal_api": "openblas",
+      "num_threads": 1,
+      "prefix": "libopenblas",
+      "filepath": "/home/koki/anaconda3/envs/sharedimp-exp/lib/libopenblasp-r0.3.34.so",
+      "version": "0.3.34",
+      "threading_layer": "pthreads",
+      "architecture": "SkylakeX"
+    },
+    {
+      "user_api": "openmp",
+      "internal_api": "openmp",
+      "num_threads": 1,
+      "prefix": "libgomp",
+      "filepath": "/home/koki/anaconda3/envs/sharedimp-exp/lib/libgomp.so.1.0.0",
+      "version": null
+    }
+  ],
+  "logical_cpus": 32,
+  "thread_env": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "SHAREDIMP_EXP_THREADS": "1"
+  }
+}

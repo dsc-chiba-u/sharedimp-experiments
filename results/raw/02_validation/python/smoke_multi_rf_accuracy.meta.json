@@ -1,0 +1,26 @@
+{
+  "job": {
+    "id": "smoke_multi_rf_accuracy",
+    "dataset": "smoke_multi_n90_p3",
+    "learner": "rand_forest",
+    "metric": "accuracy",
+    "seed": 1,
+    "parity": "none"
+  },
+  "language": "python",
+  "status": "ok",
+  "jobs_file": "config/02_validation_jobs.json",
+  "sharedimp_version": "0.1.0",
+  "sharedimp_commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
+  "threads": 1,
+  "run_at_utc": "2026-11-13T07:26:37Z",
+  "dataset_sha256": "74a4b7d52e31d4907b895419ee1f6c331a2245fef8441a58b4dc521a915d1737",
+  "task": "classification",
+  "learner_description": "RandomForestClassifier(n_estimators=500, min_samples_leaf=5, max_features='sqrt', bootstrap=True, n_jobs=1)",
+  "scoring": "accuracy",
+  "n": 90,
+  "p": 3,
+  "n_splits": 3,
+  "elapsed_seconds": 9.901823404012248,
+  "warnings": []
+}

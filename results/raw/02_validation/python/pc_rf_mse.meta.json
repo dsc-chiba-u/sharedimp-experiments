@@ -1,0 +1,26 @@
+{
+  "job": {
+    "id": "pc_rf_mse",
+    "dataset": "pc_linear_n2000_p5",
+    "learner": "rand_forest",
+    "metric": "mse",
+    "seed": 1,
+    "parity": "none"
+  },
+  "language": "python",
+  "status": "ok",
+  "jobs_file": "config/02_validation_jobs.json",
+  "sharedimp_version": "0.1.0",
+  "sharedimp_commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
+  "threads": 1,
+  "run_at_utc": "2026-11-13T07:26:37Z",
+  "dataset_sha256": "cf1f1e30b450ea39fc3cb9b580e804fb913e7f94156f2c207fbd8571e486fe12",
+  "task": "regression",
+  "learner_description": "RandomForestRegressor(n_estimators=500, min_samples_leaf=5, max_features='sqrt', bootstrap=True, n_jobs=1)",
+  "scoring": "mse",
+  "n": 2000,
+  "p": 5,
+  "n_splits": 5,
+  "elapsed_seconds": 46.33334722195286,
+  "warnings": []
+}

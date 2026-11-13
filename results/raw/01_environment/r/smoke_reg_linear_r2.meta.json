@@ -1,0 +1,26 @@
+{
+  "job": {
+    "id": "smoke_reg_linear_r2",
+    "dataset": "smoke_reg_n20_p3",
+    "learner": "linear",
+    "metric": "r2",
+    "seed": 1,
+    "parity": "exact"
+  },
+  "language": "r",
+  "status": "ok",
+  "jobs_file": "config/01_smoke_jobs.json",
+  "sharedimp_version": "0.1.0",
+  "sharedimp_commit": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
+  "threads": 1,
+  "run_at_utc": "2026-11-13T07:25:33Z",
+  "dataset_sha256": "879d3197d826d454edef37ac6d9195490aeb0a245e09b94265854969843674e1",
+  "task": "regression",
+  "learner_description": "linear",
+  "metric": "r2",
+  "n": 20,
+  "p": 3,
+  "n_splits": 4,
+  "elapsed_seconds": 0.0439999999999998,
+  "warnings": []
+}

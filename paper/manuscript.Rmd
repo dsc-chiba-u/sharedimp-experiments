@@ -1,0 +1,60 @@
+---
+title: "sharedimp: (working title — to be decided in Phase 4)"
+bibliography: references.bib
+---
+
+<!--
+SKELETON ONLY (Phase 1). Nothing below is manuscript text.
+Section names are provisional: the SoftwareX guide for authors and template
+are to be checked in Phase 4 before drafting. Do not write numbers or
+conclusions here until the corresponding experiment has been run; numbers
+must be read from ../results/ by code.
+-->
+
+# Code metadata
+
+<!-- Table required by the journal: current code version, repository links,
+license, languages, dependencies, documentation, support contact. Fill from
+the released versions only; no DOI until one exists. -->
+
+# Motivation and significance
+
+<!-- UMFI-LR is an existing method [@janssen2023umfi]; the official code
+residualizes on all rows and scores with random-forest OOB estimates.
+State the software gap (fold-internal residualization, paired CV, learner /
+metric / resampling choice, R and Python). No claim of a new importance
+measure. Importances are predictive gains, not causal or conditional effects. -->
+
+# Software description
+
+## Software architecture
+
+<!-- Figure 1: input → fold-internal residualization → Full/Reduced learner →
+paired scoring → importance; one specification, two implementations. -->
+
+## Software functionalities
+
+<!-- API in R and Python; learners, metrics, resampling; result tables;
+failure handling; reproducibility. -->
+
+# Illustrative examples
+
+<!-- Experiment C (real data). -->
+
+# Validation
+
+<!-- Experiments A/02 (R–Python agreement), B (official UMFI-LR: where exact
+agreement holds and where it cannot), D (runtime; measurements separate from
+complexity). -->
+
+# Impact
+
+# Limitations
+
+<!-- UMFI-LR only (no UMFI-OT); linear dependence only; numeric features, no
+missing values; no inference; fixed hyperparameters; rank-deficient designs
+and learner-dependent agreement across languages. -->
+
+# Conclusions
+
+# References

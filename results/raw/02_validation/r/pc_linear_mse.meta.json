@@ -1,0 +1,26 @@
+{
+  "job": {
+    "id": "pc_linear_mse",
+    "dataset": "pc_linear_n2000_p5",
+    "learner": "linear",
+    "metric": "mse",
+    "seed": 1,
+    "parity": "exact"
+  },
+  "language": "r",
+  "status": "ok",
+  "jobs_file": "config/02_validation_jobs.json",
+  "sharedimp_version": "0.1.0",
+  "sharedimp_commit": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
+  "threads": 1,
+  "run_at_utc": "2026-11-13T07:25:47Z",
+  "dataset_sha256": "cf1f1e30b450ea39fc3cb9b580e804fb913e7f94156f2c207fbd8571e486fe12",
+  "task": "regression",
+  "learner_description": "linear",
+  "metric": "mse",
+  "n": 2000,
+  "p": 5,
+  "n_splits": 5,
+  "elapsed_seconds": 0.113,
+  "warnings": []
+}
