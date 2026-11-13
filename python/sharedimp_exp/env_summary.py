@@ -15,35 +15,46 @@ from .common import ROOT, read_json, write_csv
 
 def main(raw: str, out: str) -> None:
     rawp = Path(raw)
-    s, r, p, d = (read_json(rawp / f"{n}.json") for n in ("system", "r", "python", "docker_images"))
+    s, r, p, d = (read_json(rawp / f"{n}.json") for n in ("host", "r", "python", "docker_images"))
     blas = next((t for t in p["threadpools"] if t["user_api"] == "blas"), {})
     rows = [
-        ("system", "OS", s["os"]["pretty_name"]),
-        ("system", "kernel", s["os"]["kernel"]),
-        ("system", "CPU", s["cpu"].get("model_name")),
-        ("system", "physical cores", s["cpu"].get("physical_cores")),
-        ("system", "logical CPUs", s["logical_cpus"]),
-        ("system", "memory (GB)", s["memory_gb"]),
-        ("system", "threads used (BLAS, OpenMP, ranger, joblib)", s["threads_used"]),
-        ("system", "conda environment", s["conda_env"]),
-        ("system", "ran inside a container", s["in_container"]),
+        ("host", "OS", s["os"]["pretty_name"]),
+        ("host", "kernel", s["os"]["kernel"]),
+        ("host", "CPU", s["cpu"].get("model_name")),
+        ("host", "physical cores", s["cpu"].get("physical_cores")),
+        ("host", "logical CPUs", s["logical_cpus"]),
+        ("host", "memory (GB)", s["memory_gb"]),
+        ("host", "threads used (BLAS, OpenMP, ranger, joblib)", s["threads_used"]),
+        ("host", "Snakemake", s["snakemake"]),
+        ("host", "Singularity", s["singularity"]),
+        ("host", "Docker daemon usable", s["docker_daemon"]["usable"]),
+        ("host", "this repository (code)", f"{s['experiments_repo']['head']}{' + uncommitted changes' if s['experiments_repo']['code_dirty'] else ''}"),
+        ("R", "container image", (r["container"] or {}).get("image")),
+        ("R", "runs inside the pinned image", r["in_pinned_image"]),
+        ("R", "container OS", r["os"]),
         ("R", "R", r["r_version"]),
         ("R", "sharedimp (R)", f"{r['sharedimp']['version']} @ {r['sharedimp']['commit']}"),
         *[("R", k, v) for k, v in r["packages"].items() if k != "sharedimp"],
-        ("R", "BLAS/LAPACK", f"{Path(r['blas']).name} (LAPACK {r['lapack_version']})"),
+        ("R", "BLAS/LAPACK", f"{Path(r['la_library']).name} (LAPACK {r['lapack_version']})"),
+        ("Python", "container image", (p["container"] or {}).get("image")),
+        ("Python", "runs inside the pinned image", p["in_pinned_image"]),
+        ("Python", "container OS", p["os"]),
         ("Python", "Python", p["python_version"].split()[0]),
         ("Python", "sharedimp (Python)", f"{p['sharedimp']['version']} @ {p['sharedimp']['commit']}"),
         ("Python", "editable install", p["sharedimp"]["editable"]),
         *[("Python", k, v) for k, v in p["packages"].items() if k != "sharedimp"],
         ("Python", "BLAS", f"{blas.get('internal_api')} {blas.get('version')} ({Path(blas.get('filepath', '')).name})"),
-        ("pins", "installed commits equal config/pins.env", s["installed_matches_pins"]),
-        ("docker", "Docker daemon usable on this machine", d["docker_daemon"]["usable"]),
     ]
     for img in d["images"]:
         rows += [
-            ("docker", f"{img['image']}:latest digest", img.get("digest_latest")),
-            ("docker", f"{img['image']}:{img['pinned_tag']} digest", img.get("digest_pinned_tag")),
-            ("docker", f"{img['image']}: latest is the pinned commit", img.get("latest_is_pinned_commit")),
+            ("registry", f"{img['image']}: registry query", img["status"]),
+            ("registry", f"{img['image']}: pinned digest", img["pinned_digest"]),
+            ("registry", f"{img['image']}: pinned digest is tag {img['pinned_tag']}", img["pinned_digest_is_commit_tag"]),
+            ("registry", f"{img['image']}: revision label of the pinned image", img.get("revision_label")),
+            ("registry", f"{img['image']}: revision label is the pinned commit", img["revision_label_is_pinned_commit"]),
+            ("registry", f"{img['image']}:latest digest", img.get("digest_latest")),
+            ("registry", f"{img['image']}:{img['pinned_tag']} digest", img.get("digest_pinned_tag")),
+            ("registry", f"{img['image']}: latest is the pinned commit", img.get("latest_is_pinned_commit")),
         ]
     df = pd.DataFrame(rows, columns=["group", "item", "value"])
     write_csv(df, Path(out) / "environment.csv")

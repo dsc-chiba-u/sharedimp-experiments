@@ -35,35 +35,54 @@ paper/       manuscript (skeleton), references.bib
 
 Every file under `results/` is written by a script; nothing there is edited by
 hand. `results/raw/NN_*` and `results/summary/NN_*` belong to
-`scripts/NN_*.sh`.
+`workflow/NN_*.smk`.
 
 ## Reproducing
 
-Requirements: Linux, conda or mamba, git, network access (conda-forge; GitHub
-if the sibling checkouts `../sharedimp-r` and `../sharedimp-py` are absent).
+Requirements: Linux, Snakemake >= 8.10 and Singularity (both from
+`environment.yml`), network access to pull the container images. R, Python and
+the two `sharedimp` packages are **not** installed on the host: every
+computation runs inside a container image referenced by digest in
+`config/pins.env`.
 
 ```sh
-mamba env create -f environment.yml        # R 4.5 + Python 3.13, one OpenBLAS for both
-bash scripts/00_install_sharedimp.sh       # installs the commits pinned in config/pins.env
-bash scripts/01_validate_environment.sh    # experiment A: environment record + smoke test (~20 s)
-bash scripts/02_validate_implementations.sh  # classification smoke tests + positive control (~2 min)
+conda env create -f environment.yml     # Snakemake 8.10.0 + Singularity 3.8.6
+conda activate snakemake
+snakemake -s workflow/01_environment.smk --use-singularity -c4   # experiment A: environment record + smoke test
+snakemake -s workflow/02_validation.smk  --use-singularity -c4   # classification smoke tests + positive control
 ```
 
-The scripts find the environment at `<conda base>/envs/sharedimp-exp` (or use
-the active one, or `SHAREDIMP_EXP_ENV=/path/to/env`); activation is not
-needed. They run single-threaded unless `SHAREDIMP_EXP_THREADS` is set. Each
-script exits with a non-zero status if a job fails in either language or a
-check fails.
+`bash scripts/01_environment.sh` and `bash scripts/02_validation.sh` are thin
+wrappers around these two commands (cores from `SHAREDIMP_EXP_CORES`, extra
+arguments passed to Snakemake: `-n` for a dry run, `--forceall` to recompute
+everything). The first run pulls the images and converts them
+(`.snakemake/singularity/`, a few minutes). Processes run single-threaded
+unless `--config threads=N` is given. A workflow fails if a process is not
+inside its pinned image, if a job fails in either language, or if a check
+fails. Logs are in `logs/`, Snakemake benchmarks in `benchmarks/` (both
+git-ignored); `bash workflow/dag.sh` and `bash workflow/report.sh` draw the
+rule graphs and write the Snakemake HTML reports.
 
-| script | experiment | status | output |
+| workflow (`workflow/`) | experiment | status | output |
 |---|---|---|---|
-| `00_install_sharedimp.sh` | install pinned package commits (non-editable `git archive` snapshots) | done | install manifest inside the environment |
-| `01_validate_environment.sh` | A: versions, commits, OS/CPU/threads, image digests; smoke test n = 20, p = 3 | done | `results/{raw,summary}/01_environment/`, `results/tables/01_environment*.md` |
-| `02_validate_implementations.sh` | binary / multiclass smoke tests; linear-Gaussian positive control | done | `results/{raw,summary}/02_validation/`, `results/tables/02_validation_checks.md` |
-| `03_compare_official_umfi.sh` | B: official UMFI-LR implementations | Phase 2, placeholder | — |
-| `04_real_data.sh` | C: real data in R and Python | Phase 2, placeholder | — |
-| `05_runtime_benchmark.sh` | D: runtime in n, p, folds, learner | Phase 3, placeholder | — |
-| `06_generate_figures.sh` | E: figures and tables | Phases 2–3, placeholder | — |
+| `01_environment.smk` | A: host, versions, commits, images (digest, revision label), threads; smoke test n = 20, p = 3 | done | `results/{raw,summary}/01_environment/`, `results/tables/01_environment*.md` |
+| `02_validation.smk` | binary / multiclass smoke tests; linear-Gaussian positive control | done | `results/{raw,summary}/02_validation/`, `results/tables/02_validation_checks.md` |
+| `03_official_umfi.smk` | B: official UMFI-LR implementations | Phase 2, placeholder (fails on purpose) | — |
+| `04_real_data.smk` | C: real data in R and Python | Phase 2, placeholder | — |
+| `05_runtime.smk` | D: runtime in n, p, folds, learner | Phase 3, placeholder | — |
+| `06_figures.smk` | E: figures and tables | Phases 2–3, placeholder | — |
+
+### Container images
+
+| image | contents | used by |
+|---|---|---|
+| `ghcr.io/dsc-chiba-u/sharedimp-r` (tag `cf2e1cc`, by digest) | R 4.5.3, `sharedimp` (R) at the pinned commit | 01, 02 |
+| `ghcr.io/dsc-chiba-u/sharedimp-py` (tag `bacc5d8`, by digest) | Python 3.13, `sharedimp` (Python) at the pinned commit | 01, 02 |
+| `koki/sharedimp-experiments-r` | the R image plus dependencies of the official UMFI R package and plotting | 03–06 (not built yet) |
+| `koki/umfi-official-py` | dependencies of the official Python UMFI code at its own versions | 03 (not built yet) |
+
+Dockerfiles and build commands for the last two are in `docker/`. No official
+UMFI code is contained in any image.
 
 ### How a run is defined
 
@@ -76,7 +95,7 @@ file, call `shared_importance()` with `on_error = "error"`, and write
 ```
 results/raw/<NN_name>/<language>/<job>.importance.csv   summary table (common schema)
 results/raw/<NN_name>/<language>/<job>.folds.csv        per-split table (+ fold label)
-results/raw/<NN_name>/<language>/<job>.meta.json        job, versions, commit, threads, time, warnings, status
+results/raw/<NN_name>/<language>/<job>.meta.json        job, container image, versions, commits, threads, time, warnings, status
 ```
 
 `python -m sharedimp_exp.check_jobs` then compares the two languages and
@@ -88,13 +107,11 @@ forest: the difference is reported and never checked).
 ### Versions
 
 The versions that produced the committed results are in
-`results/tables/01_environment.md`. Changing `config/pins.env` or the
-environment requires re-running everything.
-
-Docker: the packages publish images (`ghcr.io/dsc-chiba-u/sharedimp-r`,
-`ghcr.io/dsc-chiba-u/sharedimp-py`). Script 01 records their digests and
-whether `latest` is the pinned commit. The committed results were **not**
-produced inside these images (see `docs/STATUS.md`).
+`results/tables/01_environment.md`. Changing `config/pins.env` requires
+re-running everything. Workflow 01 checks through the registry API that each
+pinned digest is the image tagged with the pinned commit and carries that
+commit as its `org.opencontainers.image.revision` label, and each process
+checks from inside that it runs in the pinned image.
 
 ## License
 

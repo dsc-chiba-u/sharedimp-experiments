@@ -1,9 +1,9 @@
 # Run shared_importance() for every job of a job file (R side).
 #
-#   Rscript R/run_jobs.R config/01_smoke_jobs.json results/raw/01_environment/r
+#   Rscript R/run_jobs.R config/01_smoke_jobs.json results/raw/01_environment/r [job id]
 #
 # For each job three files are written: <id>.importance.csv, <id>.folds.csv
-# and <id>.meta.json. Any failure makes the process exit with a non-zero
+# and <id>.meta.json. With a job id only that job is run. Any failure makes the process exit with a non-zero
 # status after the remaining jobs have run; a failed job leaves a meta file
 # with "status": "failed" and no result tables.
 
@@ -15,18 +15,20 @@ jobs_file <- args[1L]
 out <- args[2L]
 dir.create(out, recursive = TRUE, showWarnings = FALSE)
 
-manifest_path <- Sys.getenv("SHAREDIMP_INSTALL_MANIFEST", "")
-manifest <- if (nzchar(manifest_path) && file.exists(manifest_path)) read_json(manifest_path) else list()
-provenance <- list(
-  jobs_file = jobs_file,
-  sharedimp_version = as.character(utils::packageVersion("sharedimp")),
-  sharedimp_commit = manifest$sharedimp_r$commit,
-  threads = as.integer(Sys.getenv("SHAREDIMP_EXP_THREADS", "1")),
-  run_at_utc = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+prov <- c(
+  list(
+    jobs_file = jobs_file,
+    sharedimp_version = as.character(utils::packageVersion("sharedimp"))
+  ),
+  provenance(),
+  list(
+    threads = as.integer(Sys.getenv("SHAREDIMP_EXP_THREADS", "1")),
+    run_at_utc = format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+  )
 )
 
 run_job <- function(job) {
-  meta <- c(list(job = job, language = "r", status = "failed"), provenance)
+  meta <- c(list(job = job, language = "r", status = "failed"), prov)
   paths <- file.path(out, paste0(job$id, c(".importance.csv", ".folds.csv", ".meta.json")))
   caught <- character()
   result <- tryCatch(
@@ -75,5 +77,10 @@ run_job <- function(job) {
   identical(meta$status, "ok")
 }
 
-ok <- vapply(read_json(jobs_file)$jobs, run_job, logical(1))
+jobs <- read_json(jobs_file)$jobs
+if (length(args) > 2L) {
+  jobs <- Filter(function(job) identical(job$id, args[3L]), jobs)
+  if (!length(jobs)) stop(sprintf("no job '%s' in %s", args[3L], jobs_file))
+}
+ok <- vapply(jobs, run_job, logical(1))
 quit(status = if (all(ok)) 0L else 1L)

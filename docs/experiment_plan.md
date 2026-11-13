@@ -37,12 +37,21 @@ Rules that apply to every experiment:
 
 ## 1. Infrastructure (Phase 1, done)
 
-- `environment.yml`: one conda environment `sharedimp-exp` with R and Python,
-  hence one OpenBLAS for both languages.
-- `config/pins.env`: commits of the two packages. `scripts/00_install_sharedimp.sh`
-  installs `git archive` snapshots of exactly these commits (non-editable) and
-  writes an install manifest into the environment;
-  `scripts/01_validate_environment.sh` fails if installed ≠ pinned.
+- Execution: Snakemake (>= 8.10) workflows `workflow/NN_*.smk`, run with
+  `--use-singularity`. Every computing rule has a `container:` directive;
+  nothing but Snakemake and Singularity is installed on the host
+  (`environment.yml`). `scripts/NN_*.sh` are thin wrappers.
+- `config/pins.env`: commits of the two packages and the digests of the
+  package images built from exactly these commits
+  (`ghcr.io/dsc-chiba-u/sharedimp-{r,py}`). Images are referenced by digest.
+  Each process reads the image reference from inside the container and
+  workflow 01 fails if it is not the pinned one; the registry is asked
+  whether the pinned digest carries the pinned commit as revision label.
+- Additional images (`docker/`): `koki/sharedimp-experiments-r` (the R image
+  plus the dependencies of the official UMFI R package and plotting) and
+  `koki/umfi-official-py` (dependencies of the official Python code at the
+  versions of its `umfi.yml`; Python 3.9, so sharedimp-py cannot be in it and
+  the two sides exchange files).
 - Job files (`config/NN_*.json`): machine-readable run conditions (data set,
   learner, metric, seed, parity class with tolerance).
 - Runners `R/run_jobs.R` and `python/sharedimp_exp/run_jobs.py`: same job
@@ -62,12 +71,13 @@ Rules that apply to every experiment:
 
 ## 2. Experiment A — environment and reproducibility (Phase 1, done)
 
-Script: `scripts/01_validate_environment.sh`. Records OS, CPU, threads, R and
-Python versions, dependency versions, BLAS, package versions and commits,
-whether the installed commits equal the pins, and for the public images
+Workflow: `workflow/01_environment.smk`. Records host OS, CPU, threads,
+Snakemake and Singularity versions; inside the images the OS, R and Python
+versions, dependency versions, BLAS, package versions and commits and
+whether the process runs in the pinned image; and for the public images
 `ghcr.io/dsc-chiba-u/sharedimp-{r,py}` the tag list, the digest of `latest`
-and of the tag named after the pinned commit, and whether the two are the
-same image. Then runs the smoke jobs (`config/01_smoke_jobs.json`: n = 20,
+and of the tag named after the pinned commit, whether the two are the
+same image, and the revision label of the pinned digest. Then runs the smoke jobs (`config/01_smoke_jobs.json`: n = 20,
 p = 3, 4 folds; OLS with `mse` and `r2`; random forest with `mse`).
 
 The package test suites are not re-run here and their parity tests are not
@@ -76,7 +86,7 @@ environment through the runners and agree on one tiny data set.
 
 ## 3. Validation of the implementations (Phase 1, done)
 
-Script: `scripts/02_validate_implementations.sh`; jobs
+Workflow: `workflow/02_validation.smk`; jobs
 `config/02_validation_jobs.json`.
 
 - Binary (n = 60) and three-class (n = 90) smoke tests, p = 3, 3 stratified
@@ -131,7 +141,9 @@ the numbers are in those tables and are summarised in `docs/STATUS.md`.
 
 ## 4. Experiment B — comparison with the official UMFI-LR code (Phase 2)
 
-Script: `scripts/03_compare_official_umfi.sh` (placeholder).
+Workflow: `workflow/03_official_umfi.smk` (placeholder). Images:
+`koki/sharedimp-experiments-r` (sharedimp-r and the official R package in one
+R session) and `koki/umfi-official-py` (official Python code); see `docker/`.
 
 Sources, verified on 2026-11-13 through the GitHub API:
 
@@ -167,7 +179,7 @@ Figure 2.
 
 ## 5. Experiment C — real data (Phase 2)
 
-Script: `scripts/04_real_data.sh` (placeholder). A download script fetches
+Workflow: `workflow/04_real_data.smk` (placeholder). A download script fetches
 each file from its source, verifies sha256, applies the documented
 preprocessing and writes `data/real/<id>.csv` with a `fold` column plus an
 entry in `data/real/manifest.json` (source URL, license, retrieval date,
@@ -194,7 +206,8 @@ behaviour of correlated groups can be read off).
 
 ## 6. Experiment D — runtime (Phase 3)
 
-Script: `scripts/05_runtime_benchmark.sh` (placeholder).
+Workflow: `workflow/05_runtime.smk` (placeholder). Timing cells are run one
+at a time (`-c1`), never in parallel with other jobs.
 
 - Data: synthetic regression, generated once per (n, p) cell and stored;
   identical files and fold labels for both languages.
@@ -219,7 +232,7 @@ Script: `scripts/05_runtime_benchmark.sh` (placeholder).
 
 ## 7. Experiment E — figures and tables (Phases 2–3)
 
-Script: `scripts/06_generate_figures.sh` (placeholder). Each figure is
+Workflow: `workflow/06_figures.smk` (placeholder). Each figure is
 produced by one script from files in `results/summary/` only.
 
 | figure | content | source |

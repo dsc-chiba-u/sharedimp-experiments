@@ -3,7 +3,7 @@
 
 exp_root <- function() {
   root <- Sys.getenv("SHAREDIMP_EXP_ROOT", "")
-  if (!nzchar(root)) stop("SHAREDIMP_EXP_ROOT is not set; run through scripts/*.sh.")
+  if (!nzchar(root)) stop("SHAREDIMP_EXP_ROOT is not set; run through workflow/*.smk.")
   normalizePath(root, mustWork = TRUE)
 }
 
@@ -17,6 +17,36 @@ read_json <- function(path) jsonlite::fromJSON(path, simplifyVector = FALSE)
 write_json <- function(obj, path) {
   dir.create(dirname(path), recursive = TRUE, showWarnings = FALSE)
   writeLines(jsonlite::toJSON(obj, auto_unbox = TRUE, pretty = TRUE, digits = NA, null = "null", na = "null"), path)
+}
+
+# The Singularity image this process runs in (NULL outside a container); see
+# container_record() in python/sharedimp_exp/common.py.
+container_record <- function() {
+  path <- "/.singularity.d/labels.json"
+  if (!file.exists(path)) return(NULL)
+  lab <- read_json(path)
+  list(
+    runtime = "singularity",
+    runtime_version = lab[["org.label-schema.usage.singularity.version"]],
+    image = lab[["org.label-schema.usage.singularity.deffile.from"]]
+  )
+}
+
+pinned_image <- function() paste0(Sys.getenv("SHAREDIMP_R_IMAGE"), "@", Sys.getenv("SHAREDIMP_R_IMAGE_DIGEST"))
+
+# Container and commit fields written into every raw result. sharedimp_commit
+# is the pinned commit only if the process runs inside the pinned image.
+provenance <- function() {
+  rec <- container_record()
+  in_pinned <- !is.null(rec) && identical(rec$image, pinned_image())
+  exp_commit <- Sys.getenv("SHAREDIMP_EXP_COMMIT", "")
+  list(
+    container = rec,
+    in_pinned_image = in_pinned,
+    sharedimp_commit = if (in_pinned) Sys.getenv("SHAREDIMP_R_COMMIT") else NULL,
+    experiments_commit = if (nzchar(exp_commit)) exp_commit else NULL,
+    experiments_code_dirty = identical(Sys.getenv("SHAREDIMP_EXP_DIRTY"), "1")
+  )
 }
 
 # Doubles are written with 17 significant digits (round-trip exact); integers,

@@ -1,57 +1,21 @@
-# Conda environment for sharedimp-experiments.
+# Workflow driver only: Snakemake and Singularity.
 #
-# One environment holds both R and Python so that the two languages share the
-# same BLAS/LAPACK (conda-forge OpenBLAS) in the runtime benchmark.
-# The two `sharedimp` packages themselves are NOT listed here: they are
-# installed at the commits pinned in config/pins.env by
-# scripts/00_install_sharedimp.sh.
+# R, Python and the two `sharedimp` packages are NOT installed on the host.
+# Every computation runs inside a container image referenced by digest in
+# config/pins.env (see workflow/common.smk).
 #
-#   mamba env create -f environment.yml      # or: conda env create -f environment.yml
-#   conda activate sharedimp-exp
-#   bash scripts/00_install_sharedimp.sh
+#   conda env create -f environment.yml
+#   conda activate snakemake
+#   bash scripts/01_environment.sh
 #
-# Versions actually resolved on the machine that produced the results are
-# recorded by scripts/01_validate_environment.sh in results/raw/environment/.
-name: sharedimp-exp
+# The versions below are the ones that produced the committed results
+# (recorded in results/raw/01_environment/host.json).
+name: snakemake
 channels:
   - conda-forge
+  - bioconda
 dependencies:
-  # --- R side (sharedimp-r Imports + Suggests used here)
-  - r-base=4.5
-  - r-parsnip>=1.1.0
-  - r-rsample>=1.2.0
-  - r-yardstick>=1.3.0
-  - r-ranger
-  - r-rlang>=1.1.0
-  - r-tibble
-  - r-nnet
-  - r-glmnet
-  - r-jsonlite
-  - r-withr
-  - r-testthat
-  - r-remotes
-  - r-bench
-  - r-dplyr
-  - r-tidyr
-  - r-readr
-  - r-ggplot2
-  - r-patchwork
-  - r-knitr
-  - r-rmarkdown
-  - r-rticles
-  - r-sessioninfo
-  # --- Python side (sharedimp-py runtime dependencies + plotting)
-  - python=3.13
-  - numpy>=1.23
-  - scipy>=1.9
-  - pandas>=1.5
-  - scikit-learn>=1.3
-  - joblib>=1.2
-  - threadpoolctl
-  - matplotlib-base
-  - pip
-  - hatchling
-  # --- tools
-  - pandoc
-  - git
-  - curl
+  - python=3.12
+  - snakemake=8.10.0
+  - singularity=3.8.6
+  - graphviz

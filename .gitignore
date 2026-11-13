@@ -32,3 +32,8 @@ paper/*_cache/
 # OS / editors
 .DS_Store
 *~
+# Snakemake
+.snakemake/
+logs/
+benchmarks/
+report/

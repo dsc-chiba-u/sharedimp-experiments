@@ -1,5 +1,5 @@
 {
-  "description": "Experiment A (scripts/01_validate_environment.sh): smoke test on n = 20, p = 3. Every job runs in R and in Python on the same data file and the same fold labels.",
+  "description": "Experiment A (workflow/01_environment.smk): smoke test on n = 20, p = 3. Every job runs in R and in Python on the same data file and the same fold labels.",
   "parity_classes": {
     "exact": {"tolerance": 1e-08, "meaning": "closed-form learner (OLS); common specification section 14"},
     "logistic": {"tolerance": 1e-06, "meaning": "iteratively fitted binary logistic regression (glm.fit IRLS vs newton-cholesky)"},

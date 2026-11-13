@@ -1,5 +1,5 @@
 {
-  "description": "scripts/02_validate_implementations.sh: classification smoke tests and the linear-Gaussian positive control. Every job runs in R and in Python on the same data file and the same fold labels.",
+  "description": "workflow/02_validation.smk: classification smoke tests and the linear-Gaussian positive control. Every job runs in R and in Python on the same data file and the same fold labels.",
   "parity_classes": {
     "exact": {"tolerance": 1e-08, "meaning": "closed-form learner (OLS); common specification section 14"},
     "logistic": {"tolerance": 1e-06, "meaning": "iteratively fitted binary logistic regression (glm.fit IRLS vs newton-cholesky)"},

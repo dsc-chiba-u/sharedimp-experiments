@@ -1,9 +1,9 @@
 """Run shared_importance() for every job of a job file (Python side).
 
-    python -m sharedimp_exp.run_jobs config/01_smoke_jobs.json results/raw/01_environment/python
+    python -m sharedimp_exp.run_jobs config/01_smoke_jobs.json results/raw/01_environment/python [job id]
 
 For each job three files are written: <id>.importance.csv, <id>.folds.csv and
-<id>.meta.json. Any failure makes the process exit with a non-zero status
+<id>.meta.json. With a job id only that job is run. Any failure makes the process exit with a non-zero status
 after the remaining jobs have run; a failed job leaves a meta file with
 "status": "failed" and no result tables.
 """
@@ -22,7 +22,7 @@ import numpy as np
 import sharedimp
 from sharedimp import common_scorer, shared_importance
 
-from .common import load_dataset, read_json, splits_from_labels, write_csv, write_json
+from .common import load_dataset, provenance, read_json, splits_from_labels, write_csv, write_json
 from .learners import make_learner
 
 
@@ -77,16 +77,20 @@ def run_job(job: dict, out: Path, provenance: dict) -> bool:
 def main(argv: list[str]) -> int:
     jobs_file, out = Path(argv[1]), Path(argv[2])
     out.mkdir(parents=True, exist_ok=True)
-    manifest_path = os.environ.get("SHAREDIMP_INSTALL_MANIFEST", "")
-    manifest = read_json(Path(manifest_path)) if manifest_path and Path(manifest_path).exists() else {}
-    provenance = {
+    prov = {
         "jobs_file": str(jobs_file),
         "sharedimp_version": sharedimp.__version__,
-        "sharedimp_commit": manifest.get("sharedimp_py", {}).get("commit"),
+        **provenance("PY"),
         "threads": int(os.environ.get("SHAREDIMP_EXP_THREADS", "1")),
         "run_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
     }
-    ok = [run_job(job, out, provenance) for job in read_json(jobs_file)["jobs"]]
+    jobs = read_json(jobs_file)["jobs"]
+    if len(argv) > 3:
+        jobs = [job for job in jobs if job["id"] == argv[3]]
+        if not jobs:
+            print(f"error: no job '{argv[3]}' in {jobs_file}", file=sys.stderr)
+            return 1
+    ok = [run_job(job, out, prov) for job in jobs]
     return 0 if all(ok) else 1
 
 

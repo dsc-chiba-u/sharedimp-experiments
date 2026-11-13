@@ -12,7 +12,8 @@ the only source of train/assessment splits in both languages.
 The files are committed; re-running this script must reproduce them byte for
 byte. `--check` regenerates everything in a temporary directory, compares it
 with the committed files and exits with status 1 on any difference
-(used by scripts/02_validate_implementations.sh).
+(used by workflow/02_validation.smk, which passes a file name after `--check`
+to which the list of compared files and their sha256 is written).
 """
 
 from __future__ import annotations
@@ -159,6 +160,9 @@ def main(argv: list[str]) -> int:
         print(f"ERROR: regenerated {name} differs from data/synthetic/{name}", file=sys.stderr)
     if not (mismatch or errors):
         print(f"[make_synthetic] {len(names)} files reproduce data/synthetic byte for byte")
+        record = [a for a in argv[1:] if a != "--check"]
+        if record:
+            write_json({"reproduced_byte_for_byte": True, "files": {n: sha256(OUT / n) for n in names}}, Path(record[0]))
     return 1 if (mismatch or errors) else 0
 
 
