@@ -11,9 +11,17 @@
   "status": "ok",
   "jobs_file": "config/02_validation_jobs.json",
   "sharedimp_version": "0.1.0",
+  "container": {
+    "runtime": "singularity",
+    "runtime_version": "3.8.6",
+    "image": "ghcr.io/dsc-chiba-u/sharedimp-r@sha256:869dbec7077cfbfcea4f0da25d8ce51e1c4e6d4297106d11a965cada1d8a0805"
+  },
+  "in_pinned_image": true,
   "sharedimp_commit": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
+  "experiments_commit": "3226da4547980695d2ef8834d43b3156ce4c89f5",
+  "experiments_code_dirty": false,
   "threads": 1,
-  "run_at_utc": "2026-11-13T07:25:47Z",
+  "run_at_utc": "2026-11-13T11:06:32Z",
   "dataset_sha256": "74a4b7d52e31d4907b895419ee1f6c331a2245fef8441a58b4dc521a915d1737",
   "task": "classification",
   "learner_description": "linear",
@@ -21,6 +29,6 @@
   "n": 90,
   "p": 3,
   "n_splits": 3,
-  "elapsed_seconds": 0.0960000000000001,
+  "elapsed_seconds": 0.341,
   "warnings": []
 }

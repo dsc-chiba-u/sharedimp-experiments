@@ -1,39 +1,40 @@
 {
   "language": "r",
   "r_version": "R version 4.5.3 (2026-03-11)",
-  "platform": "x86_64-conda-linux-gnu",
-  "running": "Ubuntu 22.04.5 LTS",
-  "executable": "/home/koki/anaconda3/envs/sharedimp-exp/lib/R/bin/R",
+  "platform": "x86_64-pc-linux-gnu",
+  "running": "Ubuntu 24.04.5 LTS",
+  "executable": "/usr/local/lib/R/bin/R",
   "sharedimp": {
     "version": "0.1.0",
-    "commit": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
-    "install": {
-      "commit": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
-      "repo": "https://github.com/dsc-chiba-u/sharedimp-r.git",
-      "source": "sibling-checkout",
-      "version": "0.1.0"
-    }
+    "commit": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10"
   },
+  "container": {
+    "runtime": "singularity",
+    "runtime_version": "3.8.6",
+    "image": "ghcr.io/dsc-chiba-u/sharedimp-r@sha256:869dbec7077cfbfcea4f0da25d8ce51e1c4e6d4297106d11a965cada1d8a0805"
+  },
+  "pinned_image": "ghcr.io/dsc-chiba-u/sharedimp-r@sha256:869dbec7077cfbfcea4f0da25d8ce51e1c4e6d4297106d11a965cada1d8a0805",
+  "in_pinned_image": true,
+  "os": "Ubuntu 24.04.5 LTS",
   "packages": {
     "sharedimp": "0.1.0",
-    "parsnip": "1.6.1",
+    "parsnip": "1.5.0",
     "rsample": "1.3.2",
     "yardstick": "1.4.0",
     "ranger": "0.18.0",
-    "rlang": "1.3.0",
+    "rlang": "1.2.0",
     "tibble": "3.3.1",
-    "nnet": "7.3.21",
-    "glmnet": "5.0",
+    "nnet": "7.3.20",
     "jsonlite": "2.0.0",
-    "bench": "1.1.4",
     "ggplot2": "4.0.3"
   },
-  "blas": "/home/koki/anaconda3/envs/sharedimp-exp/lib/libopenblasp-r0.3.34.so",
-  "lapack": "/home/koki/anaconda3/envs/sharedimp-exp/lib/libopenblasp-r0.3.34.so",
+  "blas": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3",
+  "lapack": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so",
+  "la_library": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so",
   "lapack_version": "3.12.0",
   "matprod": "default",
   "ext_soft": {
-    "BLAS": "/home/koki/anaconda3/envs/sharedimp-exp/lib/libopenblasp-r0.3.34.so"
+    "BLAS": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3"
   },
   "logical_cpus": 32,
   "physical_cpus": 32,

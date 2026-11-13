@@ -1,0 +1,44 @@
+{
+  "recorded_at_utc": "2026-11-13T11:06:09Z",
+  "os": {
+    "pretty_name": "Ubuntu 22.04.5 LTS",
+    "kernel": "6.8.0-136-generic",
+    "machine": "x86_64"
+  },
+  "cpu": {
+    "architecture": "x86_64",
+    "model_name": "Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz",
+    "logical_cpus": 32,
+    "physical_cores": 16
+  },
+  "logical_cpus": 32,
+  "memory_gb": 93.0,
+  "threads_used": 1,
+  "snakemake": "8.10.0",
+  "singularity": "singularity version 3.8.6",
+  "host_python": "3.12.5",
+  "docker_daemon": {
+    "usable": false,
+    "reason": "permission denied while trying to connect to the docker API at unix:///var/run/docker.sock"
+  },
+  "experiments_repo": {
+    "head": "3226da4547980695d2ef8834d43b3156ce4c89f5",
+    "code_dirty": false
+  },
+  "pins": {
+    "sharedimp_r": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
+    "sharedimp_py": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1"
+  },
+  "images": {
+    "r": "ghcr.io/dsc-chiba-u/sharedimp-r@sha256:869dbec7077cfbfcea4f0da25d8ce51e1c4e6d4297106d11a965cada1d8a0805",
+    "python": "ghcr.io/dsc-chiba-u/sharedimp-py@sha256:c88b48a58848d3583d14d60a9b6dabe73e26733c0c24e986153d12981a0edebe"
+  },
+  "sibling_checkout_head": {
+    "sharedimp_r": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
+    "sharedimp_py": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1"
+  },
+  "sibling_head_matches_pin": {
+    "sharedimp_r": true,
+    "sharedimp_py": true
+  }
+}

@@ -1,15 +1,13 @@
 {
-  "queried_at_utc": "2026-11-13T07:25:30Z",
-  "docker_daemon": {
-    "usable": false,
-    "reason": "permission denied while trying to connect to the docker API at unix:///var/run/docker.sock"
-  },
-  "experiments_ran_in_container": false,
+  "queried_at_utc": "2026-11-13T11:06:17Z",
   "images": [
     {
       "image": "ghcr.io/dsc-chiba-u/sharedimp-r",
       "pinned_commit": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
       "pinned_tag": "cf2e1cc",
+      "pinned_digest": "sha256:869dbec7077cfbfcea4f0da25d8ce51e1c4e6d4297106d11a965cada1d8a0805",
+      "pinned_digest_is_commit_tag": true,
+      "revision_label_is_pinned_commit": true,
       "tags": [
         "latest",
         "2237e1d",
@@ -22,12 +20,16 @@
       "digest_latest": "sha256:869dbec7077cfbfcea4f0da25d8ce51e1c4e6d4297106d11a965cada1d8a0805",
       "digest_pinned_tag": "sha256:869dbec7077cfbfcea4f0da25d8ce51e1c4e6d4297106d11a965cada1d8a0805",
       "latest_is_pinned_commit": true,
+      "revision_label": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
       "status": "ok"
     },
     {
       "image": "ghcr.io/dsc-chiba-u/sharedimp-py",
       "pinned_commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
       "pinned_tag": "bacc5d8",
+      "pinned_digest": "sha256:c88b48a58848d3583d14d60a9b6dabe73e26733c0c24e986153d12981a0edebe",
+      "pinned_digest_is_commit_tag": true,
+      "revision_label_is_pinned_commit": true,
       "tags": [
         "latest",
         "692c3fe",
@@ -39,6 +41,7 @@
       "digest_latest": "sha256:c88b48a58848d3583d14d60a9b6dabe73e26733c0c24e986153d12981a0edebe",
       "digest_pinned_tag": "sha256:c88b48a58848d3583d14d60a9b6dabe73e26733c0c24e986153d12981a0edebe",
       "latest_is_pinned_commit": true,
+      "revision_label": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
       "status": "ok"
     }
   ]

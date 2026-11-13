@@ -11,9 +11,17 @@
   "status": "ok",
   "jobs_file": "config/02_validation_jobs.json",
   "sharedimp_version": "0.1.0",
+  "container": {
+    "runtime": "singularity",
+    "runtime_version": "3.8.6",
+    "image": "ghcr.io/dsc-chiba-u/sharedimp-py@sha256:c88b48a58848d3583d14d60a9b6dabe73e26733c0c24e986153d12981a0edebe"
+  },
+  "in_pinned_image": true,
   "sharedimp_commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
+  "experiments_commit": "3226da4547980695d2ef8834d43b3156ce4c89f5",
+  "experiments_code_dirty": false,
   "threads": 1,
-  "run_at_utc": "2026-11-13T07:26:37Z",
+  "run_at_utc": "2026-11-13T11:06:46Z",
   "dataset_sha256": "1e9eeb90ec2df782cc725bc6a2a358a74665ba02bd7fbff888747e687d453f61",
   "task": "classification",
   "learner_description": "LogisticRegression(C=inf, solver='newton-cholesky', tol=1e-12, max_iter=1000)",
@@ -21,6 +29,6 @@
   "n": 60,
   "p": 3,
   "n_splits": 3,
-  "elapsed_seconds": 0.09810469404328614,
+  "elapsed_seconds": 0.12682031001895666,
   "warnings": []
 }

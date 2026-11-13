@@ -31,7 +31,7 @@
 | `pc_linear_mse/schema` | common output schema | summary columns equal; per-split common columns present |  | pass |
 | `pc_linear_mse/layout` | row order, features, fold labels, split sizes | identical in R and Python |  | pass |
 | `pc_linear_mse/parity` | max |R - Python| over all numeric columns of both tables (exact) | <= 1e-08 | 6.22e-15 | pass |
-| `pc_linear_mse/full_invariance` | OLS full score identical for every anchor within a split | <= 1e-8 | 2.66e-15 | pass |
+| `pc_linear_mse/full_invariance` | OLS full score identical for every anchor within a split | <= 1e-8 | 6.66e-16 | pass |
 | `pc_rf_mse/ran` | job completed in R and Python | status ok in both | r=ok, python=ok | pass |
 | `pc_rf_mse/input` | both languages read the same data file | identical sha256 | cf1f1e30b450 | pass |
 | `pc_rf_mse/schema` | common output schema | summary columns equal; per-split common columns present |  | pass |

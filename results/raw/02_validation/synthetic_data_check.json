@@ -1,0 +1,10 @@
+{
+  "reproduced_byte_for_byte": true,
+  "files": {
+    "manifest.json": "ce707ce4acba58832f384cf83a9b8d3d120546a319889caf6a38b6bf8c84c8fc",
+    "pc_linear_n2000_p5.csv": "cf1f1e30b450ea39fc3cb9b580e804fb913e7f94156f2c207fbd8571e486fe12",
+    "smoke_bin_n60_p3.csv": "1e9eeb90ec2df782cc725bc6a2a358a74665ba02bd7fbff888747e687d453f61",
+    "smoke_multi_n90_p3.csv": "74a4b7d52e31d4907b895419ee1f6c331a2245fef8441a58b4dc521a915d1737",
+    "smoke_reg_n20_p3.csv": "879d3197d826d454edef37ac6d9195490aeb0a245e09b94265854969843674e1"
+  }
+}

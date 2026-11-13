@@ -11,9 +11,17 @@
   "status": "ok",
   "jobs_file": "config/01_smoke_jobs.json",
   "sharedimp_version": "0.1.0",
+  "container": {
+    "runtime": "singularity",
+    "runtime_version": "3.8.6",
+    "image": "ghcr.io/dsc-chiba-u/sharedimp-py@sha256:c88b48a58848d3583d14d60a9b6dabe73e26733c0c24e986153d12981a0edebe"
+  },
+  "in_pinned_image": true,
   "sharedimp_commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
+  "experiments_commit": "3226da4547980695d2ef8834d43b3156ce4c89f5",
+  "experiments_code_dirty": false,
   "threads": 1,
-  "run_at_utc": "2026-11-13T07:25:35Z",
+  "run_at_utc": "2026-11-13T11:06:12Z",
   "dataset_sha256": "879d3197d826d454edef37ac6d9195490aeb0a245e09b94265854969843674e1",
   "task": "regression",
   "learner_description": "RandomForestRegressor(n_estimators=500, min_samples_leaf=5, max_features='sqrt', bootstrap=True, n_jobs=1)",
@@ -21,6 +29,6 @@
   "n": 20,
   "p": 3,
   "n_splits": 4,
-  "elapsed_seconds": 8.99319646100048,
+  "elapsed_seconds": 12.219483669032343,
   "warnings": []
 }

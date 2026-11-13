@@ -5,14 +5,14 @@
 | `smoke_reg_linear_mse/input` | both languages read the same data file | identical sha256 | 879d3197d826 | pass |
 | `smoke_reg_linear_mse/schema` | common output schema | summary columns equal; per-split common columns present |  | pass |
 | `smoke_reg_linear_mse/layout` | row order, features, fold labels, split sizes | identical in R and Python |  | pass |
-| `smoke_reg_linear_mse/parity` | max |R - Python| over all numeric columns of both tables (exact) | <= 1e-08 | 1.89e-15 | pass |
-| `smoke_reg_linear_mse/full_invariance` | OLS full score identical for every anchor within a split | <= 1e-8 | 1.94e-15 | pass |
+| `smoke_reg_linear_mse/parity` | max |R - Python| over all numeric columns of both tables (exact) | <= 1e-08 | 1.33e-15 | pass |
+| `smoke_reg_linear_mse/full_invariance` | OLS full score identical for every anchor within a split | <= 1e-8 | 1.11e-15 | pass |
 | `smoke_reg_linear_r2/ran` | job completed in R and Python | status ok in both | r=ok, python=ok | pass |
 | `smoke_reg_linear_r2/input` | both languages read the same data file | identical sha256 | 879d3197d826 | pass |
 | `smoke_reg_linear_r2/schema` | common output schema | summary columns equal; per-split common columns present |  | pass |
 | `smoke_reg_linear_r2/layout` | row order, features, fold labels, split sizes | identical in R and Python |  | pass |
-| `smoke_reg_linear_r2/parity` | max |R - Python| over all numeric columns of both tables (exact) | <= 1e-08 | 3.22e-15 | pass |
-| `smoke_reg_linear_r2/full_invariance` | OLS full score identical for every anchor within a split | <= 1e-8 | 3.44e-15 | pass |
+| `smoke_reg_linear_r2/parity` | max |R - Python| over all numeric columns of both tables (exact) | <= 1e-08 | 1.55e-15 | pass |
+| `smoke_reg_linear_r2/full_invariance` | OLS full score identical for every anchor within a split | <= 1e-8 | 2.11e-15 | pass |
 | `smoke_reg_rf_mse/ran` | job completed in R and Python | status ok in both | r=ok, python=ok | pass |
 | `smoke_reg_rf_mse/input` | both languages read the same data file | identical sha256 | 879d3197d826 | pass |
 | `smoke_reg_rf_mse/schema` | common output schema | summary columns equal; per-split common columns present |  | pass |

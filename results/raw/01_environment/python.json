@@ -1,21 +1,23 @@
 {
   "language": "python",
-  "python_version": "3.13.18 | packaged by conda-forge | (main, Oct 26 2026, 11:38:18) [GCC 15.3.0]",
+  "python_version": "3.13.18 (main, Nov  5 2026, 07:59:38) [GCC 14.2.0]",
   "implementation": "CPython",
-  "platform": "Linux-6.8.0-136-generic-x86_64-with-glibc2.35",
-  "executable": "/home/koki/anaconda3/envs/sharedimp-exp/bin/python",
+  "platform": "Linux-6.8.0-136-generic-x86_64-with-glibc2.41",
+  "executable": "/usr/local/bin/python",
   "sharedimp": {
     "version": "0.1.0",
     "commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
-    "install": {
-      "commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
-      "repo": "https://github.com/dsc-chiba-u/sharedimp-py.git",
-      "source": "sibling-checkout",
-      "version": "0.1.0"
-    },
-    "location": "/home/koki/anaconda3/envs/sharedimp-exp/lib/python3.13/site-packages/sharedimp",
+    "location": "/usr/local/lib/python3.13/site-packages/sharedimp",
     "editable": false
   },
+  "container": {
+    "runtime": "singularity",
+    "runtime_version": "3.8.6",
+    "image": "ghcr.io/dsc-chiba-u/sharedimp-py@sha256:c88b48a58848d3583d14d60a9b6dabe73e26733c0c24e986153d12981a0edebe"
+  },
+  "pinned_image": "ghcr.io/dsc-chiba-u/sharedimp-py@sha256:c88b48a58848d3583d14d60a9b6dabe73e26733c0c24e986153d12981a0edebe",
+  "in_pinned_image": true,
+  "os": "Debian GNU/Linux 13 (trixie)",
   "packages": {
     "sharedimp": "0.1.0",
     "scikit-learn": "1.9.1",
@@ -23,17 +25,26 @@
     "scipy": "1.18.1",
     "pandas": "3.1.1",
     "joblib": "1.6.0",
-    "threadpoolctl": "3.8.0",
-    "matplotlib": "3.11.2"
+    "threadpoolctl": "3.8.0"
   },
   "threadpools": [
     {
       "user_api": "blas",
       "internal_api": "openblas",
       "num_threads": 1,
-      "prefix": "libopenblas",
-      "filepath": "/home/koki/anaconda3/envs/sharedimp-exp/lib/libopenblasp-r0.3.34.so",
-      "version": "0.3.34",
+      "prefix": "libscipy_openblas",
+      "filepath": "/usr/local/lib/python3.13/site-packages/numpy.libs/libscipy_openblas64_-f48b354e.so",
+      "version": "0.3.34.106.0",
+      "threading_layer": "pthreads",
+      "architecture": "SkylakeX"
+    },
+    {
+      "user_api": "blas",
+      "internal_api": "openblas",
+      "num_threads": 1,
+      "prefix": "libscipy_openblas",
+      "filepath": "/usr/local/lib/python3.13/site-packages/scipy.libs/libscipy_openblas-5f890258.so",
+      "version": "0.3.31.dev",
       "threading_layer": "pthreads",
       "architecture": "SkylakeX"
     },
@@ -42,7 +53,7 @@
       "internal_api": "openmp",
       "num_threads": 1,
       "prefix": "libgomp",
-      "filepath": "/home/koki/anaconda3/envs/sharedimp-exp/lib/libgomp.so.1.0.0",
+      "filepath": "/usr/local/lib/python3.13/site-packages/scikit_learn.libs/libgomp-e985bcbb.so.1.0.0",
       "version": null
     }
   ],
