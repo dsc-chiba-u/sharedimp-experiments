@@ -13,23 +13,28 @@ UMFI-LR is an existing method. This repository evaluates *software*: it does
 not propose or benchmark a new importance measure, and the importances it
 reports are out-of-sample predictive gains, not causal or conditional effects.
 
-**Status (2026-11-13): Phase 1 of 4 is complete** — environment, runners,
-smoke tests and a positive control. The comparison with the official UMFI
-code, the real-data examples, the runtime benchmark and the manuscript are
-planned (`docs/experiment_plan.md`) but not run; their scripts are
-placeholders that exit with an error. Current state and open issues:
-`docs/STATUS.md`.
+**Status (2026-11-13): Phases 1 and 2 of 4 are complete** — environment,
+runners, smoke tests and a positive control (Phase 1); a study of the
+random-forest settings of the two languages, the comparison with the official
+UMFI-LR code, three public data sets in R and Python, and the corresponding
+figures and tables (Phase 2). The runtime benchmark (Phase 3) and the
+manuscript (Phase 4) are planned (`docs/experiment_plan.md`) but not run; the
+runtime workflow is a placeholder that fails on purpose. Current state,
+results and open issues: `docs/STATUS.md`.
 
 ## Layout
 
 ```
-config/      pins.env (package commits), NN_*.json (job files = run conditions)
-data/        synthetic/ (generated, committed, with manifest.json), real/ (Phase 2)
-R/           R helpers and the R job runner
-python/      sharedimp_exp/: Python helpers, job runner, checks, data generator
-scripts/     numbered entry points (run from anywhere; they cd to the repository root)
+config/      pins.env (package commits, image digests, official UMFI commits), NN_*.json (run conditions)
+data/        synthetic/ (generated, committed, manifest.json), real/ (prepared public data, manifest.json)
+R/           R helpers, job runner, experiment B (R side), figures
+python/      sharedimp_exp/: Python helpers, job runner, checks, data generators, experiment B, summaries
+workflow/    one Snakefile per stage (NN_*.smk), common.smk
+scripts/     thin wrappers around the workflows
+docker/      Dockerfiles of the two Phase 2 images (built by .github/workflows/docker.yml)
+external/    official UMFI sources, fetched at pinned commits at run time (git-ignored)
 results/     raw/ (per-run output), summary/ (derived CSV), tables/ (derived Markdown), figures/
-docs/        experiment_plan.md, STATUS.md
+docs/        experiment_plan.md, random_forest_comparison.md, STATUS.md
 paper/       manuscript (skeleton), references.bib
 ```
 
@@ -48,29 +53,40 @@ computation runs inside a container image referenced by digest in
 ```sh
 conda env create -f environment.yml     # Snakemake 8.10.0 + Singularity 3.8.6
 conda activate snakemake
-snakemake -s workflow/01_environment.smk --use-singularity -c4   # experiment A: environment record + smoke test
-snakemake -s workflow/02_validation.smk  --use-singularity -c4   # classification smoke tests + positive control
+bash scripts/01_environment.sh      # A: environment record + smoke test                     (~1 min)
+bash scripts/02_validation.sh       # classification smoke tests + positive control          (~2 min)
+bash scripts/02b_rf_settings.sh     # random-forest settings, ranger vs scikit-learn         (~30 min)
+bash scripts/03_official_umfi.sh    # B: official UMFI-LR code vs sharedimp (needs git)      (~40 min)
+bash scripts/04_real_data.sh        # C: three public data sets (downloads them)             (~5 min)
+bash scripts/06_figures.sh          # figures from the summaries of 01-04                    (~1 min)
 ```
 
-`bash scripts/01_environment.sh` and `bash scripts/02_validation.sh` are thin
-wrappers around these two commands (cores from `SHAREDIMP_EXP_CORES`, extra
-arguments passed to Snakemake: `-n` for a dry run, `--forceall` to recompute
-everything). The first run pulls the images and converts them
-(`.snakemake/singularity/`, a few minutes). Processes run single-threaded
-unless `--config threads=N` is given. A workflow fails if a process is not
-inside its pinned image, if a job fails in either language, or if a check
-fails. Logs are in `logs/`, Snakemake benchmarks in `benchmarks/` (both
-git-ignored); `bash workflow/dag.sh` and `bash workflow/report.sh` draw the
-rule graphs and write the Snakemake HTML reports.
+Each script runs `snakemake -s workflow/<name>.smk --use-singularity`
+(4 cores unless `SHAREDIMP_EXP_CORES` is set) and passes extra arguments on:
+`-n` for a dry run, `--forceall` to recompute everything. Run them one after
+the other. The durations are wall-clock times on the machine described in
+`results/tables/01_environment.md` and are not a benchmark.
+
+The first run pulls the images and converts them
+(`.snakemake/singularity/`, a few minutes). Singularity unpacks an image for
+every job; the wrappers set `SINGULARITY_TMPDIR` to a directory in `/dev/shm`
+unless it is already set (0.4–1.3 GB per running job). Processes run
+single-threaded unless `--config threads=N` is given. A workflow fails if a
+process is not inside its pinned image, if a job fails in either language, or
+if a check with a pre-set criterion fails. Logs are in `logs/`, Snakemake
+benchmarks in `benchmarks/` (both git-ignored); `bash workflow/dag.sh` and
+`bash workflow/report.sh` draw the rule graphs and write the Snakemake HTML
+reports.
 
 | workflow (`workflow/`) | experiment | status | output |
 |---|---|---|---|
 | `01_environment.smk` | A: host, versions, commits, images (digest, revision label), threads; smoke test n = 20, p = 3 | done | `results/{raw,summary}/01_environment/`, `results/tables/01_environment*.md` |
 | `02_validation.smk` | binary / multiclass smoke tests; linear-Gaussian positive control | done | `results/{raw,summary}/02_validation/`, `results/tables/02_validation_checks.md` |
-| `03_official_umfi.smk` | B: official UMFI-LR implementations | Phase 2, placeholder (fails on purpose) | — |
-| `04_real_data.smk` | C: real data in R and Python | Phase 2, placeholder | — |
-| `05_runtime.smk` | D: runtime in n, p, folds, learner | Phase 3, placeholder | — |
-| `06_figures.smk` | E: figures and tables | Phases 2–3, placeholder | — |
+| `02b_rf_settings.smk` | meaning and effect of the node-size settings of ranger and scikit-learn | done | `results/{raw,summary}/02b_rf_settings/`, `results/tables/02b_rf_settings.md`, `docs/random_forest_comparison.md` |
+| `03_official_umfi.smk` | B: official UMFI-LR implementations (R package, original R script, Python) | done | `results/{raw,summary}/03_official_umfi/`, `results/tables/03_official_umfi*.md` |
+| `04_real_data.smk` | C: three public data sets in R and Python | done | `data/real/`, `results/{raw,summary}/04_real_data/`, `results/tables/04_real_data*.md` |
+| `05_runtime.smk` | D: runtime in n, p, folds, learner | Phase 3, placeholder (fails on purpose) | — |
+| `06_figures.smk` | E: figures of experiments B and C | done for Phase 2 | `results/figures/` |
 
 ### Container images
 
@@ -78,11 +94,20 @@ rule graphs and write the Snakemake HTML reports.
 |---|---|---|
 | `ghcr.io/dsc-chiba-u/sharedimp-r` (tag `cf2e1cc`, by digest) | R 4.5.3, `sharedimp` (R) at the pinned commit | 01, 02 |
 | `ghcr.io/dsc-chiba-u/sharedimp-py` (tag `bacc5d8`, by digest) | Python 3.13, `sharedimp` (Python) at the pinned commit | 01, 02 |
-| `koki/sharedimp-experiments-r` | the R image plus dependencies of the official UMFI R package and plotting | 03–06 (not built yet) |
-| `koki/umfi-official-py` | dependencies of the official Python UMFI code at its own versions | 03 (not built yet) |
+| `ghcr.io/dsc-chiba-u/sharedimp-experiments-r` (by digest) | the R image plus the dependencies of the official UMFI R package and `patchwork` | 03, 06 |
+| `ghcr.io/dsc-chiba-u/umfi-official-py` (by digest) | Python 3.9 with the dependencies of the official Python UMFI code at its own versions | 03 |
 
-Dockerfiles and build commands for the last two are in `docker/`. No official
-UMFI code is contained in any image.
+The last two are built from `docker/` by `.github/workflows/docker.yml`. No
+official UMFI code is contained in any image or in this repository: workflow
+03 fetches it at pinned commits into `external/` and runs it unmodified.
+
+### Data
+
+`data/synthetic/` is generated by `python -m sharedimp_exp.make_synthetic`.
+`data/real/` holds prepared versions of three public data sets (UCI Concrete
+Compressive Strength, Breast Cancer Wisconsin (Diagnostic), Maternal Health
+Risk; all CC BY 4.0); sources, citations and the changes made are in
+`data/real/README.md` and `data/real/manifest.json`.
 
 ### How a run is defined
 
@@ -102,7 +127,9 @@ results/raw/<NN_name>/<language>/<job>.meta.json        job, container image, ve
 evaluates the checks whose criteria are fixed in `docs/experiment_plan.md`.
 `parity` names the tolerance class: `exact` (OLS, 1e-8), `logistic` (1e-6),
 `multinomial` (1e-3) or `none` (language-specific learner such as a random
-forest: the difference is reported and never checked).
+forest: the difference is reported and never checked). Workflows 02b and 03
+have their own scripts and configuration files; their criteria are written in
+`config/02b_rf_settings.json` and `config/03_official_umfi.json`.
 
 ### Versions
 

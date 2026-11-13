@@ -33,12 +33,16 @@ container_record <- function() {
 }
 
 pinned_image <- function() paste0(Sys.getenv("SHAREDIMP_R_IMAGE"), "@", Sys.getenv("SHAREDIMP_R_IMAGE_DIGEST"))
+# The experiments image is built FROM the pinned sharedimp-r digest without
+# reinstalling sharedimp (docker/experiments-r/Dockerfile), so it carries the
+# same sharedimp commit.
+derived_image <- function() paste0(Sys.getenv("SHAREDIMP_EXP_R_IMAGE"), "@", Sys.getenv("SHAREDIMP_EXP_R_IMAGE_DIGEST"))
 
 # Container and commit fields written into every raw result. sharedimp_commit
 # is the pinned commit only if the process runs inside the pinned image.
 provenance <- function() {
   rec <- container_record()
-  in_pinned <- !is.null(rec) && identical(rec$image, pinned_image())
+  in_pinned <- !is.null(rec) && (identical(rec$image, pinned_image()) || identical(rec$image, derived_image()))
   exp_commit <- Sys.getenv("SHAREDIMP_EXP_COMMIT", "")
   list(
     container = rec,
@@ -67,21 +71,22 @@ write_csv_exact <- function(df, path) {
   utils::write.csv(df, path, row.names = FALSE, quote = FALSE, na = "NA", eol = "\n")
 }
 
-find_dataset <- function(id) {
-  for (group in c("synthetic", "real")) {
-    mpath <- file.path(exp_root(), "data", group, "manifest.json")
+# Looks a data set up in `manifest_dir` (if given), then in data/synthetic and data/real.
+find_dataset <- function(id, manifest_dir = NULL) {
+  for (d in c(manifest_dir, file.path(exp_root(), "data", c("synthetic", "real")))) {
+    mpath <- file.path(d, "manifest.json")
     if (!file.exists(mpath)) next
     entry <- read_json(mpath)$datasets[[id]]
     if (!is.null(entry)) {
-      return(list(entry = entry, path = file.path(exp_root(), "data", group, entry$file)))
+      return(list(entry = entry, path = file.path(d, entry$file)))
     }
   }
-  stop(sprintf("dataset '%s' is not in any data/*/manifest.json", id))
+  stop(sprintf("dataset '%s' is not in any manifest.json", id))
 }
 
 # Load a dataset and verify its checksum against the manifest.
-load_dataset <- function(id) {
-  found <- find_dataset(id)
+load_dataset <- function(id, manifest_dir = NULL) {
+  found <- find_dataset(id, manifest_dir)
   entry <- found$entry
   digest <- sha256_file(found$path)
   if (!identical(digest, entry$sha256)) {

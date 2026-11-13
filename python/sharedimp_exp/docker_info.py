@@ -3,8 +3,9 @@
     python -m sharedimp_exp.docker_info results/raw/01_environment/docker_images.json
 
 Uses only the anonymous read API of the registry (no Docker daemon). For each
-image it records the tag list, the digest of `latest`, the digest of the tag
-named after the pinned commit (the package CI tags images with the
+image (the two package images and the two images built from docker/ of this
+repository) it records the tag list, the digest of `latest`, the digest of
+the tag named after the pinned commit (the CI workflows tag images with the
 7-character commit SHA), the pinned digest the workflows actually run, and the
 `org.opencontainers.image.revision` label stored in that pinned image.
 
@@ -103,6 +104,9 @@ def main(out: str) -> int:
         "images": [
             image_record(env["SHAREDIMP_R_IMAGE"], env["SHAREDIMP_R_COMMIT"], env["SHAREDIMP_R_IMAGE_DIGEST"]),
             image_record(env["SHAREDIMP_PY_IMAGE"], env["SHAREDIMP_PY_COMMIT"], env["SHAREDIMP_PY_IMAGE_DIGEST"]),
+            # Phase 2 images, built from docker/ of this repository: the "commit" is this repository's
+            image_record(env["SHAREDIMP_EXP_R_IMAGE"], env["PHASE2_IMAGES_COMMIT"], env["SHAREDIMP_EXP_R_IMAGE_DIGEST"]),
+            image_record(env["UMFI_PY_IMAGE"], env["PHASE2_IMAGES_COMMIT"], env["UMFI_PY_IMAGE_DIGEST"]),
         ],
     }
     write_json(info, Path(out))

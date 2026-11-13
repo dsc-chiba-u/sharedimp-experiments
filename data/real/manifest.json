@@ -1,0 +1,206 @@
+{
+  "description": "Public data sets of experiment C, prepared by python/sharedimp_exp/real_data.py from config/04_real_data.json.",
+  "standardization": "every feature is centred and divided by its standard deviation (all rows, ddof = 1); predictions of the learners used here (unpenalized linear models, forests) do not depend on an affine rescaling of a feature, so this only conditions the optimisers",
+  "separation_rule": "a classification data set is used only if unpenalized (multinomial) logistic regression on the standardized features misclassifies at least one training row in every training fold, i.e. the maximum-likelihood estimate exists; otherwise it is recorded as rejected and no file is written",
+  "datasets": {
+    "concrete": {
+      "file": "concrete.csv",
+      "task": "regression",
+      "target": "y",
+      "fold": "fold",
+      "features": [
+        "cement",
+        "slag",
+        "fly_ash",
+        "water",
+        "superplasticizer",
+        "coarse_aggregate",
+        "fine_aggregate",
+        "age"
+      ],
+      "n": 1030,
+      "p": 8,
+      "n_folds": 5,
+      "sha256": "73cdaf3e2175203b946b185453471fcea861ba71fc2709d11708988e69c3c3b6",
+      "original_target": "Concrete compressive strength",
+      "original_features": {
+        "Cement": "cement",
+        "Blast Furnace Slag": "slag",
+        "Fly Ash": "fly_ash",
+        "Water": "water",
+        "Superplasticizer": "superplasticizer",
+        "Coarse Aggregate": "coarse_aggregate",
+        "Fine Aggregate": "fine_aggregate",
+        "Age": "age"
+      },
+      "title": "Concrete Compressive Strength",
+      "source": "UCI Machine Learning Repository, dataset 165",
+      "url": "https://archive.ics.uci.edu/static/public/165/data.csv",
+      "landing_page": "https://archive.ics.uci.edu/dataset/165/concrete+compressive+strength",
+      "doi": "10.24432/C5PK67",
+      "citation": "Yeh, I-C. (1998). Concrete Compressive Strength [Dataset]. UCI Machine Learning Repository.",
+      "license": "CC BY 4.0",
+      "retrieved": "2026-11-13",
+      "source_sha256": "8d4b15b6fc68cd932d745cbd663d5ceae66dd54422e99c1e4865f2936ab7e2af",
+      "source_rows": 1030,
+      "rows_dropped_for_missing_values": 0,
+      "duplicated_rows": 25,
+      "preprocessing": "columns selected and renamed; rows with missing values dropped; features standardized (all rows, ddof = 1) and rounded to 6 decimals; fold labels from numpy default_rng(20261201)",
+      "largest_abs_feature_correlation": 0.6575328621819567
+    },
+    "wdbc": {
+      "file": "wdbc.csv",
+      "task": "classification",
+      "target": "y",
+      "fold": "fold",
+      "features": [
+        "radius",
+        "texture",
+        "perimeter",
+        "area",
+        "smoothness",
+        "compactness",
+        "concavity",
+        "concave_points",
+        "symmetry",
+        "fractal_dimension"
+      ],
+      "n": 569,
+      "p": 10,
+      "n_folds": 5,
+      "sha256": "7ff6febfcdf9f6a1d42c97051b9f1efa62e7e7df1409d0dcb47efa3792e1f719",
+      "original_target": "Diagnosis",
+      "original_features": {
+        "radius1": "radius",
+        "texture1": "texture",
+        "perimeter1": "perimeter",
+        "area1": "area",
+        "smoothness1": "smoothness",
+        "compactness1": "compactness",
+        "concavity1": "concavity",
+        "concave_points1": "concave_points",
+        "symmetry1": "symmetry",
+        "fractal_dimension1": "fractal_dimension"
+      },
+      "title": "Breast Cancer Wisconsin (Diagnostic), the ten mean features",
+      "source": "UCI Machine Learning Repository, dataset 17",
+      "url": "https://archive.ics.uci.edu/static/public/17/data.csv",
+      "landing_page": "https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic",
+      "doi": "10.24432/C5DW2B",
+      "citation": "Wolberg, W., Mangasarian, O., Street, N., & Street, W. (1993). Breast Cancer Wisconsin (Diagnostic) [Dataset]. UCI Machine Learning Repository.",
+      "license": "CC BY 4.0",
+      "retrieved": "2026-11-13",
+      "source_sha256": "3487b754ff02c93cdc8a18afafe223961d9cfbfdb932e57483e52581042767d7",
+      "source_rows": 569,
+      "rows_dropped_for_missing_values": 0,
+      "duplicated_rows": 0,
+      "preprocessing": "columns selected and renamed; rows with missing values dropped; features standardized (all rows, ddof = 1) and rounded to 6 decimals; fold labels from numpy default_rng(20261202), stratified by class",
+      "largest_abs_feature_correlation": 0.9978552819932877,
+      "classes": {
+        "B": 357,
+        "M": 212
+      },
+      "separation_check": {
+        "training_accuracy_per_fold": [
+          0.9384615384615385,
+          0.9560439560439561,
+          0.9494505494505494,
+          0.9472527472527472,
+          0.9473684210526315
+        ],
+        "completely_separated_in_some_fold": false
+      }
+    },
+    "maternal": {
+      "file": "maternal.csv",
+      "task": "classification",
+      "target": "y",
+      "fold": "fold",
+      "features": [
+        "age",
+        "systolic_bp",
+        "diastolic_bp",
+        "blood_sugar",
+        "body_temp",
+        "heart_rate"
+      ],
+      "n": 1014,
+      "p": 6,
+      "n_folds": 5,
+      "sha256": "c06b93e5aa5d20479d8b8bb30e52950014385013e3abfa8c4873277cb3d3cde6",
+      "original_target": "RiskLevel",
+      "original_features": {
+        "Age": "age",
+        "SystolicBP": "systolic_bp",
+        "DiastolicBP": "diastolic_bp",
+        "BS": "blood_sugar",
+        "BodyTemp": "body_temp",
+        "HeartRate": "heart_rate"
+      },
+      "title": "Maternal Health Risk",
+      "source": "UCI Machine Learning Repository, dataset 863",
+      "url": "https://archive.ics.uci.edu/static/public/863/data.csv",
+      "landing_page": "https://archive.ics.uci.edu/dataset/863/maternal+health+risk",
+      "doi": "10.24432/C5DP5D",
+      "citation": "Ahmed, M. (2020). Maternal Health Risk [Dataset]. UCI Machine Learning Repository.",
+      "license": "CC BY 4.0",
+      "retrieved": "2026-11-13",
+      "source_sha256": "a1f7025719f84715096e0d1f95ae2e56b57809b9b15449e1836c96a7d976ae9b",
+      "source_rows": 1014,
+      "rows_dropped_for_missing_values": 0,
+      "duplicated_rows": 562,
+      "preprocessing": "columns selected and renamed; rows with missing values dropped; features standardized (all rows, ddof = 1) and rounded to 6 decimals; fold labels from numpy default_rng(20261203), stratified by class",
+      "largest_abs_feature_correlation": 0.7870065226232489,
+      "classes": {
+        "high_risk": 272,
+        "low_risk": 406,
+        "mid_risk": 336
+      },
+      "separation_check": {
+        "training_accuracy_per_fold": [
+          0.625154130702836,
+          0.6226880394574599,
+          0.6325524044389642,
+          0.6350184956843403,
+          0.6219211822660099
+        ],
+        "completely_separated_in_some_fold": false
+      }
+    }
+  },
+  "rejected": {
+    "penguins": {
+      "title": "Palmer penguins (complete cases of the four measurements)",
+      "task": "classification",
+      "source": "allisonhorst/palmerpenguins, inst/extdata/penguins.csv at commit 8957207",
+      "url": "https://raw.githubusercontent.com/allisonhorst/palmerpenguins/8957207b78d6ccd1b4654a9dd9c9041b657478ab/inst/extdata/penguins.csv",
+      "landing_page": "https://github.com/allisonhorst/palmerpenguins",
+      "doi": "10.5281/zenodo.3960218",
+      "citation": "Horst, A. M., Hill, A. P., & Gorman, K. B. (2020). palmerpenguins: Palmer Archipelago (Antarctica) penguin data. R package version 0.1.0.",
+      "license": "CC0 1.0",
+      "retrieved": "2026-11-13",
+      "source_sha256": "f204db2c753b0937caac3cb35258562c14f073e4bbc76be24b4c51ce22767a93",
+      "source_rows": 344,
+      "rows_dropped_for_missing_values": 2,
+      "duplicated_rows": 0,
+      "preprocessing": "columns selected and renamed; rows with missing values dropped; features standardized (all rows, ddof = 1) and rounded to 6 decimals; fold labels from numpy default_rng(20261204), stratified by class",
+      "largest_abs_feature_correlation": 0.8712017560854486,
+      "classes": {
+        "Adelie": 151,
+        "Chinstrap": 68,
+        "Gentoo": 123
+      },
+      "separation_check": {
+        "training_accuracy_per_fold": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "completely_separated_in_some_fold": true
+      },
+      "reason": "complete separation: the unpenalized logistic maximum-likelihood estimate does not exist"
+    }
+  }
+}

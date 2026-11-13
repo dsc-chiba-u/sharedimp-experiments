@@ -17,10 +17,10 @@ name: Docker images
 on:
   push:
     branches: [main]
-    paths: ["docker/**", ".github/workflows/docker.yml"]
+    paths: ["docker/**/Dockerfile", ".github/workflows/docker.yml"]
   pull_request:
     branches: [main]
-    paths: ["docker/**", ".github/workflows/docker.yml"]
+    paths: ["docker/**/Dockerfile", ".github/workflows/docker.yml"]
   workflow_dispatch:
 
 concurrency:

@@ -1,0 +1,66 @@
+{
+  "description": "workflow/04_real_data.smk (experiment C): public data sets, their sources and the preprocessing applied by python/sharedimp_exp/real_data.py. Selection criteria and the reasons for each choice are in docs/experiment_plan.md, section 5.",
+  "retrieved": "2026-11-13",
+  "folds": 5,
+  "decimals": 6,
+  "standardize": "every feature is centred and divided by its standard deviation (all rows, ddof = 1); predictions of the learners used here (unpenalized linear models, forests) do not depend on an affine rescaling of a feature, so this only conditions the optimisers",
+  "datasets": {
+    "concrete": {
+      "task": "regression",
+      "title": "Concrete Compressive Strength",
+      "source": "UCI Machine Learning Repository, dataset 165",
+      "url": "https://archive.ics.uci.edu/static/public/165/data.csv",
+      "landing_page": "https://archive.ics.uci.edu/dataset/165/concrete+compressive+strength",
+      "doi": "10.24432/C5PK67",
+      "citation": "Yeh, I-C. (1998). Concrete Compressive Strength [Dataset]. UCI Machine Learning Repository.",
+      "license": "CC BY 4.0",
+      "sha256": "8d4b15b6fc68cd932d745cbd663d5ceae66dd54422e99c1e4865f2936ab7e2af",
+      "target": "Concrete compressive strength",
+      "features": {"Cement": "cement", "Blast Furnace Slag": "slag", "Fly Ash": "fly_ash", "Water": "water", "Superplasticizer": "superplasticizer", "Coarse Aggregate": "coarse_aggregate", "Fine Aggregate": "fine_aggregate", "Age": "age"},
+      "seed": 20261201
+    },
+    "wdbc": {
+      "task": "classification",
+      "title": "Breast Cancer Wisconsin (Diagnostic), the ten mean features",
+      "source": "UCI Machine Learning Repository, dataset 17",
+      "url": "https://archive.ics.uci.edu/static/public/17/data.csv",
+      "landing_page": "https://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic",
+      "doi": "10.24432/C5DW2B",
+      "citation": "Wolberg, W., Mangasarian, O., Street, N., & Street, W. (1993). Breast Cancer Wisconsin (Diagnostic) [Dataset]. UCI Machine Learning Repository.",
+      "license": "CC BY 4.0",
+      "sha256": "3487b754ff02c93cdc8a18afafe223961d9cfbfdb932e57483e52581042767d7",
+      "target": "Diagnosis",
+      "features": {"radius1": "radius", "texture1": "texture", "perimeter1": "perimeter", "area1": "area", "smoothness1": "smoothness", "compactness1": "compactness", "concavity1": "concavity", "concave_points1": "concave_points", "symmetry1": "symmetry", "fractal_dimension1": "fractal_dimension"},
+      "seed": 20261202
+    },
+    "maternal": {
+      "task": "classification",
+      "title": "Maternal Health Risk",
+      "source": "UCI Machine Learning Repository, dataset 863",
+      "url": "https://archive.ics.uci.edu/static/public/863/data.csv",
+      "landing_page": "https://archive.ics.uci.edu/dataset/863/maternal+health+risk",
+      "doi": "10.24432/C5DP5D",
+      "citation": "Ahmed, M. (2020). Maternal Health Risk [Dataset]. UCI Machine Learning Repository.",
+      "license": "CC BY 4.0",
+      "sha256": "a1f7025719f84715096e0d1f95ae2e56b57809b9b15449e1836c96a7d976ae9b",
+      "target": "RiskLevel",
+      "features": {"Age": "age", "SystolicBP": "systolic_bp", "DiastolicBP": "diastolic_bp", "BS": "blood_sugar", "BodyTemp": "body_temp", "HeartRate": "heart_rate"},
+      "seed": 20261203
+    },
+    "penguins": {
+      "task": "classification",
+      "title": "Palmer penguins (complete cases of the four measurements)",
+      "source": "allisonhorst/palmerpenguins, inst/extdata/penguins.csv at commit 8957207",
+      "url": "https://raw.githubusercontent.com/allisonhorst/palmerpenguins/8957207b78d6ccd1b4654a9dd9c9041b657478ab/inst/extdata/penguins.csv",
+      "landing_page": "https://github.com/allisonhorst/palmerpenguins",
+      "doi": "10.5281/zenodo.3960218",
+      "citation": "Horst, A. M., Hill, A. P., & Gorman, K. B. (2020). palmerpenguins: Palmer Archipelago (Antarctica) penguin data. R package version 0.1.0.",
+      "license": "CC0 1.0",
+      "sha256": "f204db2c753b0937caac3cb35258562c14f073e4bbc76be24b4c51ce22767a93",
+      "target": "species",
+      "features": {"bill_length_mm": "bill_length", "bill_depth_mm": "bill_depth", "flipper_length_mm": "flipper_length", "body_mass_g": "body_mass"},
+      "seed": 20261204
+    }
+  },
+  "separation_rule": "a classification data set is used only if unpenalized (multinomial) logistic regression on the standardized features misclassifies at least one training row in every training fold, i.e. the maximum-likelihood estimate exists; otherwise it is recorded as rejected and no file is written"
+}

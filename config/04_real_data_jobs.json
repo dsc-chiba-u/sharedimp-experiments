@@ -1,0 +1,23 @@
+{
+  "description": "workflow/04_real_data.smk (experiment C): public data sets in R and in Python, same data file, same fold labels, same metric. 'linear' jobs are checked for R-Python agreement with the parity classes below; 'rand_forest' jobs are language-specific usage examples (ranger through parsnip vs scikit-learn; settings in docs/random_forest_comparison.md) and are only reported.",
+  "parity_classes": {
+    "exact": {"tolerance": 1e-08, "meaning": "closed-form learner (OLS); common specification section 14"},
+    "logistic": {"tolerance": 1e-06, "meaning": "iteratively fitted binary logistic regression (glm.fit IRLS vs newton-cholesky)"},
+    "multinomial": {"tolerance": 0.001, "meaning": "nnet::multinom (BFGS) vs L-BFGS; agreement limited by R's optimiser"},
+    "none": {"tolerance": null, "meaning": "language-specific learner; difference reported, not checked"}
+  },
+  "jobs": [
+    {"id": "concrete_linear_rmse", "dataset": "concrete", "learner": "linear", "metric": "rmse", "seed": 1, "parity": "exact"},
+    {"id": "concrete_linear_r2", "dataset": "concrete", "learner": "linear", "metric": "r2", "seed": 1, "parity": "exact"},
+    {"id": "concrete_rf_rmse", "dataset": "concrete", "learner": "rand_forest", "metric": "rmse", "seed": 1, "parity": "none"},
+    {"id": "concrete_rf_r2", "dataset": "concrete", "learner": "rand_forest", "metric": "r2", "seed": 1, "parity": "none"},
+    {"id": "wdbc_linear_logloss", "dataset": "wdbc", "learner": "linear", "metric": "log_loss", "seed": 1, "parity": "logistic"},
+    {"id": "wdbc_linear_auc", "dataset": "wdbc", "learner": "linear", "metric": "roc_auc", "seed": 1, "parity": "logistic"},
+    {"id": "wdbc_rf_logloss", "dataset": "wdbc", "learner": "rand_forest", "metric": "log_loss", "seed": 1, "parity": "none"},
+    {"id": "wdbc_rf_auc", "dataset": "wdbc", "learner": "rand_forest", "metric": "roc_auc", "seed": 1, "parity": "none"},
+    {"id": "maternal_linear_logloss", "dataset": "maternal", "learner": "linear", "metric": "log_loss", "seed": 1, "parity": "multinomial"},
+    {"id": "maternal_linear_accuracy", "dataset": "maternal", "learner": "linear", "metric": "accuracy", "seed": 1, "parity": "multinomial"},
+    {"id": "maternal_rf_logloss", "dataset": "maternal", "learner": "rand_forest", "metric": "log_loss", "seed": 1, "parity": "none"},
+    {"id": "maternal_rf_accuracy", "dataset": "maternal", "learner": "rand_forest", "metric": "accuracy", "seed": 1, "parity": "none"}
+  ]
+}

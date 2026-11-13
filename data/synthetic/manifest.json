@@ -1,5 +1,5 @@
 {
-  "description": "Synthetic data of Phase 1; see generator docstrings.",
+  "description": "Synthetic data; see generator docstrings in python/sharedimp_exp/make_synthetic.py.",
   "datasets": {
     "smoke_reg_n20_p3": {
       "file": "smoke_reg_n20_p3.csv",
@@ -128,6 +128,88 @@
           "x4": 0.008264316104840448,
           "x5": 1.0747247079116822
         }
+      }
+    },
+    "rf_reg_n300_p5": {
+      "file": "rf_reg_n300_p5.csv",
+      "task": "regression",
+      "target": "y",
+      "fold": "fold",
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5"
+      ],
+      "n": 300,
+      "p": 5,
+      "n_folds": 5,
+      "sha256": "1c0381c009975ca352b71e91a7eb3004d1331af9ac4adfc522472daecfd3a680",
+      "generator": {
+        "script": "python/sharedimp_exp/make_synthetic.py",
+        "decimals": 6,
+        "seed": 20261117,
+        "n": 300,
+        "v": 5,
+        "model": "x1,x3,x4~N(0,1); x2=0.8*x1+0.6*N(0,1); x5=x3+0.1*N(0,1); y=2*x1+x3+x1*x3+N(0,1)"
+      }
+    },
+    "rf_bin_n300_p5": {
+      "file": "rf_bin_n300_p5.csv",
+      "task": "classification",
+      "target": "y",
+      "fold": "fold",
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5"
+      ],
+      "n": 300,
+      "p": 5,
+      "n_folds": 5,
+      "sha256": "e1ca92bea1d903276c1c1ae1379c193d0afc2815a6122915372f51e690aa8ab3",
+      "generator": {
+        "script": "python/sharedimp_exp/make_synthetic.py",
+        "decimals": 6,
+        "seed": 20261118,
+        "n": 300,
+        "v": 5,
+        "model": "x1,x3,x4~N(0,1); x2=0.8*x1+0.6*N(0,1); x5=x3+0.1*N(0,1); P(y=b)=logistic(0.75*(2*x1+x3+x1*x3)); folds stratified by y"
+      },
+      "classes": [
+        "a",
+        "b"
+      ],
+      "class_counts": {
+        "a": 155,
+        "b": 145
+      }
+    },
+    "allgate_reg_n300_p4": {
+      "file": "allgate_reg_n300_p4.csv",
+      "task": "regression",
+      "target": "y",
+      "fold": "fold",
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "n": 300,
+      "p": 4,
+      "n_folds": 5,
+      "sha256": "58387b6aafcc51dc6ef547ebf72ee7f3c58ca326bc7e4dec06609214b8fee7bc",
+      "generator": {
+        "script": "python/sharedimp_exp/make_synthetic.py",
+        "decimals": 6,
+        "seed": 20261119,
+        "n": 300,
+        "v": 5,
+        "model": "z~N(0,1); x_j=z+N(0,1), j=1..4; y=x1+0.5*x2*x3+N(0,1)"
       }
     }
   }

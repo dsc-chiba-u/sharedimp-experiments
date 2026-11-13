@@ -37,6 +37,9 @@ R_IMAGE = f"{PINS['SHAREDIMP_R_IMAGE']}@{PINS['SHAREDIMP_R_IMAGE_DIGEST']}"
 PY_IMAGE = f"{PINS['SHAREDIMP_PY_IMAGE']}@{PINS['SHAREDIMP_PY_IMAGE_DIGEST']}"
 R_CONTAINER = f"docker://{R_IMAGE}"
 PY_CONTAINER = f"docker://{PY_IMAGE}"
+# Phase 2 images (docker/): sharedimp-r + official UMFI R dependencies + plotting; official Python UMFI dependencies
+EXP_R_CONTAINER = f"docker://{PINS['SHAREDIMP_EXP_R_IMAGE']}@{PINS['SHAREDIMP_EXP_R_IMAGE_DIGEST']}"
+UMFI_PY_CONTAINER = f"docker://{PINS['UMFI_PY_IMAGE']}@{PINS['UMFI_PY_IMAGE_DIGEST']}"
 
 # One thread per process unless overridden with `--config threads=N`.
 THREADS = int(config.get("threads", 1))
@@ -57,10 +60,7 @@ ENV = {
     "R_RANGER_NUM_THREADS": THREADS,
     "SHAREDIMP_R_COMMIT": PINS["SHAREDIMP_R_COMMIT"],
     "SHAREDIMP_PY_COMMIT": PINS["SHAREDIMP_PY_COMMIT"],
-    "SHAREDIMP_R_IMAGE": PINS["SHAREDIMP_R_IMAGE"],
-    "SHAREDIMP_PY_IMAGE": PINS["SHAREDIMP_PY_IMAGE"],
-    "SHAREDIMP_R_IMAGE_DIGEST": PINS["SHAREDIMP_R_IMAGE_DIGEST"],
-    "SHAREDIMP_PY_IMAGE_DIGEST": PINS["SHAREDIMP_PY_IMAGE_DIGEST"],
+    **{k: v for k, v in PINS.items() if k.endswith(("_IMAGE", "_IMAGE_DIGEST")) or k.startswith("UMFI_") or k == "PHASE2_IMAGES_COMMIT"},
     # keep the run independent of the user's own R / Python configuration
     "PYTHONPATH": "$PWD/python",
     "PYTHONNOUSERSITE": 1,

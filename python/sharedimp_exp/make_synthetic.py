@@ -1,4 +1,4 @@
-"""Generate the synthetic data sets of Phase 1 (smoke tests, positive control).
+"""Generate the synthetic data sets (smoke tests, positive control, forest study).
 
     python -m sharedimp_exp.make_synthetic            # (re)write the files
     python -m sharedimp_exp.make_synthetic --check    # regenerate elsewhere and compare
@@ -105,6 +105,46 @@ def positive_control(seed: int = 20261114, n: int = 2000, v: int = 5):
     return df, "regression", gen, reference
 
 
+def rf_design(task: str, seed: int, n: int = 300, v: int = 5):
+    """Small design for the random-forest settings study (workflow 02b).
+
+    Features as in the positive control; the response has an interaction so
+    that tree depth matters. Binary labels are noisy (no separation).
+    """
+    rng = np.random.default_rng(seed)
+    x1 = rng.normal(size=n)
+    x2 = 0.8 * x1 + 0.6 * rng.normal(size=n)
+    x3 = rng.normal(size=n)
+    x4 = rng.normal(size=n)
+    x5 = x3 + 0.1 * rng.normal(size=n)
+    eta = 2.0 * x1 + 1.0 * x3 + 1.0 * x1 * x3
+    xmodel = "x1,x3,x4~N(0,1); x2=0.8*x1+0.6*N(0,1); x5=x3+0.1*N(0,1)"
+    if task == "regression":
+        y = eta + rng.normal(size=n)
+        strata, model = None, f"{xmodel}; y=2*x1+x3+x1*x3+N(0,1)"
+    else:
+        y = np.where(rng.uniform(size=n) < 1.0 / (1.0 + np.exp(-0.75 * eta)), "b", "a")
+        strata, model = y, f"{xmodel}; P(y=b)=logistic(0.75*(2*x1+x3+x1*x3)); folds stratified by y"
+    df = pd.DataFrame({"fold": balanced_folds(rng, n, v, strata=strata), "y": y, "x1": x1, "x2": x2, "x3": x3, "x4": x4, "x5": x5})
+    return df, task, {"seed": seed, "n": n, "v": v, "model": model}, None
+
+
+def all_gate(seed: int = 20261119, n: int = 300, v: int = 5):
+    """Every pair of features is clearly dependent (correlation 0.5).
+
+    Used in experiment B: the official UMFI-LR code residualizes a feature on
+    the anchor only if a dependence test passes; here it passes for every
+    pair, so the official representation and sharedimp's are the same
+    function of the data.
+    """
+    rng = np.random.default_rng(seed)
+    z = rng.normal(size=n)
+    x = {f"x{j}": z + rng.normal(size=n) for j in range(1, 5)}
+    y = x["x1"] + 0.5 * x["x2"] * x["x3"] + rng.normal(size=n)
+    df = pd.DataFrame({"fold": balanced_folds(rng, n, v), "y": y, **x})
+    return df, "regression", {"seed": seed, "n": n, "v": v, "model": "z~N(0,1); x_j=z+N(0,1), j=1..4; y=x1+0.5*x2*x3+N(0,1)"}, None
+
+
 def generate(out: Path) -> None:
     out.mkdir(parents=True, exist_ok=True)
     specs = {
@@ -112,6 +152,9 @@ def generate(out: Path) -> None:
         "smoke_bin_n60_p3": smoke_classification(2, seed=20261115, n=60),
         "smoke_multi_n90_p3": smoke_classification(3, seed=20261116, n=90),
         "pc_linear_n2000_p5": positive_control(),
+        "rf_reg_n300_p5": rf_design("regression", seed=20261117),
+        "rf_bin_n300_p5": rf_design("classification", seed=20261118),
+        "allgate_reg_n300_p4": all_gate(),
     }
     datasets = {}
     for name, (df, task, gen, reference) in specs.items():
@@ -145,7 +188,7 @@ def generate(out: Path) -> None:
             entry["reference"] = reference
         datasets[name] = entry
         print(f"{path.name}: n={entry['n']} p={entry['p']} folds={entry['n_folds']} sha256={entry['sha256'][:12]}")
-    write_json({"description": "Synthetic data of Phase 1; see generator docstrings.", "datasets": datasets}, out / "manifest.json")
+    write_json({"description": "Synthetic data; see generator docstrings in python/sharedimp_exp/make_synthetic.py.", "datasets": datasets}, out / "manifest.json")
 
 
 def main(argv: list[str]) -> int:

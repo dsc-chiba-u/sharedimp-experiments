@@ -1,0 +1,41 @@
+{
+  "description": "workflow/03_official_umfi.smk (experiment B): comparison with the official UMFI-LR code. Criteria are fixed here and in docs/experiment_plan.md before the run.",
+  "sources": {
+    "official_r": {"dir": "external/HydroML_UMFI", "repo_key": "UMFI_R", "files": ["R/preprocess_lr.R", "R/umfi.R"], "license_file": "LICENSE"},
+    "official_py": {"dir": "external/guanton_umfi_python", "repo_key": "UMFI_PY", "files": ["umfi/preprocess_LR.py", "umfi/UMFI.py", "umfi/experiments.py"], "license_file": null},
+    "original_r": {"dir": "external/joej1997_UMFI", "repo_key": "UMFI_ORIG", "files": ["UMFI_extended_code.R"], "license_file": null}
+  },
+  "representation_datasets": ["smoke_reg_n20_p3", "rf_reg_n300_p5", "allgate_reg_n300_p4"],
+  "identical_condition": {"dataset": "allgate_reg_n300_p4", "contrast_dataset": "rf_reg_n300_p5", "seeds": [1, 2, 3, 4, 5]},
+  "designs": {
+    "n": 500,
+    "folds": 5,
+    "seeds": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "official_generators": ["nonlinear_interaction", "correlated_interaction", "correlation", "blood_relation"],
+    "null": {"name": "independent", "model": "x1,x3,x4~N(0,1); x2=0.8*x1+0.6*N(0,1); x5=x3+0.1*N(0,1); y~N(0,1) independent of x"}
+  },
+  "official_py_call": {"preprocessing_methods": ["linear regression"], "niter": 10, "n_trees": 100, "select_optimal_preprocessing": false},
+  "sharedimp_jobs": [
+    {"learner": "rand_forest", "metric": "r2"},
+    {"learner": "linear", "metric": "r2"}
+  ],
+  "leak": {
+    "model": "x1,x3,x4~N(0,1); x2=0.8*x1+0.6*N(0,1); x5=x3+0.1*N(0,1); y=2*x1+x3+N(0,1) (the positive-control design)",
+    "n": [30, 60, 120, 500, 2000],
+    "seeds": 100,
+    "folds": 5,
+    "learner": "linear",
+    "metric": "mse"
+  },
+  "structural": {"dataset": "rf_reg_n300_p5", "assessment_rows": 100, "perturbation": "x -> 100 * x + 7 on the assessment rows"},
+  "criteria": {
+    "tolerance": 1e-08,
+    "B1_gate_fired": "max |official residual column - sharedimp residual column| <= tolerance when both are computed from the same rows",
+    "B1_gate_not_fired": "the official column equals the raw column exactly (the difference to sharedimp is reported, not checked)",
+    "B2": "same column names in the same order; anchor column equal to the raw anchor exactly; Reduced equals Full without the anchor column",
+    "B3": "official importance and the official scoring rule applied to sharedimp's representations (same seed, same call order) differ by <= tolerance on the data set where every gate fires",
+    "B5a": "the training representation that sharedimp passes to the learner is bit-identical after perturbing the assessment rows",
+    "B5b": "the step-by-step fold-internal pipeline reproduces shared_importance() within tolerance",
+    "reported_only": ["B3 on the contrast data set", "B4", "B5b size of the all-rows effect", "B6", "B7"]
+  }
+}

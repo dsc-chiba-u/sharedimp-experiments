@@ -1,0 +1,108 @@
+"""Tables of experiment C (public data sets).
+
+    python -m sharedimp_exp.real_data_summary config/04_real_data_jobs.json results/raw/04_real_data results/summary/04_real_data
+
+Reads the data manifest, the raw results and the files written by check_jobs
+(importance_long.csv, parity.csv) and writes datasets.csv, performance.csv and
+results/tables/04_real_data.md. Nothing is checked here (check_jobs does that).
+
+"Score of the Full model" is the score of the model fitted on the Full
+representation, averaged over anchors and splits. For OLS the Full
+representation spans the raw features, so it is the score of the ordinary
+model; for other learners it depends on the anchor, and the range over
+anchors is given.
+"""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+import pandas as pd
+
+from .common import DATA, ROOT, read_json, write_csv
+from .rf_settings_summary import md_table
+
+R_LEARNER = {
+    "linear": "built-in \"linear\": lm.fit / glm.fit (binomial) / nnet::multinom(maxit = 500)",
+    "rand_forest": "built-in \"rand_forest\": parsnip::rand_forest(trees = 500, min_n = 5), engine ranger (min.node.size = 5, mtry = floor(sqrt(q)), probability forest for classification, 1 thread)",
+}
+
+
+def main(argv: list[str]) -> int:
+    spec, raw, out = read_json(Path(argv[1])), Path(argv[2]), Path(argv[3])
+    manifest = read_json(DATA / "real" / "manifest.json")
+    rows = []
+    for ds_id, e in manifest["datasets"].items():
+        rows.append({"dataset": ds_id, "status": "used", "title": e["title"], "task": e["task"], "n": e["n"], "p": e["p"],
+                     "classes": "; ".join(f"{k}: {v}" for k, v in e.get("classes", {}).items()) or "-",
+                     "folds": e["n_folds"], "rows_dropped_missing": e["rows_dropped_for_missing_values"], "duplicated_rows": e["duplicated_rows"],
+                     "largest_abs_feature_correlation": e["largest_abs_feature_correlation"],
+                     "source": e["source"], "doi": e["doi"], "license": e["license"], "retrieved": e["retrieved"], "note": ""})
+    for ds_id, e in manifest["rejected"].items():
+        rows.append({"dataset": ds_id, "status": "rejected", "title": e["title"], "task": e["task"], "n": e["source_rows"] - e["rows_dropped_for_missing_values"],
+                     "p": None, "classes": "; ".join(f"{k}: {v}" for k, v in e.get("classes", {}).items()), "folds": None,
+                     "rows_dropped_missing": e["rows_dropped_for_missing_values"], "duplicated_rows": e["duplicated_rows"],
+                     "largest_abs_feature_correlation": e["largest_abs_feature_correlation"],
+                     "source": e["source"], "doi": e["doi"], "license": e["license"], "retrieved": e["retrieved"], "note": e["reason"]})
+    datasets = pd.DataFrame(rows)
+    write_csv(datasets, out / "datasets.csv")
+
+    imp = pd.read_csv(out / "importance_long.csv")
+    parity = pd.read_csv(out / "parity.csv").groupby("job")["max_abs_diff"].max()
+    perf_rows, cond_rows = [], []
+    for job in spec["jobs"]:
+        meta = {lang: read_json(raw / lang / f"{job['id']}.meta.json") for lang in ("r", "python")}
+        d = imp[imp["job"] == job["id"]]
+        wide = d.pivot(index="feature", columns="language", values="importance")
+        rec = {"job": job["id"], "dataset": job["dataset"], "learner": job["learner"], "metric": job["metric"]}
+        for lang in ("r", "python"):
+            s = d[d["language"] == lang]["score_full"]
+            rec[f"full_score_{lang}"] = s.mean()
+            rec[f"full_score_range_over_anchors_{lang}"] = s.max() - s.min()
+            rec[f"top_feature_{lang}"] = wide[lang].idxmax()
+            rec[f"seconds_{lang}"] = meta[lang]["elapsed_seconds"]
+        rec["max_abs_diff_r_python"] = parity[job["id"]]
+        rec["parity_class"] = job["parity"]
+        rec["spearman_importance_r_python"] = wide["r"].corr(wide["python"], method="spearman")
+        perf_rows.append(rec)
+        cond_rows.append({"job": job["id"], "dataset": job["dataset"], "learner": job["learner"], "metric": job["metric"],
+                          "splits": meta["r"]["n_splits"], "seed": job["seed"], "parity_class": job["parity"],
+                          "R learner": R_LEARNER[job["learner"]], "Python learner": meta["python"]["learner_description"]})
+    perf = pd.DataFrame(perf_rows)
+    write_csv(perf, out / "performance.csv")
+
+    wide = imp.pivot_table(index=["dataset", "learner", "metric", "feature"], columns="language", values="importance", sort=False).reset_index()
+    wide = wide.rename(columns={"r": "importance_r", "python": "importance_python"})
+    sd = imp.pivot_table(index=["dataset", "learner", "metric", "feature"], columns="language", values="importance_std", sort=False).reset_index()
+    wide["sd_between_splits_r"], wide["sd_between_splits_python"] = sd["r"], sd["python"]
+    write_csv(wide, out / "importance_wide.csv")
+    tables = ROOT / "results" / "tables"
+    text = [
+        "<!-- generated by python/sharedimp_exp/real_data_summary.py; do not edit -->", "",
+        "## Data sets", "",
+        md_table(datasets[["dataset", "status", "title", "task", "n", "p", "classes", "rows_dropped_missing", "duplicated_rows",
+                           "largest_abs_feature_correlation", "source", "doi", "license", "note"]].fillna("-").astype({"p": str}),
+                 {"largest_abs_feature_correlation": ".3f"}), "",
+        f"Preprocessing: {manifest['standardization']}. Rule for classification data: {manifest['separation_rule']}.", "",
+        "## Run conditions", "",
+        md_table(pd.DataFrame(cond_rows)), "",
+        "All jobs: same data file and same fold labels in both languages, 1 thread. `rand_forest` settings are not equivalent between "
+        "the languages (docs/random_forest_comparison.md); those rows are usage examples and are not checked for agreement.", "",
+        "## Score of the Full model and R-Python difference", "",
+        "Scores are oriented so that larger is better (errors and losses are negated).", "",
+        md_table(perf[["job", "full_score_r", "full_score_python", "full_score_range_over_anchors_r", "full_score_range_over_anchors_python",
+                       "parity_class", "max_abs_diff_r_python", "spearman_importance_r_python", "top_feature_r", "top_feature_python",
+                       "seconds_r", "seconds_python"]],
+                 {"max_abs_diff_r_python": ".3g", "seconds_r": ".1f", "seconds_python": ".1f", "spearman_importance_r_python": ".3f",
+                  "full_score_range_over_anchors_r": ".3g", "full_score_range_over_anchors_python": ".3g"}), "",
+        "## Importance (mean over 5 splits) and between-split SD", "",
+        md_table(wide), "",
+    ]
+    (tables / "04_real_data.md").write_text("\n".join(text))
+    print(f"[real_data_summary] {len(datasets)} data sets, {len(perf)} jobs")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main(sys.argv))

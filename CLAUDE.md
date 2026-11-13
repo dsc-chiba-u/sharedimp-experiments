@@ -8,8 +8,10 @@ package (`../sharedimp-py`, scikit-learn), both implementing UMFI-LR
 (Janssen, Guan & Robeva, AISTATS 2023) according to one specification
 (`../sharedimp-r/docs/specification.md`).
 
-Read first: `docs/STATUS.md` (state, open issues), `docs/experiment_plan.md`
-(what each experiment is for and its pre-set criteria), then the two package
+Read first: `docs/STATUS.md` (state, results, open issues),
+`docs/experiment_plan.md` (what each experiment is for and its pre-set
+criteria), `docs/random_forest_comparison.md` (why forests are never compared
+numerically across languages), then the two package
 `CLAUDE.md` files and the common specification.
 
 ## Positioning (keep consistent in code comments, docs and the paper)
@@ -42,9 +44,11 @@ Read first: `docs/STATUS.md` (state, open issues), `docs/experiment_plan.md`
   written by a script. A run that failed or was skipped is recorded as such.
   If something cannot be run (e.g. Docker, an official implementation), record
   the reason; do not substitute numbers from elsewhere.
-- **No official UMFI code in this repository** (two of the three upstream
-  repositories have no license). Clone at pinned commits into `external/`
-  (git-ignored) and record commit and checksums.
+- **No official UMFI code in this repository or in any image** (two of the
+  three upstream repositories have no license). `fetch_official` clones them
+  at the commits in `config/pins.env` into `external/` (git-ignored) and
+  records commit and checksums; the code is sourced / imported unmodified.
+  Do not paste official code into scripts, docs or commit messages.
 - **The manuscript lives only in `paper/`.** No number, DOI, release or
   conclusion goes into it before it exists. Manuscript text is English;
   progress reports to the user are in Japanese.
@@ -64,7 +68,7 @@ computing rule, `benchmark:` and `log:` per rule.
 conda activate snakemake      # Snakemake 8.10.0 + Singularity 3.8.6 (environment.yml)
 snakemake -s workflow/01_environment.smk --use-singularity -c4
 snakemake -s workflow/02_validation.smk  --use-singularity -c4
-snakemake -s workflow/<stage>.smk -n                      # dry run
+snakemake -s workflow/<stage>.smk -n                      # dry run (other stages: 02b_rf_settings, 03_official_umfi, 04_real_data, 06_figures)
 snakemake -s workflow/02_validation.smk --use-singularity -c4 results/raw/02_validation/r/pc_linear_mse.meta.json
 ```
 
@@ -73,9 +77,12 @@ snakemake -s workflow/02_validation.smk --use-singularity -c4 results/raw/02_val
 recompute. Logs: `logs/<stage>/<rule>.log`.
 
 - R, Python and sharedimp are **not** on the host. They come from the images
-  pinned by digest in `config/pins.env` (`ghcr.io/dsc-chiba-u/sharedimp-r`,
-  `…/sharedimp-py`, built by the package CI and tagged with the 7-character
-  commit). `workflow/common.smk` builds the `docker://image@sha256:…`
+  pinned by digest in `config/pins.env`: `ghcr.io/dsc-chiba-u/sharedimp-r` and
+  `…/sharedimp-py` (built by the package CI, tagged with the 7-character
+  commit), `…/sharedimp-experiments-r` (the R image + official UMFI R
+  dependencies + patchwork; `EXP_R_CONTAINER`) and `…/umfi-official-py`
+  (Python 3.9, official UMFI Python dependencies, no sharedimp;
+  `UMFI_PY_CONTAINER`). `workflow/common.smk` builds the `docker://image@sha256:…`
   references and exports thread, pin and locale variables to every rule.
 - To change a package version: set commit **and** digest in `config/pins.env`,
   then re-run everything. Workflow 01 fails if a process is not in the pinned
@@ -83,8 +90,19 @@ recompute. Logs: `logs/<stage>/<rule>.log`.
 - Only `host_info` runs on the host (standard library only, with the Python
   that runs Snakemake).
 - The Docker daemon is not usable by this account (root-owned snap socket), so
-  images cannot be *built* here. New images are defined in `docker/` and built
-  and pushed by the user; then their digest goes into `config/pins.env`.
+  images cannot be *built* here. `docker/<name>/Dockerfile` is built and
+  pushed to GHCR by `.github/workflows/docker.yml` on a push to `main` that
+  changes a Dockerfile; then set digest and `PHASE2_IMAGES_COMMIT` in
+  `config/pins.env` (workflow 01 verifies them against the registry). Docker
+  Hub is pushed too only if the repository has the secrets `DOCKER_USERNAME`
+  and `DOCKER_PASSWORD` (it does not, as of 2026-11-13).
+- The system disk is nearly full. Singularity unpacks an image per job;
+  `scripts/_snakemake.sh` sets `SINGULARITY_TMPDIR` to `/dev/shm/…`. When
+  calling `snakemake` directly, export it yourself, and do not start several
+  workflows at once without it (jobs die with empty logs: "No space left").
+- Snakemake does not see changes in `R/` or `python/` (they are not rule
+  inputs): after changing code, re-run the affected workflow with
+  `--forceall`.
   To try something in an image by hand:
   `singularity exec docker://<image>@<digest> <command>`.
 - Never state that something ran in a container unless the result's
@@ -95,14 +113,24 @@ recompute. Logs: `logs/<stage>/<rule>.log`.
 - `config/pins.env`, `config/NN_*.json` — run conditions (machine readable).
 - `data/synthetic/` — generated by `python -m sharedimp_exp.make_synthetic`,
   committed, described by `manifest.json` (sha256, generator, references).
-  Values are rounded to 6 decimals so both languages parse identical doubles.
-  `data/real/` — Phase 2, same manifest format, with source and license.
+  Values are rounded to 6 decimals so that the CSV text is the data. R's
+  `read.csv` and pandas still parse a few of these values to doubles that
+  differ in the last bit (1e-16): never test cross-language equality with
+  `==`, and do "equals the raw data exactly" checks inside one language.
+  `data/real/` — prepared by `python -m sharedimp_exp.real_data` from
+  `config/04_real_data.json`; same manifest format plus source, DOI, license.
+  Classification data on which unpenalized logistic regression separates a
+  training fold are rejected (recorded under `rejected`).
+- Strings such as `null` or `NA` are read as missing by pandas; do not use
+  them as identifiers in result files.
 - The `fold` column of a data file is the only source of splits: one split
   per label in increasing order, in both languages. Never let each language
   draw its own folds when results are to be compared.
 - `R/common.R`, `R/run_jobs.R`, `R/env_info.R`; `python/sharedimp_exp/`
   (`common`, `learners`, `run_jobs`, `check_jobs`, `make_synthetic`,
-  `env_info`, `host_info`, `docker_info`, `env_summary`). Scripts take
+  `env_info`, `host_info`, `docker_info`, `env_summary`; `rf_settings*` for
+  02b; `official_*` and `R/official_umfi.R` for experiment B; `real_data*`
+  for C; `R/figures.R`). Scripts take
   positional arguments in the order of the Snakemake rule.
 - `workflow/NN_*.smk` writes `results/raw/NN_*/` and `results/summary/NN_*/`;
   Markdown tables go to `results/tables/`, figures to `results/figures/`.
@@ -114,20 +142,23 @@ recompute. Logs: `logs/<stage>/<rule>.log`.
   only.
 - Parity classes (`exact` 1e-8, `logistic` 1e-6, `multinomial` 1e-3, `none`)
   are declared per job. Random forests and other language-specific learners
-  are `none`: report the difference, never assert on it.
+  are `none`: report the difference, never assert on it. The forest settings
+  of the two languages are not equivalent and cannot be made identical
+  (`docs/random_forest_comparison.md`).
 - Learner mapping lives in `python/sharedimp_exp/learners.py` (Python) and in
   the R package's built-in names (R). Parity on rank-deficient designs needs
   an aliasing OLS in Python (common specification §8.1); avoid exact
   duplicates in parity data unless that learner is used.
 - Stage numbers: `01` environment (experiment A), `02`
-  validation / positive control, `03` official UMFI (B), `04` real data (C),
-  `05` runtime (D), `06` figures (E). Placeholder workflows raise an error when parsed.
+  validation / positive control, `02b` random-forest settings, `03` official UMFI (B), `04` real data (C),
+  `05` runtime (D), `06` figures (E). The placeholder workflow (`05`) raises an error when parsed.
 
 ## Before committing
 
-Commit code first, then run `bash scripts/01_environment.sh --forceall` and
-`bash scripts/02_validation.sh --forceall` (about 3 minutes together once the
-images are cached) and commit the regenerated results, so that the results
-record a clean code commit. Update `docs/STATUS.md`. Small, focused commits
-with imperative messages. Never report a workflow as passing without having
-run it.
+Commit code first, then run the workflows with `--forceall`, one after the
+other (01, 02, 02b, 03, 04, 06; about 80 minutes together, 02b and 03 take
+most of it), and commit the regenerated results, so that the results record a
+clean code commit. Update `docs/STATUS.md`; numbers quoted in `docs/` are
+copied from `results/tables/` and must be re-checked after a re-run. Small,
+focused commits with imperative messages. Never report a workflow as passing
+without having run it.

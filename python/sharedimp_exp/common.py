@@ -94,20 +94,22 @@ def load_manifest(group: str) -> dict[str, Any]:
     return read_json(DATA / group / "manifest.json")
 
 
-def find_dataset(dataset_id: str) -> tuple[dict[str, Any], Path]:
-    for group in ("synthetic", "real"):
-        mpath = DATA / group / "manifest.json"
+def find_dataset(dataset_id: str, manifest_dir: Path | None = None) -> tuple[dict[str, Any], Path]:
+    """Look a data set up in `manifest_dir` (if given), then in data/synthetic and data/real."""
+    dirs = ([Path(manifest_dir)] if manifest_dir is not None else []) + [DATA / "synthetic", DATA / "real"]
+    for d in dirs:
+        mpath = d / "manifest.json"
         if not mpath.exists():
             continue
         entry = read_json(mpath)["datasets"].get(dataset_id)
         if entry is not None:
-            return entry, DATA / group / entry["file"]
-    raise KeyError(f"dataset '{dataset_id}' is not in any data/*/manifest.json")
+            return entry, d / entry["file"]
+    raise KeyError(f"dataset '{dataset_id}' is not in any manifest.json")
 
 
-def load_dataset(dataset_id: str) -> dict[str, Any]:
+def load_dataset(dataset_id: str, manifest_dir: Path | None = None) -> dict[str, Any]:
     """Load a dataset and verify its checksum against the manifest."""
-    entry, path = find_dataset(dataset_id)
+    entry, path = find_dataset(dataset_id, manifest_dir)
     digest = sha256(path)
     if digest != entry["sha256"]:
         raise RuntimeError(f"{path}: sha256 {digest} != manifest {entry['sha256']}")

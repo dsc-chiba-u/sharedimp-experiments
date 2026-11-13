@@ -1,0 +1,83 @@
+{
+  "description": "Experiment B7: design differences between the official UMFI-LR code and sharedimp. Every statement about official code names a source line: `pattern` is searched literally in the file fetched at the pinned commit, and the summary step fails if it is not found. Statements about sharedimp refer to a signature recorded by an executed call (`signature`) or to an executed check of experiment B (`check`).",
+  "columns": {"official_r": "HydroML/UMFI (R)", "official_py": "guanton/umfi_python (Python)", "sharedimp_r": "sharedimp (R)", "sharedimp_py": "sharedimp (Python)"},
+  "rows": [
+    {
+      "aspect": "rows used to estimate the residualization",
+      "official_r": {"text": "all rows of X", "evidence": [{"source": "official_r", "file": "R/umfi.R", "pattern": "newX<-preprocess_lr(X,i)"}]},
+      "official_py": {"text": "all rows of X", "evidence": [{"source": "official_py", "file": "umfi/UMFI.py", "pattern": "newX = preprocess_lr(X, col_name)"}]},
+      "sharedimp_r": {"text": "training rows of each split; coefficients applied to the assessment rows", "check": "B5a/r"},
+      "sharedimp_py": {"text": "training rows of each split; coefficients applied to the assessment rows", "check": "B5a/python"}
+    },
+    {
+      "aspect": "when a feature is residualized on the anchor",
+      "official_r": {"text": "only if the slope has p < 0.01", "evidence": [{"source": "official_r", "file": "R/preprocess_lr.R", "pattern": "if(summary(mod)$coefficients[2,4]<0.01) modifiedDAT[,i]<- mod$residuals"}]},
+      "official_py": {"text": "only if R^2 > 0.01", "evidence": [{"source": "official_py", "file": "umfi/preprocess_LR.py", "pattern": "if model.score(X, y) > 0.01:"}]},
+      "sharedimp_r": {"text": "always", "check": "B1/gate_not_fired/sharedimp_r"},
+      "sharedimp_py": {"text": "always", "check": "B1/gate_not_fired/sharedimp_py"}
+    },
+    {
+      "aspect": "random noise added to (near-)constant columns",
+      "official_r": {"text": "yes", "evidence": [{"source": "official_r", "file": "R/preprocess_lr.R", "pattern": "if(sd(dat[,i])<1e-6) dat[,i]<-dat[,i]+rnorm(nrow(dat))"}, {"source": "official_r", "file": "R/preprocess_lr.R", "pattern": "if(var(modifiedDAT[,i])==0) modifiedDAT[,i]<-rnorm(nrow(modifiedDAT))"}]},
+      "official_py": {"text": "yes", "evidence": [{"source": "official_py", "file": "umfi/preprocess_LR.py", "pattern": "dat[col] += np.random.normal(size=len(dat))"}, {"source": "official_py", "file": "umfi/preprocess_LR.py", "pattern": "modified_dat[col] = np.random.normal(size=len(modified_dat))"}]},
+      "sharedimp_r": {"text": "no (deterministic; see residualize_fit)", "signature": "residualize_fit"},
+      "sharedimp_py": {"text": "no (deterministic; see AnchorResidualizer)", "signature": "AnchorResidualizer"}
+    },
+    {
+      "aspect": "learner",
+      "official_r": {"text": "ranger random forest, 100 trees, fixed", "evidence": [{"source": "official_r", "file": "R/umfi.R", "pattern": "rfwith<-ranger::ranger(x=newX,y=y,num.trees = 100)"}]},
+      "official_py": {"text": "extra trees (default) or random forest (RF=True), n_trees = 100 by default", "evidence": [{"source": "official_py", "file": "umfi/UMFI.py", "pattern": "model_with = ExtraTreesRegressor(n_estimators=n_trees, oob_score=True, bootstrap=True)"}, {"source": "official_py", "file": "umfi/UMFI.py", "pattern": "model_with = RandomForestRegressor(n_estimators=n_trees, oob_score=True)"}]},
+      "sharedimp_r": {"text": "argument `learner`: built-in forest or linear model, any parsnip model specification, or a fit/predict pair", "signature": "shared_importance"},
+      "sharedimp_py": {"text": "argument `estimator`: any scikit-learn estimator", "signature": "shared_importance"}
+    },
+    {
+      "aspect": "data on which the two models are scored",
+      "official_r": {"text": "out-of-bag predictions of the forest fitted on all rows", "evidence": [{"source": "official_r", "file": "R/umfi.R", "pattern": "if(is.numeric(y)) fi[i]<-max(rfwith$r.squared,0)-max(rfwithout$r.squared,0)"}]},
+      "official_py": {"text": "out-of-bag predictions of the forest fitted on all rows", "evidence": [{"source": "official_py", "file": "umfi/UMFI.py", "pattern": "score_with = max(0, model_with.oob_score_)"}]},
+      "sharedimp_r": {"text": "assessment rows of each split (arguments `v`, `repeats`, `resamples`)", "signature": "shared_importance"},
+      "sharedimp_py": {"text": "test rows of each split (argument `cv`, `groups`)", "signature": "shared_importance"}
+    },
+    {
+      "aspect": "metric",
+      "official_r": {"text": "R^2 for a numeric response, accuracy for a factor; fixed", "evidence": [{"source": "official_r", "file": "R/umfi.R", "pattern": "if(is.factor(y)) fi[i]<- max(1-rfwith$prediction.error,0.5)-max(1-rfwithout$prediction.error,0.5)"}]},
+      "official_py": {"text": "the forest's `oob_score_` (R^2 or accuracy); fixed", "evidence": [{"source": "official_py", "file": "umfi/UMFI.py", "pattern": "score_with = max(0, model_with.oob_score_)"}]},
+      "sharedimp_r": {"text": "argument `metric`: common metric name or yardstick metric", "signature": "shared_importance"},
+      "sharedimp_py": {"text": "argument `scoring`: common metric name, scikit-learn scorer or callable", "signature": "shared_importance"}
+    },
+    {
+      "aspect": "negative scores and negative importances",
+      "official_r": {"text": "scores floored (0 for R^2, 0.5 for accuracy); negative importances set to 0", "evidence": [{"source": "official_r", "file": "R/umfi.R", "pattern": "fi[fi<0]<-0"}]},
+      "official_py": {"text": "scores floored at 0; negative importances set to 0", "evidence": [{"source": "official_py", "file": "umfi/UMFI.py", "pattern": "umfi[umfi < 0] = 0"}]},
+      "sharedimp_r": {"text": "kept as they are", "check": "B6/sharedimp_r"},
+      "sharedimp_py": {"text": "kept as they are", "check": "B6/sharedimp_py"}
+    },
+    {
+      "aspect": "repetition and reported spread",
+      "official_r": {"text": "one run; a numeric vector", "evidence": [{"source": "official_r", "file": "R/umfi.R", "pattern": "fi<-rep(0,ncol(X))"}]},
+      "official_py": {"text": "`niter` runs (default 10); mean over runs and a table of every run", "evidence": [{"source": "official_py", "file": "umfi/UMFI.py", "pattern": "for iteration in tqdm(range(niter), desc=f\"Using {method} to remove dependencies\"):"}]},
+      "sharedimp_r": {"text": "mean over splits, between-split SD, per-split table (`fold_results()`)", "signature": "shared_importance"},
+      "sharedimp_py": {"text": "mean over splits, between-split SD, per-split table (`fold_results`)", "signature": "shared_importance"}
+    },
+    {
+      "aspect": "seed argument",
+      "official_r": {"text": "none (global R random number generator)", "signature": "umfi"},
+      "official_py": {"text": "none (global NumPy random number generator)", "signature": "UMFI"},
+      "sharedimp_r": {"text": "`seed`", "signature": "shared_importance"},
+      "sharedimp_py": {"text": "`random_state`", "signature": "shared_importance"}
+    },
+    {
+      "aspect": "dependence-removal methods other than linear regression",
+      "official_r": {"text": "optimal transport (`mod_meth = \"ot\"`, `\"ot_atomic\"`)", "evidence": [{"source": "official_r", "file": "R/umfi.R", "pattern": "if(mod_meth==\"ot\") newX<-preprocess_ot(X,i)"}]},
+      "official_py": {"text": "optimal transport; automatic choice between the two per feature", "evidence": [{"source": "official_py", "file": "umfi/UMFI.py", "pattern": "newX = preprocess_ot(X, col_name)"}]},
+      "sharedimp_r": {"text": "not implemented (linear regression only)", "signature": "shared_importance"},
+      "sharedimp_py": {"text": "not implemented (linear regression only)", "signature": "shared_importance"}
+    },
+    {
+      "aspect": "parallel execution",
+      "official_r": {"text": "`umfi_par()` (foreach)", "signature": "umfi_par"},
+      "official_py": {"text": "none", "signature": "UMFI"},
+      "sharedimp_r": {"text": "none", "signature": "shared_importance"},
+      "sharedimp_py": {"text": "`n_jobs` (joblib)", "signature": "shared_importance"}
+    }
+  ]
+}

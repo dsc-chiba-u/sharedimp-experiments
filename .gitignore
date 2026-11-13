@@ -37,3 +37,8 @@ paper/*_cache/
 logs/
 benchmarks/
 report/
+# Created by tools inside the containers (Snakemake runs Singularity with the repository as $HOME)
+.cache/
+.config/
+.fontconfig/
+.local/

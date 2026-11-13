@@ -1,6 +1,8 @@
 # Experiment plan — sharedimp SoftwareX paper
 
-Status: **Phase 1 complete (2026-11-13). Phases 2–4 are planned, not run.**
+Status: **Phases 1 and 2 complete (2026-11-13): experiments A, B, C, the
+random-forest settings study and the Phase 2 figures. Phase 3 (runtime) and
+Phase 4 (manuscript) are planned, not run.**
 This file states what each experiment is for, what is run, what is checked and
 which criteria were fixed *before* looking at the results. Results live in
 `results/`; this file contains no result numbers except where a section is
@@ -47,6 +49,10 @@ Rules that apply to every experiment:
   Each process reads the image reference from inside the container and
   workflow 01 fails if it is not the pinned one; the registry is asked
   whether the pinned digest carries the pinned commit as revision label.
+- Singularity unpacks an image for every job; `scripts/_snakemake.sh` points
+  `SINGULARITY_TMPDIR` to `/dev/shm` because the system disk of the machine
+  used here is nearly full (parallel jobs failed with "No space left on
+  device" otherwise).
 - Additional images (`docker/`): `koki/sharedimp-experiments-r` (the R image
   plus the dependencies of the official UMFI R package and plotting) and
   `koki/umfi-official-py` (dependencies of the official Python code at the
@@ -139,11 +145,23 @@ sampling error at n = 2000 is a few percent).
 Observed (2026-11-13, `results/tables/0{1,2}_*_checks.md`): all checks pass;
 the numbers are in those tables and are summarised in `docs/STATUS.md`.
 
+## 3b. Random-forest settings (Phase 2)
+
+Workflow: `workflow/02b_rf_settings.smk`, configuration
+`config/02b_rf_settings.json`. Question, method, results and the resulting
+recommendations are in `docs/random_forest_comparison.md`. The only
+pass/fail statement is whether a pair of single-tree settings meets the
+equivalence criterion written in the configuration file (same number of
+leaves, same depth, predictions equal within 1e-8 on training rows and on a
+held-out fold); nothing is asserted about forests.
+
 ## 4. Experiment B — comparison with the official UMFI-LR code (Phase 2)
 
-Workflow: `workflow/03_official_umfi.smk` (placeholder). Images:
-`koki/sharedimp-experiments-r` (sharedimp-r and the official R package in one
-R session) and `koki/umfi-official-py` (official Python code); see `docker/`.
+Workflow: `workflow/03_official_umfi.smk`, configuration and criteria
+`config/03_official_umfi.json`, design table `config/03_api_comparison.json`.
+Images: `sharedimp-experiments-r` (sharedimp-r and the official R code in one
+R session) and `umfi-official-py` (official Python code, Python 3.9); see
+`docker/`.
 
 Sources, verified on 2026-11-13 through the GitHub API:
 
@@ -175,39 +193,123 @@ here from this environment rather than quoted.
 | B7 | learner / metric / CV API | feature table built from code inspection, each cell backed by an executed call or a quoted line reference | — |
 
 Outputs: `results/raw/03_official_umfi/`, `results/summary/03_official_umfi/`,
-Figure 2.
+`results/tables/03_official_umfi{,_checks}.md`, figures
+`03_official_designs` and `03_fold_internal_effect`.
+
+### As executed (2026-11-13)
+
+- **How the official code is run.** `fetch_official` (host, git) fetches the
+  three repositories at the pinned commits into `external/` and records the
+  sha256 of every file read (`sources.json`). `HydroML/UMFI`: `R/preprocess_lr.R`
+  and `R/umfi.R` are sourced. `joej1997/UMFI`: the file is a script that runs
+  the paper's experiments (absolute Windows paths, many packages), so it is
+  parsed and only the first definitions of `modifty_linreg` and `UMFI` are
+  evaluated. `guanton/umfi_python`: `umfi.preprocess_LR`, `umfi.UMFI` and the
+  generators of `umfi.experiments` are imported. Nothing is modified or copied.
+- **Data.** B1/B2: `smoke_reg_n20_p3`, `rf_reg_n300_p5`, `allgate_reg_n300_p4`.
+  B3: `allgate_reg_n300_p4`, in which every pair of features is clearly
+  dependent, so that the official dependence test passes everywhere and the
+  official representation is the same function of the data as sharedimp's;
+  `rf_reg_n300_p5` as the contrast. B4: the four synthetic designs of the
+  official Python repository (`nonlinear_interaction`,
+  `correlated_interaction`, `correlation`, `blood_relation`), produced by
+  the official generators after `numpy.random.seed(s)`, n = 500, s = 1..10.
+  B6: a design with the response independent of the features, same n and
+  seeds. B5b: the positive-control design simulated in R, n = 30, 60, 120,
+  500, 2000, 100 data sets each, OLS, MSE, 5 folds.
+- **B3 construction.** R: `set.seed(s); umfi(X, y)` against `set.seed(s)` and
+  the official scoring rule (two `ranger` forests with 100 trees, out-of-bag
+  R² floored at 0, difference, negatives set to 0) applied to
+  `build_representations(X, X, anchor)`; same call order, hence same random
+  numbers. Python: the same with `numpy.random.seed(s)`, `UMFI(niter = 1)`,
+  and the representation of `AnchorResidualizer` passed as a CSV file with 17
+  significant digits (sharedimp-py cannot be installed under Python 3.9).
+- **Criteria** (tolerance 1e-8, fixed in the config file before the run):
+  B1 where the official test passes; B2 layout, anchor, Reduced = Full minus
+  anchor; B3 on the all-gates data set; B5a bit-identity; B5b agreement of the
+  step-by-step pipeline with `shared_importance()`; B7 every statement backed
+  by a source line, a signature or a check. Everything else is reported.
+- **Deviations from the plan above.** B4 uses the designs shipped with the
+  official Python code instead of re-typing the designs of the paper. B5b is
+  measured with OLS only (deterministic; no Monte Carlo noise from the
+  learner); the size of the effect for other learners was not measured.
+- **Found while implementing.** R's `read.csv` and pandas parse the same
+  6-decimal text to doubles that differ in the last bit for a few values
+  (largest difference 1.1e-16). Exact comparisons with the raw data are
+  therefore made inside each language. The name `null` for a design is read
+  as a missing value by pandas; the design is called `independent`.
 
 ## 5. Experiment C — real data (Phase 2)
 
-Workflow: `workflow/04_real_data.smk` (placeholder). A download script fetches
-each file from its source, verifies sha256, applies the documented
-preprocessing and writes `data/real/<id>.csv` with a `fold` column plus an
-entry in `data/real/manifest.json` (source URL, license, retrieval date,
-preprocessing, features, target).
+Workflow: `workflow/04_real_data.smk`; sources and preprocessing
+`config/04_real_data.json`; jobs `config/04_real_data_jobs.json`.
+`python/sharedimp_exp/real_data.py` downloads each file, verifies the pinned
+sha256, applies the preprocessing and writes `data/real/<id>.csv` (columns
+`fold`, `y`, features) and `data/real/manifest.json` (source URL, DOI,
+citation, license, retrieval date, preprocessing, checks).
 
-Candidates — **source, license and availability still have to be verified in
-Phase 2 before any is adopted**:
+Selection criteria (fixed before any importance was computed): public and
+re-downloadable from a stable URL; source and license stated by the provider;
+continuous features with some strongly correlated ones; no or trivial missing
+values; small enough to run in minutes; and, for classification, **the
+unpenalized (multinomial) logistic maximum-likelihood estimate must exist**
+(no complete separation in any training fold), because the deterministic
+learner used for the R–Python comparison is unpenalized.
 
-| task | candidate | why |
-|---|---|---|
-| regression | UCI Concrete Compressive Strength (n = 1030, p = 8) | continuous mixture components with known mutual dependence; no missing values |
-| binary | UCI Breast Cancer Wisconsin (Diagnostic) (n = 569; the 10 "mean" features) | strongly correlated size features (radius / perimeter / area) |
-| multiclass (optional) | Palmer penguins (complete cases; 4 continuous measurements, 3 species) or UCI Wine (n = 178, p = 13) | small, continuous, correlated |
+| task | data set | source, license (verified 2026-11-13) | decision |
+|---|---|---|---|
+| regression | Concrete Compressive Strength, n = 1030, p = 8 | UCI ML Repository 165, doi:10.24432/C5PK67, CC BY 4.0 | used |
+| binary | Breast Cancer Wisconsin (Diagnostic), the ten "mean" features, n = 569 | UCI 17, doi:10.24432/C5DW2B, CC BY 4.0 | used |
+| three classes | Maternal Health Risk, n = 1014, p = 6 | UCI 863, doi:10.24432/C5DP5D, CC BY 4.0 | used |
+| three classes | Palmer penguins, 4 measurements, n = 342 complete cases | palmerpenguins (GitHub, commit `8957207`), doi:10.5281/zenodo.3960218, CC0 | **rejected by the separation rule**: the species are completely separated in every training fold |
 
-Design: same file, same fold labels, same metric in both languages.
-(i) Deterministic learner (`linear`): R–Python agreement checked with the
-parity classes of §3. (ii) Language-specific learners (ranger /
-scikit-learn random forest, possibly one more per language): usage examples;
-no numerical agreement required, rank agreement reported. Repeated CV
-(e.g. 5 × 5 folds, fixed labels) so that the between-split spread can be
-shown descriptively. Outputs: importance tables, Figure 3 (importances with
-split-level spread; feature correlation structure next to it so that the
-behaviour of correlated groups can be read off).
+UCI Wine (n = 178, p = 13), the other candidate of Phase 1, was not prepared:
+with 13 features and 178 rows it is expected to be separated as well, and one
+multiclass example suffices. The license of the UCI data sets is the CC BY 4.0
+link on each data set's page; DOI and creators come from the UCI API.
+
+Preprocessing, the same for every data set: select and rename columns, drop
+rows with missing values (none in the three data sets used), standardize
+every feature with the mean and SD of all rows, round to 6 decimals, draw
+5 fold labels from a seeded permutation (stratified by class). The learners
+used here are invariant to an affine rescaling of a feature (up to
+optimiser tolerance), so standardizing with all rows conditions the
+optimisers without passing information between folds through the model.
+
+Jobs: for every data set the `linear` learner with two metrics (checked with
+the parity classes of §3) and the `rand_forest` learner with the same two
+metrics (language-specific usage example: reported, never checked). The
+forest settings of the two languages are not equivalent
+(`docs/random_forest_comparison.md`).
+
+Outputs: `results/raw/04_real_data/`, `results/summary/04_real_data/`
+(`checks`, `parity`, `importance_long`, `importance_wide`, `datasets`,
+`performance`), `results/tables/04_real_data{,_checks}.md`, figures
+`04_real_data_importance` and `04_r_python_agreement`.
+
+Deviations from the Phase 1 sketch: one 5-fold split instead of repeated
+cross-validation (the between-split SD shown is over 5 splits); the
+correlation structure is summarised by the largest absolute feature
+correlation in the data-set table, not drawn. Known limitation: Maternal
+Health Risk contains many duplicated rows (count in the data-set table), so
+identical rows occur in training and assessment folds and the scores of
+flexible learners on it are optimistic; it is used as distributed.
 
 ## 6. Experiment D — runtime (Phase 3)
 
 Workflow: `workflow/05_runtime.smk` (placeholder). Timing cells are run one
 at a time (`-c1`), never in parallel with other jobs.
+
+Forest learner (decided in Phase 2, see `docs/random_forest_comparison.md`):
+two separate comparisons, never mixed in one curve. (i) *Aligned settings*:
+the R built-in forest against a scikit-learn forest whose split rule has the
+same definition (`min_samples_split = 6`), both with 500 trees, sqrt(q)
+candidates, bootstrap, 1 thread; even then the implementations count node
+sizes differently under bootstrap, which is stated with the result.
+(ii) *Customary learners*: each language's forest as a user would call it
+(R built-in `"rand_forest"`; scikit-learn `RandomForestRegressor` /
+`RandomForestClassifier` with their defaults), reported as a practical
+comparison, not as a comparison of equal work.
 
 - Data: synthetic regression, generated once per (n, p) cell and stored;
   identical files and fold labels for both languages.
@@ -232,15 +334,25 @@ at a time (`-c1`), never in parallel with other jobs.
 
 ## 7. Experiment E — figures and tables (Phases 2–3)
 
-Workflow: `workflow/06_figures.smk` (placeholder). Each figure is
-produced by one script from files in `results/summary/` only.
+Workflow: `workflow/06_figures.smk` (`R/figures.R`, in the
+`sharedimp-experiments-r` image). Every figure is drawn from files in
+`results/summary/` only, as `.pdf` and `.png` in `results/figures/`.
 
-| figure | content | source |
-|---|---|---|
-| 1 | workflow: input → fold-internal residualization → Full/Reduced learner → paired scoring → importance; shared by R and Python | drawn (no data) |
-| 2 | numerical validation: official UMFI-LR vs sharedimp (B1–B6) and R–Python parity (A, 02, C) | `results/summary/{01,02,03,04}_*` |
-| 3 | real-data importances | `results/summary/04_real_data` |
-| 4 | runtime scaling in n, p, v | `results/summary/05_runtime` |
+| file | content | source | status |
+|---|---|---|---|
+| `03_official_designs` | B4/B6: importance on the official synthetic designs, official code vs sharedimp | `03_official_umfi/importance_by_design.csv` | done |
+| `03_fold_internal_effect` | B5b: all-rows vs fold-internal residualization as a function of n | `03_official_umfi/leak.csv` | done |
+| `04_real_data_importance` | C: importance on the public data sets, R and Python, linear and forest | `04_real_data/importance_wide.csv` | done |
+| `04_r_python_agreement` | R vs Python importance for every job of 01, 02, 04; largest difference against the tolerance | `{01,02,04}_*/{importance_long,parity}.csv` | done |
+| (workflow diagram) | input → fold-internal residualization → Full/Reduced learner → paired scoring → importance | drawn (no data) | Phase 4 |
+| (runtime) | scaling in n, p, v | `05_runtime` | Phase 3 |
+
+Tables: `results/tables/03_official_umfi.md` (sources, residualization,
+identical condition, designs, null design, all-rows effect, design
+differences), `results/tables/04_real_data.md` (data sets, run conditions,
+scores, importances), `results/tables/02b_rf_settings.md`, and the
+`*_checks.md` tables. Which of these become figures or tables of the paper is
+decided in Phase 4.
 
 The number of figures will be adjusted to the SoftwareX guide (to be checked
 in Phase 4) and to what the results support.

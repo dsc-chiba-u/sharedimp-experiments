@@ -1,0 +1,45 @@
+{
+  "description": "workflow/02b_rf_settings.smk: what the node-size parameters of ranger (R) and scikit-learn (Python) mean, and how much the difference matters. Part 1 grows one deterministic tree per setting (no bootstrap, all features as split candidates), so that equal stopping rules must give equal trees. Part 2 looks at how the terminal-node minimum is counted under bootstrap sampling. Part 3 compares forests as they are used (500 trees, bootstrap, sqrt(p) candidates) over several seeds.",
+  "datasets": ["rf_reg_n300_p5", "rf_bin_n300_p5"],
+  "test_fold": 1,
+  "single_tree": {
+    "r": {
+      "node5": {"min.node.size": 5, "min.bucket": 1},
+      "node4": {"min.node.size": 4, "min.bucket": 1},
+      "bucket5": {"min.node.size": 1, "min.bucket": 5}
+    },
+    "python": {
+      "split5": {"min_samples_split": 5, "min_samples_leaf": 1},
+      "split6": {"min_samples_split": 6, "min_samples_leaf": 1},
+      "leaf5": {"min_samples_split": 2, "min_samples_leaf": 5}
+    },
+    "pairs": [
+      {"r": "node5", "python": "split5", "question": "min.node.size = 5 vs min_samples_split = 5 (same number)"},
+      {"r": "node5", "python": "split6", "question": "min.node.size = 5 vs min_samples_split = 6 (ranger stops at node size <= min.node.size)"},
+      {"r": "node4", "python": "split5", "question": "min.node.size = 4 vs min_samples_split = 5"},
+      {"r": "bucket5", "python": "leaf5", "question": "min.bucket = 5 vs min_samples_leaf = 5"},
+      {"r": "node5", "python": "leaf5", "question": "common specification 8.2 as written: min_n = 5 (min.node.size) vs min_samples_leaf = 5"}
+    ],
+    "equivalence_criterion": "same number of leaves, same depth, and max |prediction difference| <= 1e-8 on the training rows and on the held-out fold"
+  },
+  "bootstrap_counting": {
+    "question": "Is the terminal-node minimum counted in bootstrap draws or in distinct training rows?",
+    "trees": 50,
+    "seed": 1,
+    "r": {"min.node.size": 1, "min.bucket": 5},
+    "python": {"min_samples_split": 2, "min_samples_leaf": 5}
+  },
+  "forest": {
+    "trees": 500,
+    "seeds": [1, 2, 3, 4, 5],
+    "metric": {"regression": "mse", "classification": "log_loss"},
+    "r": {
+      "spec_node5": {"min.node.size": 5, "min.bucket": 1, "note": "R built-in rand_forest (min_n = 5)"},
+      "bucket5": {"min.node.size": 1, "min.bucket": 5, "note": "terminal-node minimum 5, the meaning of the Python setting"}
+    },
+    "python": {
+      "spec_leaf5": {"min_samples_split": 2, "min_samples_leaf": 5, "note": "Python counterpart in specification 8.2"},
+      "split6": {"min_samples_split": 6, "min_samples_leaf": 1, "note": "split only nodes with more than 5 rows, the meaning of the R setting"}
+    }
+  }
+}

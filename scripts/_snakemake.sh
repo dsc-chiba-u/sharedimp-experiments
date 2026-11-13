@@ -15,6 +15,15 @@ if ! command -v snakemake >/dev/null 2>&1 || ! command -v singularity >/dev/null
   fi
 fi
 
+# Singularity (without setuid) unpacks an image into a temporary sandbox for
+# every job (0.4-1.3 GB each). On a nearly full system disk parallel jobs fail
+# with "No space left on device"; use the RAM disk unless the caller chose a
+# directory.
+if [ -z "${SINGULARITY_TMPDIR:-}" ] && [ -d /dev/shm ] && [ -w /dev/shm ]; then
+  export SINGULARITY_TMPDIR="/dev/shm/sharedimp-exp-$(id -u)"
+  mkdir -p "$SINGULARITY_TMPDIR"
+fi
+
 run_workflow() {
   local smk="$1"; shift
   snakemake -s "$smk" --use-singularity --cores "${SHAREDIMP_EXP_CORES:-4}" --show-failed-logs "$@"
