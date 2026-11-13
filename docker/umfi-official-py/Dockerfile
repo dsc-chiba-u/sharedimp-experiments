@@ -10,8 +10,8 @@
 # external/ at run time. sharedimp is not installed here either (it needs
 # Python >= 3.10); the two sides exchange CSV files.
 #
-#   docker build -t koki/umfi-official-py:20261113 docker/umfi-official-py
-#   docker push koki/umfi-official-py:20261113
+# Built and pushed by .github/workflows/docker.yml to ghcr.io/dsc-chiba-u/umfi-official-py
+# (and docker.io/koki/umfi-official-py when the Docker Hub secrets are set).
 FROM python:3.9-slim-bookworm
 
 LABEL org.opencontainers.image.title="umfi-official-py" \

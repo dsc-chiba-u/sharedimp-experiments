@@ -11,8 +11,8 @@
 #   - patchwork                : figure layout (experiment E)
 # sharedimp itself is not reinstalled, so it stays the pinned commit.
 #
-#   docker build -t koki/sharedimp-experiments-r:20261113 docker/experiments-r
-#   docker push koki/sharedimp-experiments-r:20261113
+# Built and pushed by .github/workflows/docker.yml to ghcr.io/dsc-chiba-u/sharedimp-experiments-r
+# (and docker.io/koki/sharedimp-experiments-r when the Docker Hub secrets are set).
 ARG SHAREDIMP_R_DIGEST=sha256:869dbec7077cfbfcea4f0da25d8ce51e1c4e6d4297106d11a965cada1d8a0805
 FROM ghcr.io/dsc-chiba-u/sharedimp-r@${SHAREDIMP_R_DIGEST}
 
