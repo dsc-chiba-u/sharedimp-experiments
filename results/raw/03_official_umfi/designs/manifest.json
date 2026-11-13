@@ -1,0 +1,865 @@
+{
+  "description": "Data sets of experiments B4 and B6; see python/sharedimp_exp/official_designs.py.",
+  "datasets": {
+    "nonlinear_interaction_seed01": {
+      "file": "nonlinear_interaction_seed01.csv",
+      "design": "nonlinear_interaction",
+      "seed": 1,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_nonlinear_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(1)",
+      "sha256": "32cba73b272c529257bb3f385bc793d8d7ccb68fd2353a3492fb990af8ff4a93"
+    },
+    "nonlinear_interaction_seed02": {
+      "file": "nonlinear_interaction_seed02.csv",
+      "design": "nonlinear_interaction",
+      "seed": 2,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_nonlinear_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(2)",
+      "sha256": "1219274fa66529db2ddd0acc8bcc10c3ca0a9da1705ac594aa74e73883741d11"
+    },
+    "nonlinear_interaction_seed03": {
+      "file": "nonlinear_interaction_seed03.csv",
+      "design": "nonlinear_interaction",
+      "seed": 3,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_nonlinear_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(3)",
+      "sha256": "7998c80e4ed682288168fb8d94cafe51e9de6494ce0c32c823f56e5ecc8a8976"
+    },
+    "nonlinear_interaction_seed04": {
+      "file": "nonlinear_interaction_seed04.csv",
+      "design": "nonlinear_interaction",
+      "seed": 4,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_nonlinear_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(4)",
+      "sha256": "013f52444acd3d917c3128754b4f8e9f63778200a25de8131d0752b735a2d7c8"
+    },
+    "nonlinear_interaction_seed05": {
+      "file": "nonlinear_interaction_seed05.csv",
+      "design": "nonlinear_interaction",
+      "seed": 5,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_nonlinear_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(5)",
+      "sha256": "0325148672546031a4e96737a6911e0b7864a2e666f7fd1ae23688ad5d9630a3"
+    },
+    "nonlinear_interaction_seed06": {
+      "file": "nonlinear_interaction_seed06.csv",
+      "design": "nonlinear_interaction",
+      "seed": 6,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_nonlinear_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(6)",
+      "sha256": "0ec4a119ce40c8c10cbcb724075f6d57eaf81e4ad1d7f24ea8341df53652ad3e"
+    },
+    "nonlinear_interaction_seed07": {
+      "file": "nonlinear_interaction_seed07.csv",
+      "design": "nonlinear_interaction",
+      "seed": 7,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_nonlinear_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(7)",
+      "sha256": "e32acdfaf85a780019f14a246c2186f22a5f255f757f24bef5f5c0382943e7be"
+    },
+    "nonlinear_interaction_seed08": {
+      "file": "nonlinear_interaction_seed08.csv",
+      "design": "nonlinear_interaction",
+      "seed": 8,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_nonlinear_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(8)",
+      "sha256": "0ec1681b2d2c83994ccc757723e2671464e516b925ac811ad30e86d9f1ff7399"
+    },
+    "nonlinear_interaction_seed09": {
+      "file": "nonlinear_interaction_seed09.csv",
+      "design": "nonlinear_interaction",
+      "seed": 9,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_nonlinear_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(9)",
+      "sha256": "0486caa0f3e837eae9a08ef8cbd9b90c1836309bc2f2aee52ccc0f4844cde7b5"
+    },
+    "nonlinear_interaction_seed10": {
+      "file": "nonlinear_interaction_seed10.csv",
+      "design": "nonlinear_interaction",
+      "seed": 10,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_nonlinear_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(10)",
+      "sha256": "c55266ffe32a3524aed3a872d9dd35b28c0ecff2da547a22d67896dc70233268"
+    },
+    "correlated_interaction_seed01": {
+      "file": "correlated_interaction_seed01.csv",
+      "design": "correlated_interaction",
+      "seed": 1,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlated_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(1)",
+      "sha256": "a2641136fab840bb3ee02b599a4856c83268c40a4543e6ef2d8dae7836faee3c"
+    },
+    "correlated_interaction_seed02": {
+      "file": "correlated_interaction_seed02.csv",
+      "design": "correlated_interaction",
+      "seed": 2,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlated_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(2)",
+      "sha256": "b5d068fee3c18042a4ea6bfe00693d5fc8769d4e297a12b4d681e9d4c54b5c1b"
+    },
+    "correlated_interaction_seed03": {
+      "file": "correlated_interaction_seed03.csv",
+      "design": "correlated_interaction",
+      "seed": 3,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlated_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(3)",
+      "sha256": "dd5a0b82de10d3dde02ace3389889d0db2bbffe6eddf943828e7799db57f346a"
+    },
+    "correlated_interaction_seed04": {
+      "file": "correlated_interaction_seed04.csv",
+      "design": "correlated_interaction",
+      "seed": 4,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlated_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(4)",
+      "sha256": "d3efb0bd245e21015ef6ae9084760f0a0029181d2a78dba216b10856e8664373"
+    },
+    "correlated_interaction_seed05": {
+      "file": "correlated_interaction_seed05.csv",
+      "design": "correlated_interaction",
+      "seed": 5,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlated_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(5)",
+      "sha256": "63b877dc0a0362dfa2f54169a788057adf5d235f47f0286bf5dae91d7fde9153"
+    },
+    "correlated_interaction_seed06": {
+      "file": "correlated_interaction_seed06.csv",
+      "design": "correlated_interaction",
+      "seed": 6,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlated_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(6)",
+      "sha256": "9cdcfb53dcfb60919d3c2cb215a22b86dbe71b151d9fbe117ceca9239e532bc4"
+    },
+    "correlated_interaction_seed07": {
+      "file": "correlated_interaction_seed07.csv",
+      "design": "correlated_interaction",
+      "seed": 7,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlated_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(7)",
+      "sha256": "ab3721632e0e0ab835cc7b15f533bbdd2358b8ae2194921a432bd6c5d81b2015"
+    },
+    "correlated_interaction_seed08": {
+      "file": "correlated_interaction_seed08.csv",
+      "design": "correlated_interaction",
+      "seed": 8,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlated_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(8)",
+      "sha256": "0c77c4263eab80fbf396d83cf0483805c721cec33e2b0b5ae35482d167cc4a9a"
+    },
+    "correlated_interaction_seed09": {
+      "file": "correlated_interaction_seed09.csv",
+      "design": "correlated_interaction",
+      "seed": 9,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlated_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(9)",
+      "sha256": "54e007bb0c235b12f71ec7543a1f7b236d54178a0008f37d4b4af983bbf90bab"
+    },
+    "correlated_interaction_seed10": {
+      "file": "correlated_interaction_seed10.csv",
+      "design": "correlated_interaction",
+      "seed": 10,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlated_interaction_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(10)",
+      "sha256": "6290f7f1487e3c753cc383548fc498bd3274d4307bde687cae26dde5f072f7dd"
+    },
+    "correlation_seed01": {
+      "file": "correlation_seed01.csv",
+      "design": "correlation",
+      "seed": 1,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(1)",
+      "sha256": "f54972c0440bc5e40f026b76c6da4195e49a371b0c0234dc1216aa16c728bb37"
+    },
+    "correlation_seed02": {
+      "file": "correlation_seed02.csv",
+      "design": "correlation",
+      "seed": 2,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(2)",
+      "sha256": "fd6b647153b4ae1ad5c8047e31e08c43477b3e4140da401c6316d6b4ef246dbd"
+    },
+    "correlation_seed03": {
+      "file": "correlation_seed03.csv",
+      "design": "correlation",
+      "seed": 3,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(3)",
+      "sha256": "709ad46feffc9e23ef2fd19b4d1676a13d7baee3e144f1799d062b9090bf58ff"
+    },
+    "correlation_seed04": {
+      "file": "correlation_seed04.csv",
+      "design": "correlation",
+      "seed": 4,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(4)",
+      "sha256": "b75386c93b4583c418da71f3bd76362d33b75e33126dd1e8ac277e7498745ed0"
+    },
+    "correlation_seed05": {
+      "file": "correlation_seed05.csv",
+      "design": "correlation",
+      "seed": 5,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(5)",
+      "sha256": "777ede812410cf7378b12c4a2153cb5ea759a197dd4fbc0ae6557af214620624"
+    },
+    "correlation_seed06": {
+      "file": "correlation_seed06.csv",
+      "design": "correlation",
+      "seed": 6,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(6)",
+      "sha256": "a310de96c01354e594cf1e2fc9730926b93c33cdb7617b438f25de41946504a4"
+    },
+    "correlation_seed07": {
+      "file": "correlation_seed07.csv",
+      "design": "correlation",
+      "seed": 7,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(7)",
+      "sha256": "57fff507107b1f4133145c8b4ab95c2a5b23f03213981097664ebe18791fb709"
+    },
+    "correlation_seed08": {
+      "file": "correlation_seed08.csv",
+      "design": "correlation",
+      "seed": 8,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(8)",
+      "sha256": "0acfb1518e8866b76e881bf5ce01b61c2f4370949625c163ad9a5c8d0fda265d"
+    },
+    "correlation_seed09": {
+      "file": "correlation_seed09.csv",
+      "design": "correlation",
+      "seed": 9,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(9)",
+      "sha256": "9155dd24fecfb28ece3b0345857f3041a263dd8b28db13f34f7fb23a74e20a2b"
+    },
+    "correlation_seed10": {
+      "file": "correlation_seed10.csv",
+      "design": "correlation",
+      "seed": 10,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_correlation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(10)",
+      "sha256": "7abd6cc03959a9171bcdd34196e3fbbf4fca64b9b282c60ae835aec87faae817"
+    },
+    "blood_relation_seed01": {
+      "file": "blood_relation_seed01.csv",
+      "design": "blood_relation",
+      "seed": 1,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_blood_relation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(1)",
+      "sha256": "caf2320368ffb8b38f5663e5ce486aff82fd6468d05d593ee3fce6e44d352dc2"
+    },
+    "blood_relation_seed02": {
+      "file": "blood_relation_seed02.csv",
+      "design": "blood_relation",
+      "seed": 2,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_blood_relation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(2)",
+      "sha256": "60231b6702cc40693dd525cb0da3017c86b271d86d43f16a51e5503d35141919"
+    },
+    "blood_relation_seed03": {
+      "file": "blood_relation_seed03.csv",
+      "design": "blood_relation",
+      "seed": 3,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_blood_relation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(3)",
+      "sha256": "25a7ca6f28e62173b836314aad3a2dae56e5e464e8ad3223c1be9485dbf64c77"
+    },
+    "blood_relation_seed04": {
+      "file": "blood_relation_seed04.csv",
+      "design": "blood_relation",
+      "seed": 4,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_blood_relation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(4)",
+      "sha256": "ca56b1ec03015a606de899793d31519eb323fa46eb287e8b9815fdaab0398b4d"
+    },
+    "blood_relation_seed05": {
+      "file": "blood_relation_seed05.csv",
+      "design": "blood_relation",
+      "seed": 5,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_blood_relation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(5)",
+      "sha256": "faa5c01db00d09b0f26e0a8a162803f35ed85698fe48d441bf14a3d5c6fd2dc7"
+    },
+    "blood_relation_seed06": {
+      "file": "blood_relation_seed06.csv",
+      "design": "blood_relation",
+      "seed": 6,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_blood_relation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(6)",
+      "sha256": "48827df325c7414bf0a83672e29775d7236989a3ab6b269d814a4b4c18b3c762"
+    },
+    "blood_relation_seed07": {
+      "file": "blood_relation_seed07.csv",
+      "design": "blood_relation",
+      "seed": 7,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_blood_relation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(7)",
+      "sha256": "58e53e175ebb6e68e3d68b7e3842ec0f4ee417e7d64fc05ef672bec317f17255"
+    },
+    "blood_relation_seed08": {
+      "file": "blood_relation_seed08.csv",
+      "design": "blood_relation",
+      "seed": 8,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_blood_relation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(8)",
+      "sha256": "5c74334a5b5f666d9df772f80638084bb30059863b645634b4ee6c7abcdf94a1"
+    },
+    "blood_relation_seed09": {
+      "file": "blood_relation_seed09.csv",
+      "design": "blood_relation",
+      "seed": 9,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_blood_relation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(9)",
+      "sha256": "677764a8d57de440d2087ed451daf5d577d25c3c021a6372deaca9302ec9cf5e"
+    },
+    "blood_relation_seed10": {
+      "file": "blood_relation_seed10.csv",
+      "design": "blood_relation",
+      "seed": 10,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "umfi/experiments.py:generate_blood_relation_data (guanton/umfi_python @ 4db1c23) after numpy.random.seed(10)",
+      "sha256": "3aacf3040aa7c8712a13d146bc70decff52ab16359c3930005ab2f9fc82fb594"
+    },
+    "independent_seed01": {
+      "file": "independent_seed01.csv",
+      "design": "independent",
+      "seed": 1,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "python/sharedimp_exp/official_designs.py:null_design",
+      "sha256": "77c80022f6c98525f785ee9e74c97e5ae88df0ceaa4c4b5849b832287bc65534"
+    },
+    "independent_seed02": {
+      "file": "independent_seed02.csv",
+      "design": "independent",
+      "seed": 2,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "python/sharedimp_exp/official_designs.py:null_design",
+      "sha256": "c0cc7c95783f689f859d146a396f85113ac8de58b077dfeecc85c1fb79b00b46"
+    },
+    "independent_seed03": {
+      "file": "independent_seed03.csv",
+      "design": "independent",
+      "seed": 3,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "python/sharedimp_exp/official_designs.py:null_design",
+      "sha256": "c47a4fde5d7db52a303998659c3820a3655f4a804d2cd3d0e94b3aeb1112fced"
+    },
+    "independent_seed04": {
+      "file": "independent_seed04.csv",
+      "design": "independent",
+      "seed": 4,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "python/sharedimp_exp/official_designs.py:null_design",
+      "sha256": "b6d3c0fcf8b7aac8fb72121b4146644d208faccfdf8409e175996333779be063"
+    },
+    "independent_seed05": {
+      "file": "independent_seed05.csv",
+      "design": "independent",
+      "seed": 5,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "python/sharedimp_exp/official_designs.py:null_design",
+      "sha256": "98b6cff170366c7628e2114cbef49ee6fa2e7c92894e37c63e3bcab3cf0bea38"
+    },
+    "independent_seed06": {
+      "file": "independent_seed06.csv",
+      "design": "independent",
+      "seed": 6,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "python/sharedimp_exp/official_designs.py:null_design",
+      "sha256": "d20e31073e46e197e0c7cb8afdfbee87d77b1c6d36d8c5c96514672ae9f96590"
+    },
+    "independent_seed07": {
+      "file": "independent_seed07.csv",
+      "design": "independent",
+      "seed": 7,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "python/sharedimp_exp/official_designs.py:null_design",
+      "sha256": "43fc0a8b849809e71360b9b334e8933e208fe784fd03fc434a40d8e4c809a8c6"
+    },
+    "independent_seed08": {
+      "file": "independent_seed08.csv",
+      "design": "independent",
+      "seed": 8,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "python/sharedimp_exp/official_designs.py:null_design",
+      "sha256": "c4023068156ecb4d49ce80766e029c666983e7898a7837b26710bf94e08854c4"
+    },
+    "independent_seed09": {
+      "file": "independent_seed09.csv",
+      "design": "independent",
+      "seed": 9,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "python/sharedimp_exp/official_designs.py:null_design",
+      "sha256": "9225b6e370c14cef38132bd88d979c1287c0b46925cf24e3aa982f04d1b8958d"
+    },
+    "independent_seed10": {
+      "file": "independent_seed10.csv",
+      "design": "independent",
+      "seed": 10,
+      "n": 500,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5"
+      ],
+      "target": "y",
+      "fold": "fold",
+      "task": "regression",
+      "origin": "python/sharedimp_exp/official_designs.py:null_design",
+      "sha256": "6d60e692efbbb9da31743b9f7163c27905de0d7c56548e4f6b51e1553ec1704c"
+    }
+  }
+}

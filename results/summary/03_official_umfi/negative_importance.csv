@@ -1,0 +1,9 @@
+variant,n_values,mean,min,max,share_negative,share_exactly_zero,description
+official_r,50,0,0,0,0,1,"official R (HydroML/UMFI): ranger, 100 trees, OOB R^2, floors"
+original_r,50,0,0,0,0,1,original R script (joej1997/UMFI): same rule
+official_py/extra_trees,500,0,0,0,0,1,"official Python (guanton/umfi_python): extra trees, OOB R^2, floors, mean of 10 runs"
+official_py/random_forest,500,0,0,0,0,1,"official Python, RF=True: random forest, OOB R^2, floors, mean of 10 runs"
+sharedimp_r/rand_forest,50,0.014849695957707031,-0.022892220678695542,0.083181194768983516,0.28000000000000003,0,"sharedimp (R): built-in forest, 5-fold, r2"
+sharedimp_r/linear,50,-0.0031212875840959499,-0.011697916100142747,0.0042614595954041604,0.85999999999999999,0,"sharedimp (R): OLS, 5-fold, r2"
+sharedimp_py/rand_forest,50,0.0090809306508878671,-0.021717512428937935,0.065002382113914209,0.40000000000000002,0,"sharedimp (Python): forest of specification 8.2, 5-fold, r2"
+sharedimp_py/linear,50,-0.0031212875840959569,-0.011697916100142747,0.0042614595954041604,0.85999999999999999,0,"sharedimp (Python): OLS, 5-fold, r2"

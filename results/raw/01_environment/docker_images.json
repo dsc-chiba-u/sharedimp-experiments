@@ -1,5 +1,5 @@
 {
-  "queried_at_utc": "2026-11-13T11:06:17Z",
+  "queried_at_utc": "2026-11-13T12:15:23Z",
   "images": [
     {
       "image": "ghcr.io/dsc-chiba-u/sharedimp-r",
@@ -42,6 +42,40 @@
       "digest_pinned_tag": "sha256:c88b48a58848d3583d14d60a9b6dabe73e26733c0c24e986153d12981a0edebe",
       "latest_is_pinned_commit": true,
       "revision_label": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
+      "status": "ok"
+    },
+    {
+      "image": "ghcr.io/dsc-chiba-u/sharedimp-experiments-r",
+      "pinned_commit": "408e962c5c19a34b4d60912555705697cc650399",
+      "pinned_tag": "408e962",
+      "pinned_digest": "sha256:803daedb5ce5b39246eefb63c823e0f0a7b5c8bb869f6d4283884d7142d84c1f",
+      "pinned_digest_is_commit_tag": true,
+      "revision_label_is_pinned_commit": true,
+      "tags": [
+        "latest",
+        "408e962"
+      ],
+      "digest_latest": "sha256:803daedb5ce5b39246eefb63c823e0f0a7b5c8bb869f6d4283884d7142d84c1f",
+      "digest_pinned_tag": "sha256:803daedb5ce5b39246eefb63c823e0f0a7b5c8bb869f6d4283884d7142d84c1f",
+      "latest_is_pinned_commit": true,
+      "revision_label": "408e962c5c19a34b4d60912555705697cc650399",
+      "status": "ok"
+    },
+    {
+      "image": "ghcr.io/dsc-chiba-u/umfi-official-py",
+      "pinned_commit": "408e962c5c19a34b4d60912555705697cc650399",
+      "pinned_tag": "408e962",
+      "pinned_digest": "sha256:2e44cc61c15ecd87b679b20025e6c53f8bd7ad3c5fb1efadc8855537ca47bef6",
+      "pinned_digest_is_commit_tag": true,
+      "revision_label_is_pinned_commit": true,
+      "tags": [
+        "latest",
+        "408e962"
+      ],
+      "digest_latest": "sha256:2e44cc61c15ecd87b679b20025e6c53f8bd7ad3c5fb1efadc8855537ca47bef6",
+      "digest_pinned_tag": "sha256:2e44cc61c15ecd87b679b20025e6c53f8bd7ad3c5fb1efadc8855537ca47bef6",
+      "latest_is_pinned_commit": true,
+      "revision_label": "408e962c5c19a34b4d60912555705697cc650399",
       "status": "ok"
     }
   ]

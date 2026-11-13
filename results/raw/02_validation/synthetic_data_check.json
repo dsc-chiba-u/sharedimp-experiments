@@ -1,8 +1,11 @@
 {
   "reproduced_byte_for_byte": true,
   "files": {
-    "manifest.json": "ce707ce4acba58832f384cf83a9b8d3d120546a319889caf6a38b6bf8c84c8fc",
+    "allgate_reg_n300_p4.csv": "58387b6aafcc51dc6ef547ebf72ee7f3c58ca326bc7e4dec06609214b8fee7bc",
+    "manifest.json": "ad3c6583b2e30c6521e1755c63d927b09129e412c806175411790552c466e759",
     "pc_linear_n2000_p5.csv": "cf1f1e30b450ea39fc3cb9b580e804fb913e7f94156f2c207fbd8571e486fe12",
+    "rf_bin_n300_p5.csv": "e1ca92bea1d903276c1c1ae1379c193d0afc2815a6122915372f51e690aa8ab3",
+    "rf_reg_n300_p5.csv": "1c0381c009975ca352b71e91a7eb3004d1331af9ac4adfc522472daecfd3a680",
     "smoke_bin_n60_p3.csv": "1e9eeb90ec2df782cc725bc6a2a358a74665ba02bd7fbff888747e687d453f61",
     "smoke_multi_n90_p3.csv": "74a4b7d52e31d4907b895419ee1f6c331a2245fef8441a58b4dc521a915d1737",
     "smoke_reg_n20_p3.csv": "879d3197d826d454edef37ac6d9195490aeb0a245e09b94265854969843674e1"

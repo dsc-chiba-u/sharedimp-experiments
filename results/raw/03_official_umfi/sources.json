@@ -1,0 +1,65 @@
+{
+  "fetched_at_utc": "2026-11-13T12:26:56Z",
+  "sources": {
+    "official_r": {
+      "repository": "https://github.com/HydroML/UMFI.git",
+      "commit": "54b964740ffb006d3ade759d84dc6e9af2f45998",
+      "directory": "external/HydroML_UMFI",
+      "license_file": "LICENSE",
+      "license_first_line": "MIT License",
+      "top_level_files": [
+        "DESCRIPTION",
+        "LICENSE",
+        "NAMESPACE",
+        "R",
+        "README.md",
+        "UMFI.Rproj",
+        "UMFI_aistats_an.R",
+        "data",
+        "man",
+        "mci.R",
+        "vignettes"
+      ],
+      "files_used": {
+        "R/preprocess_lr.R": "563287da9c06e43ca92bcc838c7cf10ac3d98e48fb62869816e25effde5999e9",
+        "R/umfi.R": "737cba571b82e6d10e4ebb95efdbccf048e0f7a779c88b7efb793e20ab590be6"
+      }
+    },
+    "official_py": {
+      "repository": "https://github.com/guanton/umfi_python.git",
+      "commit": "4db1c23f2355d69fc1471ae8df89c196d7a9a347",
+      "directory": "external/guanton_umfi_python",
+      "license_file": null,
+      "license_first_line": null,
+      "top_level_files": [
+        ".idea",
+        "MCI.py",
+        "README.md",
+        "data",
+        "main.py",
+        "umfi",
+        "umfi.yml"
+      ],
+      "files_used": {
+        "umfi/preprocess_LR.py": "07db484f4fb9bb9a638d0a0f16b028b10f1045e1be195683aa8dc217a9919d7f",
+        "umfi/UMFI.py": "8c90a2d0288303532ea64694d694e90fc94d1975e84427cf67a87848a15e372d",
+        "umfi/experiments.py": "315722d9464e3d64de240ce598aef14af882938532d80d5df1eddffaf0806f39"
+      }
+    },
+    "original_r": {
+      "repository": "https://github.com/joej1997/UMFI.git",
+      "commit": "16ef563fda5aae1fdb6544001a0f04450799c134",
+      "directory": "external/joej1997_UMFI",
+      "license_file": null,
+      "license_first_line": null,
+      "top_level_files": [
+        "MCIcode.R",
+        "README.md",
+        "UMFI_extended_code.R"
+      ],
+      "files_used": {
+        "UMFI_extended_code.R": "3f0d5a06d59691ddbf7d8f06e30a078b1ab71b405716ca5a7369b171c3277e6b"
+      }
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "job": {
+    "id": "wdbc_linear_logloss",
+    "dataset": "wdbc",
+    "learner": "linear",
+    "metric": "log_loss",
+    "seed": 1,
+    "parity": "logistic"
+  },
+  "language": "r",
+  "status": "ok",
+  "jobs_file": "config/04_real_data_jobs.json",
+  "sharedimp_version": "0.1.0",
+  "container": {
+    "runtime": "singularity",
+    "runtime_version": "3.8.6",
+    "image": "ghcr.io/dsc-chiba-u/sharedimp-r@sha256:869dbec7077cfbfcea4f0da25d8ce51e1c4e6d4297106d11a965cada1d8a0805"
+  },
+  "in_pinned_image": true,
+  "sharedimp_commit": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
+  "experiments_commit": "9d29abe141966bd881bc6af205ff9d1181cc8ead",
+  "experiments_code_dirty": false,
+  "threads": 1,
+  "run_at_utc": "2026-11-13T12:37:33Z",
+  "dataset_sha256": "7ff6febfcdf9f6a1d42c97051b9f1efa62e7e7df1409d0dcb47efa3792e1f719",
+  "task": "classification",
+  "learner_description": "linear",
+  "metric": "log_loss",
+  "n": 569,
+  "p": 10,
+  "n_splits": 5,
+  "elapsed_seconds": 0.752,
+  "warnings": [
+    "The learner emitted 55 warning(s) during fitting or prediction:\n• [55 times] glm.fit: fitted probabilities numerically 0 or 1 occurred"
+  ]
+}

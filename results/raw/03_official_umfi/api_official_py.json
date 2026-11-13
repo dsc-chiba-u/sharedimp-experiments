@@ -1,0 +1,20 @@
+{
+  "implementation": "official_py",
+  "signatures": {
+    "UMFI": "(X, y, preprocessing_methods=['optimal transport', 'linear regression'], niter=10, n_trees=100, select_optimal_preprocessing=True, RF=False, dependence_metric='OOB_R2')",
+    "preprocess_lr": "(dat, protect)"
+  },
+  "versions": {
+    "python": "3.9.25",
+    "scikit-learn": "1.5.0",
+    "numpy": "1.26.4",
+    "pandas": "2.2.1"
+  },
+  "container": {
+    "runtime": "singularity",
+    "runtime_version": "3.8.6",
+    "image": "ghcr.io/dsc-chiba-u/umfi-official-py@sha256:2e44cc61c15ecd87b679b20025e6c53f8bd7ad3c5fb1efadc8855537ca47bef6"
+  },
+  "experiments_commit": "9d29abe141966bd881bc6af205ff9d1181cc8ead",
+  "experiments_code_dirty": false
+}

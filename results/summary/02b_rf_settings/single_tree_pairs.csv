@@ -1,0 +1,11 @@
+dataset,question,ranger,sklearn,leaves_ranger,leaves_sklearn,depth_ranger,depth_sklearn,max_abs_diff_train,max_abs_diff_test,share_identical_test,equivalent
+rf_reg_n300_p5,min.node.size = 5 vs min_samples_split = 5 (same number),node5,split5,86,102,12,13,1.4567173999999998,2.398209,0.6333333333333333,False
+rf_reg_n300_p5,min.node.size = 5 vs min_samples_split = 6 (ranger stops at node size <= min.node.size),node5,split6,86,86,12,12,8.8817841970012523e-16,2.5841751999999998,0.93333333333333335,False
+rf_reg_n300_p5,min.node.size = 4 vs min_samples_split = 5,node4,split5,102,102,13,13,8.8817841970012523e-16,2.398209,0.84999999999999998,False
+rf_reg_n300_p5,min.bucket = 5 vs min_samples_leaf = 5,bucket5,leaf5,36,36,8,8,1.7763568394002505e-15,1.7763568394002505e-15,1,True
+rf_reg_n300_p5,common specification 8.2 as written: min_n = 5 (min.node.size) vs min_samples_leaf = 5,node5,leaf5,86,36,12,8,3.2468230833333331,2.0647331428571425,0.016666666666666666,False
+rf_bin_n300_p5,min.node.size = 5 vs min_samples_split = 5 (same number),node5,split5,43,44,12,12,0.5,1,0.93333333333333335,False
+rf_bin_n300_p5,min.node.size = 5 vs min_samples_split = 6 (ranger stops at node size <= min.node.size),node5,split6,43,43,12,12,0.5,1,0.93333333333333335,False
+rf_bin_n300_p5,min.node.size = 4 vs min_samples_split = 5,node4,split5,44,44,12,12,0.5,1,0.94999999999999996,False
+rf_bin_n300_p5,min.bucket = 5 vs min_samples_leaf = 5,bucket5,leaf5,43,27,20,7,0.59999999999999998,0.43055555555555558,0.29999999999999999,False
+rf_bin_n300_p5,common specification 8.2 as written: min_n = 5 (min.node.size) vs min_samples_leaf = 5,node5,leaf5,43,27,12,7,0.875,1,0.43333333333333335,False

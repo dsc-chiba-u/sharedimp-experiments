@@ -1,0 +1,39 @@
+check,description,criterion,observed,status
+B1/gate_rule/official_r,the official column differs from the raw column exactly where the dependence test (recomputed independently) passes,gate fired <=> official column != raw column,"38 feature pairs, 18 fired",pass
+B1/gate_fired/official_r,"residuals of official_r vs sharedimp_r, same rows, pairs where the official test passes",<= 1e-08,4.72e-15 over 18 pairs,pass
+B1/gate_not_fired/sharedimp_r,"pairs where the official test of official_r fails: official keeps the raw column, sharedimp_r residualizes",reported (design difference),20 pairs; max |official - sharedimp| = 1.28,reported
+B1/gate_rule/original_r,the official column differs from the raw column exactly where the dependence test (recomputed independently) passes,gate fired <=> official column != raw column,"38 feature pairs, 18 fired",pass
+B1/gate_fired/original_r,"residuals of original_r vs sharedimp_r, same rows, pairs where the official test passes",<= 1e-08,4.72e-15 over 18 pairs,pass
+B1/gate_not_fired/original_r_vs_sharedimp_r,"pairs where the official test of original_r fails: official keeps the raw column, sharedimp_r residualizes",reported (design difference),20 pairs; max |official - sharedimp| = 1.28,reported
+B1/gate_rule/official_py,the official column differs from the raw column exactly where the dependence test (recomputed independently) passes,gate fired <=> official column != raw column,"38 feature pairs, 22 fired",pass
+B1/gate_fired/official_py,"residuals of official_py vs sharedimp_py, same rows, pairs where the official test passes",<= 1e-08,2.22e-15 over 22 pairs,pass
+B1/gate_not_fired/sharedimp_py,"pairs where the official test of official_py fails: official keeps the raw column, sharedimp_py residualizes",reported (design difference),16 pairs; max |official - sharedimp| = 0.284,reported
+B1/official_gates_differ,the two official implementations use different dependence tests (p < 0.01 vs R^2 > 0.01),reported,4 of 38 feature pairs are residualized by one official implementation and not by the other,reported
+B1/number_parsing,raw anchor column as parsed by R (read.csv) vs as parsed by pandas from the same 6-decimal text,reported,max |difference| = 1.11e-16,reported
+B1/sharedimp_r_vs_py,"Full representation of sharedimp (R) vs sharedimp (Python), fitted and applied on all rows",<= 1e-08,1.78e-15,pass
+B2/layout,"Full representation: all features, original column order, in every implementation",identical,,pass
+B2/anchor,"anchor column of the Full representation equals the raw anchor, in every implementation",exactly equal,,pass
+B2/reduced,sharedimp Reduced representation = Full representation without the anchor column (the official code drops the anchor column from its Full representation in the call to the learner),"exactly equal, same order",,pass
+B3/r/random_forest/allgate_reg_n300_p4,"official importance vs the official scoring rule applied to sharedimp's all-rows representation (same seed, same order of fits)",<= 1e-08,0,pass
+B3/r/random_forest/rf_reg_n300_p5,"official importance vs the official scoring rule applied to sharedimp's all-rows representation (same seed, same order of fits)",reported (representations differ where the official test fails),0.0291,reported
+B3/python/extra_trees/allgate_reg_n300_p4,"official importance vs the official scoring rule applied to sharedimp's all-rows representation (same seed, same order of fits)",<= 1e-08,0,pass
+B3/python/random_forest/allgate_reg_n300_p4,"official importance vs the official scoring rule applied to sharedimp's all-rows representation (same seed, same order of fits)",<= 1e-08,0,pass
+B3/python/extra_trees/rf_reg_n300_p5,"official importance vs the official scoring rule applied to sharedimp's all-rows representation (same seed, same order of fits)",reported (representations differ where the official test fails),0.0268,reported
+B3/python/random_forest/rf_reg_n300_p5,"official importance vs the official scoring rule applied to sharedimp's all-rows representation (same seed, same order of fits)",reported (representations differ where the official test fails),0.0216,reported
+B3/official_r_vs_original_r,"HydroML/UMFI umfi() vs UMFI() of the original script, same seed",<= 1e-08,0,pass
+B6/official_r,"null design (response independent of the features), official R (HydroML/UMFI): ranger, 100 trees, OOB R^2, floors",reported (design difference),"50 values: mean 0, min 0, share < 0: 0.00, share == 0: 1.00",reported
+B6/original_r,"null design (response independent of the features), original R script (joej1997/UMFI): same rule",reported (design difference),"50 values: mean 0, min 0, share < 0: 0.00, share == 0: 1.00",reported
+B6/official_py/extra_trees,"null design (response independent of the features), official Python (guanton/umfi_python): extra trees, OOB R^2, floors, mean of 10 runs",reported (design difference),"500 values: mean 0, min 0, share < 0: 0.00, share == 0: 1.00",reported
+B6/official_py/random_forest,"null design (response independent of the features), official Python, RF=True: random forest, OOB R^2, floors, mean of 10 runs",reported (design difference),"500 values: mean 0, min 0, share < 0: 0.00, share == 0: 1.00",reported
+B6/sharedimp_r,"null design (response independent of the features), sharedimp (R): built-in forest, 5-fold, r2",reported (design difference),"50 values: mean 0.0148, min -0.0229, share < 0: 0.28, share == 0: 0.00",reported
+B6/sharedimp_r/linear,"null design (response independent of the features), sharedimp (R): OLS, 5-fold, r2",reported (design difference),"50 values: mean -0.00312, min -0.0117, share < 0: 0.86, share == 0: 0.00",reported
+B6/sharedimp_py,"null design (response independent of the features), sharedimp (Python): forest of specification 8.2, 5-fold, r2",reported (design difference),"50 values: mean 0.00908, min -0.0217, share < 0: 0.40, share == 0: 0.00",reported
+B6/sharedimp_py/linear,"null design (response independent of the features), sharedimp (Python): OLS, 5-fold, r2",reported (design difference),"50 values: mean -0.00312, min -0.0117, share < 0: 0.86, share == 0: 0.00",reported
+B4/official_r_vs_sharedimp_r,"official R (all rows, OOB R^2, 100 trees, floors) vs sharedimp R (fold-internal, 5-fold r2, 500 trees), mean over seeds, non-null designs",reported (procedures differ),largest |difference of means| = 0.0225,reported
+B4/official_py_vs_sharedimp_py,"official Python with RF=True vs sharedimp Python, mean over seeds, non-null designs",reported (procedures differ),largest |difference of means| = 0.0779,reported
+B5a/r,sharedimp (R): training representation passed to the learner after perturbing the 100 assessment rows,bit-identical,"10 fits, max |diff| = 0",pass
+B5a/python,sharedimp (Python): the same,bit-identical,"10 fits, max |diff| = 0.0",pass
+B5a/official_r,official preprocess_lr() on all rows: residuals of the training rows after the same perturbation,reported,max |diff| = 1.29,reported
+B5b/pipeline,step-by-step fold-internal pipeline (build_representations + lm.fit + MSE) vs shared_importance(),<= 1e-08,0 over 2500 values,pass
+B5b/all_rows_effect,"all-rows residualization vs fold-internal residualization, otherwise identical 5-fold CV (OLS, MSE): mean relative change of the importance of x1, x2, x3, x5",reported,n=30: +34.0%; n=60: +15.7%; n=120: +7.7%; n=500: +1.8%; n=2000: +0.4%,reported
+B7/evidence,"every statement of the API table is backed by a source line at the pinned commit, a recorded signature or an executed check",all found,all found,pass

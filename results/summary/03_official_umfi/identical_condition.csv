@@ -1,0 +1,7 @@
+language,dataset,forest,n_values,n_seeds,max_abs_diff_official_vs_rule_on_sharedimp,max_abs_diff_official_r_vs_original_r,mean_official_importance,condition
+r,allgate_reg_n300_p4,random_forest,20,5,0,0,0.36780132914704144,every dependence test passes (identical representations)
+r,rf_reg_n300_p5,random_forest,25,5,0.02905405530291183,0,0.33114927332339017,some dependence tests fail (representations differ)
+python,allgate_reg_n300_p4,extra_trees,20,5,0,NA,0.41379658893237881,every dependence test passes (identical representations)
+python,allgate_reg_n300_p4,random_forest,20,5,0,NA,0.39302852888391093,every dependence test passes (identical representations)
+python,rf_reg_n300_p5,extra_trees,25,5,0.026847731680530118,NA,0.36197815136837314,some dependence tests fail (representations differ)
+python,rf_reg_n300_p5,random_forest,25,5,0.021597137048173676,NA,0.36779291310602164,some dependence tests fail (representations differ)

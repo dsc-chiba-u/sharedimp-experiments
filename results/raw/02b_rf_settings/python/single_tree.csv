@@ -1,0 +1,7 @@
+dataset,setting,leaves,depth
+rf_reg_n300_p5,split5,102,13
+rf_reg_n300_p5,split6,86,12
+rf_reg_n300_p5,leaf5,36,8
+rf_bin_n300_p5,split5,44,12
+rf_bin_n300_p5,split6,43,12
+rf_bin_n300_p5,leaf5,27,7

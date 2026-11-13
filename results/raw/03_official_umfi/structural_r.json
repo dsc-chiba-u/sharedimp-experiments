@@ -1,0 +1,17 @@
+{
+  "language": "r",
+  "dataset": "rf_reg_n300_p5",
+  "perturbation": "x -> 100 * x + 7 on the assessment rows",
+  "n_train": 200,
+  "n_assessment": 100,
+  "sharedimp_r": {
+    "learner_fits_compared": 10,
+    "same_layout": true,
+    "max_abs_diff_training_representation": 0,
+    "bit_identical": true
+  },
+  "official_r": {
+    "max_abs_diff_training_rows_of_representation": 1.29220427243279,
+    "note": "preprocess_lr() is given all rows, so the residuals of the training rows depend on the assessment rows"
+  }
+}

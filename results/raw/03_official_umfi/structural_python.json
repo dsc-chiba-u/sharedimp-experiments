@@ -1,0 +1,12 @@
+{
+  "language": "python",
+  "implementation": "sharedimp_py",
+  "dataset": "rf_reg_n300_p5",
+  "perturbation": "x -> 100 * x + 7 on the assessment rows",
+  "n_train": 200,
+  "n_assessment": 100,
+  "learner_fits_compared": 10,
+  "same_layout": true,
+  "max_abs_diff_training_representation": 0.0,
+  "bit_identical": true
+}

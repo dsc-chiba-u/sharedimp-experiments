@@ -1,0 +1,5 @@
+dataset,status,title,task,n,p,classes,folds,rows_dropped_missing,duplicated_rows,largest_abs_feature_correlation,source,doi,license,retrieved,note
+concrete,used,Concrete Compressive Strength,regression,1030,8,-,5,0,25,0.65753286218195672,"UCI Machine Learning Repository, dataset 165",10.24432/C5PK67,CC BY 4.0,2026-11-13,
+wdbc,used,"Breast Cancer Wisconsin (Diagnostic), the ten mean features",classification,569,10,B: 357; M: 212,5,0,0,0.99785528199328766,"UCI Machine Learning Repository, dataset 17",10.24432/C5DW2B,CC BY 4.0,2026-11-13,
+maternal,used,Maternal Health Risk,classification,1014,6,high_risk: 272; low_risk: 406; mid_risk: 336,5,0,562,0.78700652262324888,"UCI Machine Learning Repository, dataset 863",10.24432/C5DP5D,CC BY 4.0,2026-11-13,
+penguins,rejected,Palmer penguins (complete cases of the four measurements),classification,342,NA,Adelie: 151; Chinstrap: 68; Gentoo: 123,NA,2,0,0.87120175608544859,"allisonhorst/palmerpenguins, inst/extdata/penguins.csv at commit 8957207",10.5281/zenodo.3960218,CC0 1.0,2026-11-13,complete separation: the unpenalized logistic maximum-likelihood estimate does not exist

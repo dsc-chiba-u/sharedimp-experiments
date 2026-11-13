@@ -1,0 +1,29 @@
+{
+  "implementation": "sharedimp_py",
+  "signatures": {
+    "shared_importance": "(estimator: 'Any', X: 'Any', y: 'Any', *, scoring: 'Any' = None, cv: 'Any' = 5, groups: 'Any' = None, features: 'Any' = None, fit_params: 'Mapping[str, Any] | None' = None, on_error: 'str' = 'warn', n_jobs: 'int | None' = None, random_state: 'int | np.random.RandomState | None' = None, verbose: 'int' = 0) -> 'SharedImportanceResult'",
+    "AnchorResidualizer": "(anchor: 'int | str' = 0, *, fit_intercept: 'bool' = True, drop_anchor: 'bool' = False, tol: 'float' = 1e-10) -> 'None'"
+  },
+  "common_metrics": [
+    "accuracy",
+    "log_loss",
+    "mae",
+    "mse",
+    "r2",
+    "rmse",
+    "roc_auc",
+    "rsq"
+  ],
+  "versions": {
+    "sharedimp": "0.1.0"
+  },
+  "container": {
+    "runtime": "singularity",
+    "runtime_version": "3.8.6",
+    "image": "ghcr.io/dsc-chiba-u/sharedimp-py@sha256:c88b48a58848d3583d14d60a9b6dabe73e26733c0c24e986153d12981a0edebe"
+  },
+  "in_pinned_image": true,
+  "sharedimp_commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
+  "experiments_commit": "9d29abe141966bd881bc6af205ff9d1181cc8ead",
+  "experiments_code_dirty": false
+}

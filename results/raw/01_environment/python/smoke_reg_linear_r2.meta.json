@@ -18,10 +18,10 @@
   },
   "in_pinned_image": true,
   "sharedimp_commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
-  "experiments_commit": "3226da4547980695d2ef8834d43b3156ce4c89f5",
+  "experiments_commit": "9d29abe141966bd881bc6af205ff9d1181cc8ead",
   "experiments_code_dirty": false,
   "threads": 1,
-  "run_at_utc": "2026-11-13T11:06:11Z",
+  "run_at_utc": "2026-11-13T12:15:24Z",
   "dataset_sha256": "879d3197d826d454edef37ac6d9195490aeb0a245e09b94265854969843674e1",
   "task": "regression",
   "learner_description": "LinearRegression()",
@@ -29,6 +29,6 @@
   "n": 20,
   "p": 3,
   "n_splits": 4,
-  "elapsed_seconds": 0.08203579997643828,
+  "elapsed_seconds": 0.08376146492082626,
   "warnings": []
 }

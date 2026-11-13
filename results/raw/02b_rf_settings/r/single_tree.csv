@@ -1,0 +1,7 @@
+dataset,setting,leaves,depth
+rf_reg_n300_p5,node5,                86,                12
+rf_reg_n300_p5,node4,               102,                13
+rf_reg_n300_p5,bucket5,                36,                 8
+rf_bin_n300_p5,node5,                43,                12
+rf_bin_n300_p5,node4,                44,                12
+rf_bin_n300_p5,bucket5,                43,                20

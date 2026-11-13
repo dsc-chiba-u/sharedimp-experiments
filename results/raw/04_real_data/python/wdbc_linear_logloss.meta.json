@@ -1,0 +1,34 @@
+{
+  "job": {
+    "id": "wdbc_linear_logloss",
+    "dataset": "wdbc",
+    "learner": "linear",
+    "metric": "log_loss",
+    "seed": 1,
+    "parity": "logistic"
+  },
+  "language": "python",
+  "status": "ok",
+  "jobs_file": "config/04_real_data_jobs.json",
+  "sharedimp_version": "0.1.0",
+  "container": {
+    "runtime": "singularity",
+    "runtime_version": "3.8.6",
+    "image": "ghcr.io/dsc-chiba-u/sharedimp-py@sha256:c88b48a58848d3583d14d60a9b6dabe73e26733c0c24e986153d12981a0edebe"
+  },
+  "in_pinned_image": true,
+  "sharedimp_commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
+  "experiments_commit": "9d29abe141966bd881bc6af205ff9d1181cc8ead",
+  "experiments_code_dirty": false,
+  "threads": 1,
+  "run_at_utc": "2026-11-13T12:37:59Z",
+  "dataset_sha256": "7ff6febfcdf9f6a1d42c97051b9f1efa62e7e7df1409d0dcb47efa3792e1f719",
+  "task": "classification",
+  "learner_description": "LogisticRegression(C=inf, solver='newton-cholesky', tol=1e-12, max_iter=1000)",
+  "scoring": "log_loss",
+  "n": 569,
+  "p": 10,
+  "n_splits": 5,
+  "elapsed_seconds": 0.7892437210539356,
+  "warnings": []
+}

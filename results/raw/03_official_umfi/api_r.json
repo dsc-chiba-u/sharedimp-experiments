@@ -1,0 +1,33 @@
+{
+  "signatures": {
+    "official_r": {
+      "umfi": "function (X, y, mod_meth = \"lr\")  NULL",
+      "umfi_par": "function (X, y, mod_meth)  NULL",
+      "preprocess_lr": "function (dat, protect)  NULL"
+    },
+    "original_r": {
+      "UMFI": "function (X, y, mod_meth)  NULL",
+      "modifty_linreg": "function (dat, protect)  NULL"
+    },
+    "sharedimp_r": {
+      "shared_importance": "function (x, y, learner = \"rand_forest\", metric = NULL, task = c(\"auto\",      \"regression\", \"classification\"), v = 5, repeats = 1, resamples = NULL,      features = NULL, seed = NULL, on_error = c(\"warn\", \"error\"),      verbose = FALSE)  NULL",
+      "residualize_fit": "function (x, anchor)  NULL",
+      "build_representations": "function (x_train, x_assess, anchor)  NULL",
+      "sharedimp_learner": "function (fit, predict, label = \"custom learner\")  NULL"
+    }
+  },
+  "versions": {
+    "R": "R version 4.5.3 (2026-03-11)",
+    "ranger": "0.18.0",
+    "sharedimp": "0.1.0"
+  },
+  "container": {
+    "runtime": "singularity",
+    "runtime_version": "3.8.6",
+    "image": "ghcr.io/dsc-chiba-u/sharedimp-experiments-r@sha256:803daedb5ce5b39246eefb63c823e0f0a7b5c8bb869f6d4283884d7142d84c1f"
+  },
+  "in_pinned_image": true,
+  "sharedimp_commit": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
+  "experiments_commit": "9d29abe141966bd881bc6af205ff9d1181cc8ead",
+  "experiments_code_dirty": false
+}
