@@ -1,0 +1,13 @@
+{
+  "description": "workflow/04a_multiclass_selection.smk, pilot of criterion E9 (docs/experiment_plan.md, section 5d): the 'linear' learner with the two metrics of the Maternal jobs of experiment C on every candidate that passed E1-E8, same file and fold column in R and Python. Parity class and tolerance are those of experiment C; they are not changed.",
+  "parity_classes": {
+    "exact": {"tolerance": 1e-08, "meaning": "closed-form learner (OLS); common specification section 14"},
+    "logistic": {"tolerance": 1e-06, "meaning": "iteratively fitted binary logistic regression (glm.fit IRLS vs newton-cholesky)"},
+    "multinomial": {"tolerance": 0.001, "meaning": "nnet::multinom (BFGS) vs L-BFGS; agreement limited by R's optimiser"},
+    "none": {"tolerance": null, "meaning": "language-specific learner; difference reported, not checked"}
+  },
+  "jobs": [
+    {"id": "candidate_abalone_linear_logloss", "dataset": "candidate_abalone", "learner": "linear", "metric": "log_loss", "seed": 1, "parity": "multinomial"},
+    {"id": "candidate_abalone_linear_accuracy", "dataset": "candidate_abalone", "learner": "linear", "metric": "accuracy", "seed": 1, "parity": "multinomial"}
+  ]
+}

@@ -71,7 +71,7 @@ computing rule, `benchmark:` and `log:` per rule.
 conda activate snakemake      # Snakemake 8.10.0 + Singularity 3.8.6 (environment.yml)
 snakemake -s workflow/01_environment.smk --use-singularity -c4
 snakemake -s workflow/02_validation.smk  --use-singularity -c4
-snakemake -s workflow/<stage>.smk -n                      # dry run (other stages: 02b_rf_settings, 03_official_umfi, 04_real_data, 04b_maternal, 04c_null_forest, 05_runtime, 06_figures)
+snakemake -s workflow/<stage>.smk -n                      # dry run (other stages: 02b_rf_settings, 03_official_umfi, 04_real_data, 04a_multiclass_selection, 04b_maternal, 04c_null_forest, 05_runtime, 06_figures)
 snakemake -s workflow/02_validation.smk --use-singularity -c4 results/raw/02_validation/r/pc_linear_mse.meta.json
 ```
 
@@ -143,7 +143,8 @@ recompute. Logs: `logs/<stage>/<rule>.log`.
   for C; `maternal_*` for 04b; `null_forest*` and `R/null_forest.R` for 04c;
   `runtime*` and `R/runtime.R` for D; `R/figures.R`, `R/figures_phase3.R`).
   `data/derived/`, `data/null_forest/`, `data/runtime/` are written by 04b,
-  04c and 05; `find_dataset` searches synthetic, real and derived. Scripts take
+  04c and 05; `data/candidates/` is written by 04a and used by no experiment.
+  `find_dataset` searches synthetic, real, derived and candidates. Scripts take
   positional arguments in the order of the Snakemake rule.
 - `workflow/NN_*.smk` writes `results/raw/NN_*/` and `results/summary/NN_*/`;
   Markdown tables go to `results/tables/`, figures to `results/figures/`.
@@ -164,7 +165,7 @@ recompute. Logs: `logs/<stage>/<rule>.log`.
   duplicates in parity data unless that learner is used.
 - Stage numbers: `01` environment (experiment A), `02`
   validation / positive control, `02b` random-forest settings, `03` official UMFI (B), `04` real data (C),
-  `04b` Maternal duplicates, `04c` null-design forest, `05` runtime (D), `06` figures (E).
+  `04a` multiclass data-set selection (screening + pilot; outcome in `docs/multiclass_dataset_selection.md`), `04b` Maternal duplicates, `04c` null-design forest, `05` runtime (D), `06` figures (E).
 
 ## Before committing
 

@@ -405,6 +405,25 @@ Rules for the outcome:
   Maternal jobs keep their job ids, data file, folds and seeds; the runtime
   benchmark (05) is not re-run.
 
+### As executed (2026-11-14, after the criteria above were committed as `a4b5f17`)
+
+Workflow `workflow/04a_multiclass_selection.smk`
+(`config/04a_multiclass_selection.json`: sources, checksums, thresholds and
+the documentary evidence for E1, E2, P1; `config/04a_pilot_jobs.json`: the
+pilot jobs). Candidates that pass E1–E8 are prepared in `data/candidates/`
+and run through the pilot of E9 with the unchanged checker; a failed parity
+check there is the recorded outcome, not a workflow failure.
+
+Observed: Dry Bean and Vehicle fail E7 on the provider's figures (not
+downloaded); Vertebral Column fails E3; Seeds fails E8; Abalone passes
+E1–E8 and P2 and **fails E9** (accuracy: 0.0012 against 1e-3; log-loss:
+2.8e-06). **No candidate is eligible; nothing was replaced**, as the rules
+above prescribe. Details and the options left to the authors:
+`docs/multiclass_dataset_selection.md`.
+
+Deviation: the candidate "passes" recorded for E1 and E2 are documentary
+(read from the provider's pages and files), not computed.
+
 ## 6. Experiment D — runtime (Phase 3)
 
 Workflow: `workflow/05_runtime.smk`; conditions, protocol, budget rule and

@@ -26,7 +26,7 @@ state, results and open issues: `docs/STATUS.md`.
 
 ```
 config/      pins.env (package commits, image digests, official UMFI commits), NN_*.json (run conditions)
-data/        synthetic/ (generated, committed), real/ (prepared public data), derived/ (variants of real data), null_forest/, runtime/ (generated; CSVs of runtime/ git-ignored); manifest.json in each
+data/        synthetic/ (generated, committed), real/ (prepared public data), derived/ (variants of real data), candidates/ (screened, not used), null_forest/, runtime/ (generated; CSVs of runtime/ git-ignored); manifest.json in each
 R/           R helpers, job runner, experiment B (R side), figures
 python/      sharedimp_exp/: Python helpers, job runner, checks, data generators, experiment B, summaries
 workflow/    one Snakefile per stage (NN_*.smk), common.smk
@@ -34,7 +34,7 @@ scripts/     thin wrappers around the workflows
 docker/      Dockerfiles of the two Phase 2 images (built by .github/workflows/docker.yml)
 external/    official UMFI sources, fetched at pinned commits at run time (git-ignored)
 results/     raw/ (per-run output), summary/ (derived CSV), tables/ (derived Markdown), figures/
-docs/        experiment_plan.md, STATUS.md, random_forest_comparison.md, package_change_proposal.md, maternal_duplicates.md, null_forest_investigation.md, runtime_benchmark.md
+docs/        experiment_plan.md, STATUS.md, random_forest_comparison.md, package_change_proposal.md, maternal_duplicates.md, multiclass_dataset_selection.md, null_forest_investigation.md, runtime_benchmark.md
 paper/       manuscript (skeleton), references.bib
 ```
 
@@ -58,6 +58,7 @@ bash scripts/02_validation.sh       # classification smoke tests + positive cont
 bash scripts/02b_rf_settings.sh     # random-forest settings, ranger vs scikit-learn         (~30 min)
 bash scripts/03_official_umfi.sh    # B: official UMFI-LR code vs sharedimp (needs git)      (~40 min)
 bash scripts/04_real_data.sh        # C: three public data sets (downloads them)             (~5 min)
+bash scripts/04a_multiclass_selection.sh  # candidate multiclass data sets (downloads them)  (~1 min)
 bash scripts/04b_maternal.sh        # duplicated rows of Maternal Health Risk (needs 04)     (~2 min)
 bash scripts/04c_null_forest.sh     # forest importance under a null design                  (~40 min)
 bash scripts/05_runtime.sh          # D: runtime benchmark, pilot + main, always 1 core      (~2 h)
@@ -93,6 +94,7 @@ reports.
 | `02b_rf_settings.smk` | meaning and effect of the node-size settings of ranger and scikit-learn | done | `results/{raw,summary}/02b_rf_settings/`, `results/tables/02b_rf_settings.md`, `docs/random_forest_comparison.md` |
 | `03_official_umfi.smk` | B: official UMFI-LR implementations (R package, original R script, Python) | done | `results/{raw,summary}/03_official_umfi/`, `results/tables/03_official_umfi*.md` |
 | `04_real_data.smk` | C: three public data sets in R and Python | done | `data/real/`, `results/{raw,summary}/04_real_data/`, `results/tables/04_real_data*.md` |
+| `04a_multiclass_selection.smk` | screening of five candidate multiclass data sets by pre-set criteria, R/Python pilot for those that pass | done; no candidate eligible, experiment C unchanged | `data/candidates/`, `results/{raw,summary}/04a_multiclass_{selection,pilot}/`, `results/tables/04a_multiclass_*.md`, `docs/multiclass_dataset_selection.md` |
 | `04b_maternal.smk` | duplicated rows of Maternal Health Risk: random folds, group-aware folds, identical records removed | done | `data/derived/`, `results/{raw,summary}/04b_maternal/`, `results/tables/04b_maternal*.md`, `docs/maternal_duplicates.md` |
 | `04c_null_forest.smk` | forest importance when the response is independent of the features, one setting changed at a time | done | `data/null_forest/`, `results/{raw,summary}/04c_null_forest/`, `results/tables/04c_null_forest.md`, `docs/null_forest_investigation.md` |
 | `05_runtime.smk` | D: runtime in n, p, folds, learner, R and Python (pilot, budget of 2 h) | done; 31 of 90 cells skipped by the budget rule | `data/runtime/`, `results/{raw,summary}/05_runtime/`, `results/tables/05_runtime*.md`, `docs/runtime_benchmark.md` |
@@ -102,8 +104,8 @@ reports.
 
 | image | contents | used by |
 |---|---|---|
-| `ghcr.io/dsc-chiba-u/sharedimp-r` (tag `cf2e1cc`, by digest) | R 4.5.3, `sharedimp` (R) at the pinned commit | 01, 02, 02b, 04, 04b, 04c, 05 |
-| `ghcr.io/dsc-chiba-u/sharedimp-py` (tag `bacc5d8`, by digest) | Python 3.13, `sharedimp` (Python) at the pinned commit | 01, 02, 02b, 03, 04, 04b, 04c, 05 |
+| `ghcr.io/dsc-chiba-u/sharedimp-r` (tag `cf2e1cc`, by digest) | R 4.5.3, `sharedimp` (R) at the pinned commit | 01, 02, 02b, 04, 04a, 04b, 04c, 05 |
+| `ghcr.io/dsc-chiba-u/sharedimp-py` (tag `bacc5d8`, by digest) | Python 3.13, `sharedimp` (Python) at the pinned commit | 01, 02, 02b, 03, 04, 04a, 04b, 04c, 05 |
 | `ghcr.io/dsc-chiba-u/sharedimp-experiments-r` (by digest) | the R image plus the dependencies of the official UMFI R package and `patchwork` | 03, 06 |
 | `ghcr.io/dsc-chiba-u/umfi-official-py` (by digest) | Python 3.9 with the dependencies of the official Python UMFI code at its own versions | 03 |
 

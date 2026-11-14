@@ -1,0 +1,48 @@
+{
+  "description": "Candidate data sets that passed criteria E1-E8 of docs/experiment_plan.md, section 5d, prepared for the pilot of criterion E9 by python/sharedimp_exp/multiclass_selection.py. Not used by any experiment. Modified versions of the originals (CC BY 4.0).",
+  "datasets": {
+    "candidate_abalone": {
+      "file": "candidate_abalone.csv",
+      "task": "classification",
+      "target": "y",
+      "fold": "fold",
+      "features": [
+        "length",
+        "diameter",
+        "height",
+        "whole_weight",
+        "shucked_weight",
+        "viscera_weight",
+        "shell_weight"
+      ],
+      "n": 4177,
+      "p": 7,
+      "n_folds": 5,
+      "sha256": "bd65f5246ef0a230d14c63bf6bf1b56d1d23213031121d4ffee5529b64d989cc",
+      "title": "Abalone, Sex (M, F, I) as response",
+      "source": "UCI Machine Learning Repository, dataset 1",
+      "url": "https://archive.ics.uci.edu/static/public/1/data.csv",
+      "landing_page": "https://archive.ics.uci.edu/dataset/1/abalone",
+      "doi": "10.24432/C55C7W",
+      "license": "CC BY 4.0",
+      "retrieved": "2026-11-14",
+      "source_sha256": "25f3dc964447fcb3d68cf1048c04ed69d1474771c4fb34318e10778800a4342f",
+      "original_target": "Sex",
+      "original_features": {
+        "Length": "length",
+        "Diameter": "diameter",
+        "Height": "height",
+        "Whole_weight": "whole_weight",
+        "Shucked_weight": "shucked_weight",
+        "Viscera_weight": "viscera_weight",
+        "Shell_weight": "shell_weight"
+      },
+      "classes": {
+        "F": 1307,
+        "I": 1342,
+        "M": 1528
+      },
+      "preprocessing": "columns selected and renamed; features standardized (all rows, ddof = 1) and rounded to 6 decimals; fold labels from numpy default_rng(20261205), stratified by class"
+    }
+  }
+}

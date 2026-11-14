@@ -1,6 +1,6 @@
 # Status and open issues
 
-Last updated: 2026-11-14 (end of Phase 3). Plan: `docs/experiment_plan.md`.
+Last updated: 2026-11-14 (end of Phase 3; multiclass data-set selection attempted). Plan: `docs/experiment_plan.md`.
 Numbers quoted here are copied from generated files, which are authoritative;
 the file is named next to each number. Nothing here is a conclusion of the
 paper: Phase 4 decides what is reported and how.
@@ -231,6 +231,31 @@ features, one setting changed at a time, R and Python).
 - No order of growth is claimed, and no "R vs Python" ranking (different
   learner implementations and BLAS builds; the ratio changes sign).
 
+### Selection of a multiclass data set (`docs/multiclass_dataset_selection.md`, `results/tables/04a_multiclass_*.md`)
+
+Attempt of 2026-11-14 to replace Maternal Health Risk as the multiclass
+example, with criteria committed beforehand (`docs/experiment_plan.md`, §5d).
+
+- Five UCI candidates. Dry Bean and Statlog Vehicle: too large (E7).
+  Vertebral Column: one feature is the exact sum of two others; without it
+  the largest feature correlation is 0.598 < 0.7 (E3). Seeds: complete
+  separation in four of five training folds (E8).
+- Abalone with `Sex` as response (n = 4177, 7 measurements, classes 1307 /
+  1342 / 1528, no missing values, no two rows with the same measurements,
+  largest correlation 0.987, no separation: training accuracy 0.556–0.568)
+  passed E1–E8. Pilot with the `linear` learner: log-loss agrees between R
+  and Python within 2.8e-06; **accuracy differs by 0.0012 > 1e-3**: one
+  assessment row of 836 in one of 40 models is classified differently, its
+  two top class probabilities being 4.5e-07 apart (probabilities of the two
+  fits agree within 1.2e-05; `nnet::multinom` converged).
+- **Outcome: no candidate is eligible, experiment C is unchanged**, and
+  `maternal_grouped` stays the provisional multiclass example. The tolerance
+  was not changed. The target `Sex` is also not the documented purpose of
+  the Abalone data.
+- Workflow 04a: 9 of 10 pilot checks pass; the failed parity check is the
+  recorded outcome of the pilot (it is not counted among the checks of the
+  experiments above).
+
 ### Proposal for the packages (`docs/package_change_proposal.md`)
 
 Text for a documentation-only change of specification §8.2 (R `min_n = 5`
@@ -271,10 +296,12 @@ read-only from here.
    forests or other learners is unknown.
 6. **Maternal Health Risk: 562 of 1014 rows repeat an earlier record, and
    the origin of the copies is undocumented** (`docs/maternal_duplicates.md`).
-   The Phase 2 forest scores on it must not be quoted. Open decision for
-   the authors: report the group-aware analysis (`maternal_grouped`) with
-   the deduplicated one as sensitivity analysis, or replace the data set
-   (candidate not prepared or checked: UCI Abalone with `Sex` as response).
+   The Phase 2 forest scores on it must not be quoted. A replacement was
+   attempted on 2026-11-14 and none of five candidates met the pre-set
+   criteria (`docs/multiclass_dataset_selection.md`); `maternal_grouped`
+   is the provisional multiclass example. Open decision for the authors:
+   keep it; or adopt Abalone (`Sex`) after amending the agreement rule for
+   thresholded metrics; or screen further candidates.
 7. **One 5-fold split per data set.** The between-split SD shown is over 5
    splits; repeated CV was not run.
 8. **R and Python parse some 6-decimal numbers to doubles that differ in the
@@ -301,7 +328,14 @@ read-only from here.
     only**; the machine was shared (load average up to 2.2 before a timed
     run). The share of residualization in the total time was not measured.
 
+16. **The R–Python agreement check on accuracy is in effect "no row is
+    classified differently"** when a fold has fewer than 1000 assessment
+    rows (one row weighs more than the tolerance 1e-3). Probabilities that
+    agree within 1e-5 can still flip a near-tied row, as seen on Abalone.
+    The checks that passed are unaffected; a rule for thresholded metrics
+    would be a change of criterion and is left to the authors.
+
 ## Next (Phase 4, not started)
 
-Manuscript. Before it: decide issue 6 (Maternal Health Risk) and issue 2
+Manuscript. Before it: decide issue 6 (multiclass data set; with it issue 16) and issue 2
 (specification §8.2); check the SoftwareX guide and template (issue 13).

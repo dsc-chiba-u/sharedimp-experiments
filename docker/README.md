@@ -7,8 +7,8 @@ referenced by the digests in `config/pins.env`.
 
 | image | built from | contents | used by |
 |---|---|---|---|
-| `ghcr.io/dsc-chiba-u/sharedimp-r` (tag `cf2e1cc`) | `sharedimp-r` repository, its CI | R 4.5.3, `sharedimp` (R) at the pinned commit | 01, 02, 02b, 04, 04b, 04c, 05 |
-| `ghcr.io/dsc-chiba-u/sharedimp-py` (tag `bacc5d8`) | `sharedimp-py` repository, its CI | Python 3.13, `sharedimp` (Python) at the pinned commit | 01, 02, 02b, 03, 04, 04b, 04c, 05 |
+| `ghcr.io/dsc-chiba-u/sharedimp-r` (tag `cf2e1cc`) | `sharedimp-r` repository, its CI | R 4.5.3, `sharedimp` (R) at the pinned commit | 01, 02, 02b, 04, 04a, 04b, 04c, 05 |
+| `ghcr.io/dsc-chiba-u/sharedimp-py` (tag `bacc5d8`) | `sharedimp-py` repository, its CI | Python 3.13, `sharedimp` (Python) at the pinned commit | 01, 02, 02b, 03, 04, 04a, 04b, 04c, 05 |
 | `ghcr.io/dsc-chiba-u/sharedimp-experiments-r` (tag `408e962`) | `docker/experiments-r/Dockerfile` | the `sharedimp-r` image (by digest) + `doParallel`, `foreach`, `rje` (Imports of the official R package `HydroML/UMFI`) + `patchwork` | 03, 06 |
 | `ghcr.io/dsc-chiba-u/umfi-official-py` (tag `408e962`) | `docker/umfi-official-py/Dockerfile` | Python 3.9 and the packages of the official `umfi.yml` (numpy 1.26.4, pandas 2.2.1, scipy 1.13.1, scikit-learn 1.5.0, minepy 1.2.6, POT 0.9.3, ...) | 03 |
 
