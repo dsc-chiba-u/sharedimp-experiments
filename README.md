@@ -13,20 +13,20 @@ UMFI-LR is an existing method. This repository evaluates *software*: it does
 not propose or benchmark a new importance measure, and the importances it
 reports are out-of-sample predictive gains, not causal or conditional effects.
 
-**Status (2026-11-13): Phases 1 and 2 of 4 are complete** — environment,
+**Status (2026-11-14): Phases 1 to 3 of 4 are complete** — environment,
 runners, smoke tests and a positive control (Phase 1); a study of the
 random-forest settings of the two languages, the comparison with the official
-UMFI-LR code, three public data sets in R and Python, and the corresponding
-figures and tables (Phase 2). The runtime benchmark (Phase 3) and the
-manuscript (Phase 4) are planned (`docs/experiment_plan.md`) but not run; the
-runtime workflow is a placeholder that fails on purpose. Current state,
-results and open issues: `docs/STATUS.md`.
+UMFI-LR code, three public data sets in R and Python (Phase 2); two
+follow-up studies (duplicated rows of the Maternal Health Risk data, forest
+importance under a null design) and the runtime benchmark (Phase 3), with
+figures and tables. The manuscript (Phase 4) has not been started. Current
+state, results and open issues: `docs/STATUS.md`.
 
 ## Layout
 
 ```
 config/      pins.env (package commits, image digests, official UMFI commits), NN_*.json (run conditions)
-data/        synthetic/ (generated, committed, manifest.json), real/ (prepared public data, manifest.json)
+data/        synthetic/ (generated, committed), real/ (prepared public data), derived/ (variants of real data), null_forest/, runtime/ (generated; CSVs of runtime/ git-ignored); manifest.json in each
 R/           R helpers, job runner, experiment B (R side), figures
 python/      sharedimp_exp/: Python helpers, job runner, checks, data generators, experiment B, summaries
 workflow/    one Snakefile per stage (NN_*.smk), common.smk
@@ -34,7 +34,7 @@ scripts/     thin wrappers around the workflows
 docker/      Dockerfiles of the two Phase 2 images (built by .github/workflows/docker.yml)
 external/    official UMFI sources, fetched at pinned commits at run time (git-ignored)
 results/     raw/ (per-run output), summary/ (derived CSV), tables/ (derived Markdown), figures/
-docs/        experiment_plan.md, random_forest_comparison.md, STATUS.md
+docs/        experiment_plan.md, STATUS.md, random_forest_comparison.md, package_change_proposal.md, maternal_duplicates.md, null_forest_investigation.md, runtime_benchmark.md
 paper/       manuscript (skeleton), references.bib
 ```
 
@@ -58,8 +58,16 @@ bash scripts/02_validation.sh       # classification smoke tests + positive cont
 bash scripts/02b_rf_settings.sh     # random-forest settings, ranger vs scikit-learn         (~30 min)
 bash scripts/03_official_umfi.sh    # B: official UMFI-LR code vs sharedimp (needs git)      (~40 min)
 bash scripts/04_real_data.sh        # C: three public data sets (downloads them)             (~5 min)
-bash scripts/06_figures.sh          # figures from the summaries of 01-04                    (~1 min)
+bash scripts/04b_maternal.sh        # duplicated rows of Maternal Health Risk (needs 04)     (~2 min)
+bash scripts/04c_null_forest.sh     # forest importance under a null design                  (~40 min)
+bash scripts/05_runtime.sh          # D: runtime benchmark, pilot + main, always 1 core      (~2 h)
+bash scripts/06_figures.sh          # figures from the summaries of 01-05                    (~1 min)
 ```
+
+The durations in the comments were observed with 16 cores
+(`SHAREDIMP_EXP_CORES=16`; 02b and 03 took 10 and 8 minutes then).
+`05_runtime.sh` runs its processes one after the other on one core whatever
+the setting, and should be run while the machine is otherwise idle.
 
 Each script runs `snakemake -s workflow/<name>.smk --use-singularity`
 (4 cores unless `SHAREDIMP_EXP_CORES` is set) and passes extra arguments on:
@@ -85,15 +93,17 @@ reports.
 | `02b_rf_settings.smk` | meaning and effect of the node-size settings of ranger and scikit-learn | done | `results/{raw,summary}/02b_rf_settings/`, `results/tables/02b_rf_settings.md`, `docs/random_forest_comparison.md` |
 | `03_official_umfi.smk` | B: official UMFI-LR implementations (R package, original R script, Python) | done | `results/{raw,summary}/03_official_umfi/`, `results/tables/03_official_umfi*.md` |
 | `04_real_data.smk` | C: three public data sets in R and Python | done | `data/real/`, `results/{raw,summary}/04_real_data/`, `results/tables/04_real_data*.md` |
-| `05_runtime.smk` | D: runtime in n, p, folds, learner | Phase 3, placeholder (fails on purpose) | — |
-| `06_figures.smk` | E: figures of experiments B and C | done for Phase 2 | `results/figures/` |
+| `04b_maternal.smk` | duplicated rows of Maternal Health Risk: random folds, group-aware folds, identical records removed | done | `data/derived/`, `results/{raw,summary}/04b_maternal/`, `results/tables/04b_maternal*.md`, `docs/maternal_duplicates.md` |
+| `04c_null_forest.smk` | forest importance when the response is independent of the features, one setting changed at a time | done | `data/null_forest/`, `results/{raw,summary}/04c_null_forest/`, `results/tables/04c_null_forest.md`, `docs/null_forest_investigation.md` |
+| `05_runtime.smk` | D: runtime in n, p, folds, learner, R and Python (pilot, budget of 2 h) | done; 31 of 90 cells skipped by the budget rule | `data/runtime/`, `results/{raw,summary}/05_runtime/`, `results/tables/05_runtime*.md`, `docs/runtime_benchmark.md` |
+| `06_figures.smk` | E: figures of experiments B, C, D and the follow-up studies | done | `results/figures/` |
 
 ### Container images
 
 | image | contents | used by |
 |---|---|---|
-| `ghcr.io/dsc-chiba-u/sharedimp-r` (tag `cf2e1cc`, by digest) | R 4.5.3, `sharedimp` (R) at the pinned commit | 01, 02 |
-| `ghcr.io/dsc-chiba-u/sharedimp-py` (tag `bacc5d8`, by digest) | Python 3.13, `sharedimp` (Python) at the pinned commit | 01, 02 |
+| `ghcr.io/dsc-chiba-u/sharedimp-r` (tag `cf2e1cc`, by digest) | R 4.5.3, `sharedimp` (R) at the pinned commit | 01, 02, 02b, 04, 04b, 04c, 05 |
+| `ghcr.io/dsc-chiba-u/sharedimp-py` (tag `bacc5d8`, by digest) | Python 3.13, `sharedimp` (Python) at the pinned commit | 01, 02, 02b, 03, 04, 04b, 04c, 05 |
 | `ghcr.io/dsc-chiba-u/sharedimp-experiments-r` (by digest) | the R image plus the dependencies of the official UMFI R package and `patchwork` | 03, 06 |
 | `ghcr.io/dsc-chiba-u/umfi-official-py` (by digest) | Python 3.9 with the dependencies of the official Python UMFI code at its own versions | 03 |
 
@@ -107,7 +117,11 @@ official UMFI code is contained in any image or in this repository: workflow
 `data/real/` holds prepared versions of three public data sets (UCI Concrete
 Compressive Strength, Breast Cancer Wisconsin (Diagnostic), Maternal Health
 Risk; all CC BY 4.0); sources, citations and the changes made are in
-`data/real/README.md` and `data/real/manifest.json`.
+`data/real/README.md` and `data/real/manifest.json`. `data/derived/` holds
+two variants of the Maternal Health Risk file (group-aware folds; identical
+records removed) written by workflow 04b; the original file is not changed.
+`data/null_forest/` and `data/runtime/` are generated by workflows 04c and
+05 (the runtime CSV files are not committed; their checksums are).
 
 ### How a run is defined
 

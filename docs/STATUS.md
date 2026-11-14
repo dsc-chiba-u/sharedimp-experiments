@@ -1,6 +1,6 @@
 # Status and open issues
 
-Last updated: 2026-11-13 (end of Phase 2). Plan: `docs/experiment_plan.md`.
+Last updated: 2026-11-14 (end of Phase 3). Plan: `docs/experiment_plan.md`.
 Numbers quoted here are copied from generated files, which are authoritative;
 the file is named next to each number. Nothing here is a conclusion of the
 paper: Phase 4 decides what is reported and how.
@@ -19,10 +19,18 @@ four digests. Nothing is installed on the host besides Snakemake and
 Singularity.
 
 Checks with a criterion fixed in advance, over all workflows
-(`results/summary/*/checks.csv`): 131 pass, 0 fail; 31 further rows are
-"reported" (no criterion by design).
+(`results/summary/*/checks*.csv`): 218 pass, 0 fail; 57 further rows are
+"reported" (no criterion by design). Of these, 131 pass / 31 reported belong
+to Phases 1 and 2 (workflows 01, 02, 03, 04), the same counts as at the end
+of Phase 2.
 
-## Phase 1 — done (re-run with Phase 2, unchanged)
+All results were regenerated on 2026-11-14 with `--forceall` at code commit
+`e516acd` (recorded in every result, no uncommitted code changes); the
+figures were redrawn afterwards at the following commit, which changed two
+labels of one figure. The Phase 1 and 2 summaries and tables are identical
+to the committed ones except for the columns of elapsed seconds.
+
+## Phase 1 — done (re-run with Phase 3, unchanged)
 
 `results/tables/01_environment_checks.md`, `results/tables/02_validation_checks.md`:
 
@@ -152,6 +160,91 @@ in every training fold, so the unpenalized logistic estimate does not exist.
 `03_official_umfi_checks.md`, `04_real_data.md`, `04_real_data_checks.md`
 next to the Phase 1 tables.
 
+## Phase 3 — done
+
+### Maternal Health Risk: duplicated rows (`docs/maternal_duplicates.md`, `results/tables/04b_maternal.md`)
+
+- 1014 rows, 452 distinct records (features and label), 416 distinct
+  feature vectors. 562 rows repeat an earlier record (the "562" of Phase 2
+  is this definition); 598 repeat an earlier feature vector; 35 feature
+  vectors (215 rows) carry more than one label. The last 300 rows or so add
+  almost no new record (3, 0, 0, 0 per block of 100). The provider's page
+  has no patient identifier and says nothing about duplicates.
+- With the random folds of experiment C, 807 of 1014 assessment rows have
+  their feature vector in the training rows.
+- Derived files in `data/derived/` (the original is unchanged):
+  `maternal_grouped` (all rows, group-aware folds) and `maternal_dedup`
+  (452 rows, group-aware folds). 42 + 36 checks pass; multinomial logistic
+  regression agrees between R and Python (9.5e-6 and 3.1e-6, criterion 1e-3).
+- Full-model log-loss, random → group-aware → identical records removed:
+  multinomial logistic 0.787 → 0.804 → 0.781; forest R 0.443 → 0.794 →
+  0.696, Python 0.547 → 0.739 → 0.686. The forest's advantage in experiment
+  C came from rows present in training and assessment folds.
+- Linear importances (log-loss): unchanged with group-aware folds (largest
+  change 0.003, Spearman 1.000); Spearman 0.771 with identical records
+  removed (blood sugar first in all three).
+- Recommendation: group-aware folds with all rows as the main analysis if
+  the data set is kept (no assumption about what the copies are needed);
+  identical records removed as sensitivity analysis; preferably another
+  multiclass data set for the paper. Decision open (issue 6).
+
+### Forest importance under a null design (`docs/null_forest_investigation.md`, `results/tables/04c_null_forest.md`)
+
+Small simulation (20 data sets per design, response independent of the
+features, one setting changed at a time, R and Python).
+
+- p = 5, n = 300, baseline: +0.0136 ± 0.0033 (R), +0.0075 ± 0.0021
+  (Python). Both models predict worse than the training mean; the
+  importance is a difference of two amounts of overfitting.
+- Equal number of columns (noise column added to the Reduced model):
+  +0.0015 / +0.0003. Noise column in place of the anchor: +0.0131 /
+  +0.0064, as the baseline. The positive mean comes with the extra column,
+  not with the anchor.
+- p = 4 (candidates per split 2 for Full, 1 for Reduced): baseline about
+  zero (+0.0024 / −0.0051); with the same number of candidates in both
+  models +0.0287 / +0.0179. The sign depends on how `floor(sqrt(q))` falls.
+- Not the cause: number of trees (50, 500, 2000 give the same mean), finite
+  assessment sample (n = 1200: +0.0149 / +0.0091, all 20 data sets
+  positive). Shallow trees shrink it; no bootstrap enlarges it.
+- OLS: −0.0046 (n = 300), −0.0009 (n = 1200), about −σ²/n_train.
+- Not settled: a remainder of about two standard errors with equal column
+  numbers in the p = 4 and n = 1200 designs; one correlation structure,
+  regression only. No theoretical statement is made.
+
+### Runtime (experiment D; `docs/runtime_benchmark.md`, `results/tables/05_runtime.md`)
+
+- Protocol as planned: 1 thread, 1 warm-up + 5 timed calls per cell, only
+  the `shared_importance()` call timed, one process per language and
+  learner run one after the other, same data file and folds in both
+  languages. 9 checks pass (incl. linear R = Python within 1.0e-14 in all
+  18 cells; 2·p·v learner fits counted in both languages).
+- Budget: 2 h for the main benchmark; cap 600 s per cell from the pilot.
+  **59 of 90 cells measured, 31 skipped by the budget rule** (all of them
+  forest cells: n ≥ 2000, p ≥ 20, v ≥ 10; the customary scikit-learn forest
+  also has n = 2000 and v = 10). Main processes 5239 s, pilot 1803 s.
+- Base cell (n = 1000, p = 10, v = 5), median seconds: linear 0.184 (R) /
+  0.305 (Python); forest R built-in 58.5, scikit-learn aligned 88.9,
+  scikit-learn defaults 35.1.
+- Linear: nearly flat in n up to 1000 (fixed cost per fit); Python / R
+  1.73 at n = 125, 0.78 at n = 32000; p = 160: 15.4 / 19.3 s; proportional
+  to v.
+- No order of growth is claimed, and no "R vs Python" ranking (different
+  learner implementations and BLAS builds; the ratio changes sign).
+
+### Proposal for the packages (`docs/package_change_proposal.md`)
+
+Text for a documentation-only change of specification §8.2 (R `min_n = 5`
+↔ scikit-learn `min_samples_split=6, min_samples_leaf=1`; the two forests
+stated as not equivalent). Not applied: the package repositories are
+read-only from here.
+
+### Figures and tables added
+
+`results/figures/`: `04b_maternal_duplicates`, `04c_null_forest`,
+`05_runtime_scaling`, `05_runtime_learners`. `results/tables/`:
+`04b_maternal.md`, `04b_maternal_checks.md`, `04b_maternal_jobs_checks.md`,
+`04c_null_forest.md`, `05_runtime.md`, `05_runtime_checks.md`.
+
 ## Open issues
 
 1. **Docker Hub.** The Phase 2 images are on GHCR only. This repository has
@@ -160,44 +253,55 @@ next to the Phase 1 tables.
    secrets and re-run the workflow if `docker.io/koki/…` copies are wanted
    (`docker/README.md`).
 2. **Specification §8.2 pairs non-equivalent forest parameters** (for the
-   package maintainers; proposal in `docs/random_forest_comparison.md`).
-   Until decided, the Python forest here follows §8.2 as written.
+   package maintainers; replacement text in
+   `docs/package_change_proposal.md`, not applied). Until decided, the
+   Python forest of experiments A–C follows §8.2 as written.
 3. **Classification trees differ between ranger and scikit-learn in every
    pairing examined**, also with stopping rules of the same definition. The
    cause was not identified (ties between equally good splits are a
    candidate). Relevant for Phase 3: "aligned" forests do not do equal work.
 4. **The forest importances on the null design are positive on average**
-   (B6). Not investigated; the built-in forest draws `floor(sqrt(q))`
-   candidates, and q differs between the Full and the Reduced model. To be
-   understood before the paper says anything about values near zero.
+   (B6). Investigated in Phase 3 (`docs/null_forest_investigation.md`): the
+   mean follows the number of columns and of split candidates of the two
+   models and can be positive, zero or negative. A remainder of about two
+   standard errors with equal column numbers is unexplained; classification
+   and other correlation structures were not examined. The paper must not
+   describe forest importances as centred at zero under the null.
 5. **The all-rows effect (B5b) was measured with OLS only.** Its size for
    forests or other learners is unknown.
-6. **Maternal Health Risk has 562 duplicated rows of 1014**; identical rows
-   are in training and assessment folds. Scores of flexible learners on it
-   are optimistic, and the R forest (larger trees) scores much better than
-   the Python forest for that reason, presumably. Consider replacing the
-   data set, or deduplicating, before the paper.
+6. **Maternal Health Risk: 562 of 1014 rows repeat an earlier record, and
+   the origin of the copies is undocumented** (`docs/maternal_duplicates.md`).
+   The Phase 2 forest scores on it must not be quoted. Open decision for
+   the authors: report the group-aware analysis (`maternal_grouped`) with
+   the deduplicated one as sensitivity analysis, or replace the data set
+   (candidate not prepared or checked: UCI Abalone with `Sex` as response).
 7. **One 5-fold split per data set.** The between-split SD shown is over 5
    splits; repeated CV was not run.
 8. **R and Python parse some 6-decimal numbers to doubles that differ in the
    last bit** (1.1e-16). No effect on any tolerance used; exact comparisons
    with raw data are made inside one language.
-9. **The system disk of the machine is 97 % full.** Singularity unpacks an
-   image per job; the wrappers use `/dev/shm`. Running `snakemake` directly
-   with many cores and without `SINGULARITY_TMPDIR` fails with empty logs.
+9. **Disk.** 2026-11-14: `/` 81 % used, 88 GB free (inodes 8 %);
+   `~/.singularity/cache` is now a symlink to `/data2`; `.snakemake` 1.3 GB.
+   The wrappers still put Singularity's temporary files in `/dev/shm`.
+   Copies of the three repositories exist under `/data2/dev/`; work
+   continues in `~/dev` until the move is completed by the user.
 10. **R and Python do not share a BLAS inside the images** (system OpenBLAS
     0.3.26 vs NumPy's bundled OpenBLAS); to be stated with any timing.
-11. **The built-in R forest runs on one thread** (parsnip passes
-    `num.threads = 1`); forests are slow (seconds per run in
-    `results/tables/04_real_data.md`); Phase 3 needs a per-cell cap.
+11. **Forest runtime was measured on small cells only** (n ≤ 1000, p ≤ 10,
+    v ≤ 5 in both languages): one call takes 7 s to 1.5 min on one thread
+    there, and the 2-hour budget excluded everything larger. Runtime with
+    several threads was not measured.
 12. Parity is checked on full-rank designs only (common specification §8.1).
 13. **SoftwareX guide and template not yet checked**; `paper/manuscript.Rmd`
     is a skeleton and has not been built. No manuscript image is defined.
 14. The checker's own failure modes (tampered value, failed job) were
     verified in the conda-based run of Phase 1 (`6c094a1`), not again since.
 
-## Next (Phase 3, not started)
+15. **Runtime: one machine, one data-generating model, regression with MSE
+    only**; the machine was shared (load average up to 2.2 before a timed
+    run). The share of residualization in the total time was not measured.
 
-Runtime benchmark (experiment D) with a pilot first; the forest comparison
-split into "aligned settings" and "customary learners"
-(`docs/experiment_plan.md`, section 6). Then Phase 4 (manuscript).
+## Next (Phase 4, not started)
+
+Manuscript. Before it: decide issue 6 (Maternal Health Risk) and issue 2
+(specification §8.2); check the SoftwareX guide and template (issue 13).

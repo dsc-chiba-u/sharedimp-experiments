@@ -11,7 +11,10 @@ package (`../sharedimp-py`, scikit-learn), both implementing UMFI-LR
 Read first: `docs/STATUS.md` (state, results, open issues),
 `docs/experiment_plan.md` (what each experiment is for and its pre-set
 criteria), `docs/random_forest_comparison.md` (why forests are never compared
-numerically across languages), then the two package
+numerically across languages), `docs/runtime_benchmark.md` (what the timings
+do and do not show), `docs/maternal_duplicates.md` and
+`docs/null_forest_investigation.md` (two results that must not be quoted
+naively), then the two package
 `CLAUDE.md` files and the common specification.
 
 ## Positioning (keep consistent in code comments, docs and the paper)
@@ -68,7 +71,7 @@ computing rule, `benchmark:` and `log:` per rule.
 conda activate snakemake      # Snakemake 8.10.0 + Singularity 3.8.6 (environment.yml)
 snakemake -s workflow/01_environment.smk --use-singularity -c4
 snakemake -s workflow/02_validation.smk  --use-singularity -c4
-snakemake -s workflow/<stage>.smk -n                      # dry run (other stages: 02b_rf_settings, 03_official_umfi, 04_real_data, 06_figures)
+snakemake -s workflow/<stage>.smk -n                      # dry run (other stages: 02b_rf_settings, 03_official_umfi, 04_real_data, 04b_maternal, 04c_null_forest, 05_runtime, 06_figures)
 snakemake -s workflow/02_validation.smk --use-singularity -c4 results/raw/02_validation/r/pc_linear_mse.meta.json
 ```
 
@@ -96,7 +99,14 @@ recompute. Logs: `logs/<stage>/<rule>.log`.
   `config/pins.env` (workflow 01 verifies them against the registry). Docker
   Hub is pushed too only if the repository has the secrets `DOCKER_USERNAME`
   and `DOCKER_PASSWORD` (it does not, as of 2026-11-13).
-- The system disk is nearly full. Singularity unpacks an image per job;
+- `05_runtime` needs `-c1` (its rules claim all cores so that nothing runs
+  beside a timed process) and about 2 hours; do not run anything else on the
+  machine meanwhile. `scripts/05_runtime.sh` forces one core. Target `pilot`
+  runs the pilot and the plan only.
+- `EXP_DIRTY` is computed when a workflow is parsed: do not edit tracked
+  files (outside `results/`) while a run that is to be committed is going.
+- The system disk was 81 % full on 2026-11-14 (88 GB free; `/data2` has
+  3.4 TB, and `~/.singularity/cache` is a symlink to it). Singularity unpacks an image per job;
   `scripts/_snakemake.sh` sets `SINGULARITY_TMPDIR` to `/dev/shm/…`. When
   calling `snakemake` directly, export it yourself, and do not start several
   workflows at once without it (jobs die with empty logs: "No space left").
@@ -130,7 +140,10 @@ recompute. Logs: `logs/<stage>/<rule>.log`.
   (`common`, `learners`, `run_jobs`, `check_jobs`, `make_synthetic`,
   `env_info`, `host_info`, `docker_info`, `env_summary`; `rf_settings*` for
   02b; `official_*` and `R/official_umfi.R` for experiment B; `real_data*`
-  for C; `R/figures.R`). Scripts take
+  for C; `maternal_*` for 04b; `null_forest*` and `R/null_forest.R` for 04c;
+  `runtime*` and `R/runtime.R` for D; `R/figures.R`, `R/figures_phase3.R`).
+  `data/derived/`, `data/null_forest/`, `data/runtime/` are written by 04b,
+  04c and 05; `find_dataset` searches synthetic, real and derived. Scripts take
   positional arguments in the order of the Snakemake rule.
 - `workflow/NN_*.smk` writes `results/raw/NN_*/` and `results/summary/NN_*/`;
   Markdown tables go to `results/tables/`, figures to `results/figures/`.
@@ -151,13 +164,13 @@ recompute. Logs: `logs/<stage>/<rule>.log`.
   duplicates in parity data unless that learner is used.
 - Stage numbers: `01` environment (experiment A), `02`
   validation / positive control, `02b` random-forest settings, `03` official UMFI (B), `04` real data (C),
-  `05` runtime (D), `06` figures (E). The placeholder workflow (`05`) raises an error when parsed.
+  `04b` Maternal duplicates, `04c` null-design forest, `05` runtime (D), `06` figures (E).
 
 ## Before committing
 
 Commit code first, then run the workflows with `--forceall`, one after the
-other (01, 02, 02b, 03, 04, 06; about 80 minutes together, 02b and 03 take
-most of it), and commit the regenerated results, so that the results record a
+other (01, 02, 02b, 03, 04, 04b, 04c, 05, 06; about 3 hours together with 16
+cores, 2 of them for 05; 04b needs 04, 06 needs all), and commit the regenerated results, so that the results record a
 clean code commit. Update `docs/STATUS.md`; numbers quoted in `docs/` are
 copied from `results/tables/` and must be re-checked after a re-run. Small,
 focused commits with imperative messages. Never report a workflow as passing

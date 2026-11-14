@@ -26,7 +26,7 @@ lang_cols <- c("R" = "#1b6ca8", "Python" = "#d1702e")
 lang_label <- function(x) factor(ifelse(x == "r", "R", "Python"), levels = c("R", "Python"))
 
 # ---- 04b_maternal_duplicates
-variants <- c(maternal = "all rows,\nrandom folds", maternal_grouped = "all rows,\ngroup-aware folds", maternal_dedup = "identical records\nremoved, group-aware folds")
+variants <- c(maternal = "all rows,\nrandom folds", maternal_grouped = "all rows,\ngroup-aware folds", maternal_dedup = "identical records\nremoved,\ngroup-aware folds")
 s <- read("04b_maternal", "scores.csv")
 s <- s[s$metric == "log_loss", ]
 s$variant <- factor(variants[s$variant], levels = variants)
@@ -34,7 +34,7 @@ s$language <- lang_label(s$language)
 s$learner <- ifelse(s$learner == "linear", "multinomial logistic", "random forest (language-specific)")
 m1 <- ggplot(s, aes(variant, -full_score, colour = language, shape = language, group = language)) +
   geom_line(linewidth = 0.3, position = position_dodge(width = 0.25)) + geom_point(size = 1.8, position = position_dodge(width = 0.25)) +
-  facet_wrap(~learner) + scale_colour_manual(values = lang_cols, name = NULL) + scale_shape_manual(values = c(R = 16, Python = 17), name = NULL) +
+  facet_wrap(~learner) + scale_colour_manual(values = lang_cols, guide = "none") + scale_shape_manual(values = c(R = 16, Python = 17), guide = "none") +
   labs(x = NULL, y = "log-loss of the Full model (5 folds)", title = "Score of the Full model") +
   theme(plot.title = element_text(size = 9, face = "bold"))
 w <- read("04b_maternal", "importance_by_variant.csv")
