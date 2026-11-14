@@ -1,4 +1,4 @@
-# `paper/` — SoftwareX manuscript (first draft, Phase 4)
+# `paper/` — SoftwareX manuscript (Phase 4; reviewed and revised, `docs/manuscript_review.md`)
 
 ```
 paper/
@@ -16,11 +16,13 @@ bash scripts/07_manuscript.sh      # workflow/07_manuscript.smk
 ```
 
 writes `paper/manuscript.pdf` and `paper/manuscript.tex` (build products,
-git-ignored), the two figures made for the paper
-(`results/figures/07_software_overview`, `07_examples_importance`),
+git-ignored), the four figures of the paper
+(`results/figures/07_software_overview`, `07_fold_internal_effect`,
+`07_examples_importance`, `07_runtime`; 6.5 in wide, the width of the text
+block),
 `results/summary/07_manuscript/numbers.csv` and the checks
-(`results/tables/07_manuscript_checks.md`: word count, sections, number of
-figures, abstract length, unresolved citations or references, figure
+(`results/tables/07_manuscript_checks.md`: word count, pages of running
+text without figures and tables, sections, number of figures, abstract length, unresolved citations or references, figure
 files, bibliography keys).
 
 Environment: the image `ghcr.io/dsc-chiba-u/sharedimp-manuscript`, pinned by
@@ -51,5 +53,5 @@ LaTeX installation that has `elsarticle`.
 
 The list of what the author still has to decide, supply or verify is in
 `docs/STATUS.md` ("To be decided or supplied by the author before
-submission") and `docs/softwarex_requirements.md` ("Not verified", "Open
+submission"), `docs/manuscript_review.md` (sections 3 and 4) and `docs/softwarex_requirements.md` ("Not verified", "Open
 points").

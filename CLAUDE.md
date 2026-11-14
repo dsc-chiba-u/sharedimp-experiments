@@ -56,10 +56,13 @@ naively), then the two package
   conclusion goes into it before it exists. Numbers are never typed into
   `paper/manuscript.Rmd`: they are computed in its `setup` chunk from
   `results/` with `num()` / `reg()` (`paper/README.md`). Journal
-  requirements and their sources: `docs/softwarex_requirements.md`; items
+  requirements and their sources: `docs/softwarex_requirements.md`; claims, their evidence and the
+  remaining concerns: `docs/manuscript_review.md`; items
   marked `TO BE COMPLETED BY THE AUTHOR` are not to be guessed. Limits
-  checked by workflow 07: 4000 words for the five main sections, six
-  figures. Manuscript text is English;
+  checked by workflow 07: 4000 words for the five main sections, six pages
+  of running text with figures and tables removed, six figures. The paper
+  figures are `results/figures/07_*` (workflow 07, 6.5 in wide); do not
+  change the figures of workflow 06 for the paper. Manuscript text is English;
   progress reports to the user are in Japanese.
 - **Do not start a later phase, or a large benchmark, without being asked.**
   Run a pilot first and set a time budget.

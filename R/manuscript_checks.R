@@ -9,6 +9,12 @@
 # sections, at most six figures, abstract of about 100 words, at most six
 # keywords. The word count is approximate (LaTeX commands, figures, tables,
 # code listings and display mathematics are removed before counting).
+# The page limit of the template ("maximum six (6) pages in total (excluding
+# metadata, tables, figures, references)") is checked on a copy of
+# manuscript.tex from which every figure and table environment has been
+# removed, compiled in a temporary directory: the pages from the title to the
+# end of section 5 are counted (title block and abstract included, so the
+# count is an upper bound of what the template limits).
 args <- commandArgs(trailingOnly = TRUE)
 paper <- args[1L]; out <- args[2L]
 tex <- readLines(file.path(paper, "manuscript.tex"), warn = FALSE)
@@ -23,9 +29,9 @@ add <- function(check, description, criterion, observed, pass) {
 strip <- function(x) {
   x <- paste(x, collapse = "\n")
   for (env in c("figure", "table", "Shaded", "verbatim", "Highlighting", "equation", "tabular"))
-    x <- gsub(sprintf("\\\\begin\\{%s\\*?\\}.*?\\\\end\\{%s\\*?\\}", env, env), " ", x, perl = TRUE)
-  x <- gsub("\\$\\$.*?\\$\\$", " ", x, perl = TRUE)
-  x <- gsub("\\\\\\[.*?\\\\\\]", " ", x, perl = TRUE)
+    x <- gsub(sprintf("(?s)\\\\begin\\{%s\\*?\\}.*?\\\\end\\{%s\\*?\\}", env, env), " ", x, perl = TRUE)
+  x <- gsub("(?s)\\$\\$.*?\\$\\$", " ", x, perl = TRUE)
+  x <- gsub("(?s)\\\\\\[.*?\\\\\\]", " ", x, perl = TRUE)
   x <- gsub("(?m)^%.*$", " ", x, perl = TRUE)
   x <- gsub("\\\\(cite[a-z]*|ref|label|hypertarget|url)\\*?(\\[[^]]*\\])?\\{[^}]*\\}", " ", x, perl = TRUE)
   x <- gsub("\\\\[a-zA-Z]+\\*?(\\[[^]]*\\])?", " ", x, perl = TRUE)
@@ -42,8 +48,25 @@ pdf_pages <- suppressWarnings(tryCatch(as.integer(sub("^.*Output written on .*\\
 aux <- readLines(file.path(paper, "manuscript.aux"), warn = FALSE)
 page_of <- function(label) { l <- grep(paste0("\\newlabel{", label, "}"), aux, value = TRUE, fixed = TRUE); if (!length(l)) return(NA_integer_); as.integer(strsplit(l[1L], "[{}]+")[[1L]][4L]) }
 p1 <- page_of("motivation-and-significance"); p2 <- page_of("sec:repro")
-add("body_pages", "pages from the start of section 1 to the end of section 5, figures and tables included (template: six pages excluding metadata, tables, figures and references, the word limit having priority)", "reported only", sprintf("pages %s to %s of %s", p1, p2, paste(pdf_pages, collapse = "")), NA)
+add("body_pages", "pages from the start of section 1 to the end of section 5 in the built PDF, figures and tables included", "reported only", sprintf("pages %s to %s of %s", p1, p2, paste(pdf_pages, collapse = "")), NA)
 stopifnot(!is.na(p1), !is.na(p2))
+text_only_pages <- function() {
+  x <- paste(tex, collapse = "\n")
+  for (env in c("figure", "table")) x <- gsub(sprintf("(?s)\\\\begin\\{%s\\*?\\}.*?\\\\end\\{%s\\*?\\}", env, env), "", x, perl = TRUE)
+  stopifnot(!grepl("includegraphics", x, fixed = TRUE), !grepl("\\begin{tabular}", x, fixed = TRUE))
+  tmp <- tempfile("textonly"); dir.create(tmp)
+  writeLines(x, file.path(tmp, "textonly.tex"))
+  file.copy(file.path(paper, "manuscript.bbl"), file.path(tmp, "textonly.bbl"))
+  old <- setwd(tmp); on.exit(setwd(old))
+  for (i in 1:3) system2("pdflatex", c("-interaction=nonstopmode", "textonly.tex"), stdout = FALSE, stderr = FALSE)
+  if (!file.exists("textonly.pdf") || !file.exists("textonly.aux")) return(NA_integer_)
+  a2 <- readLines("textonly.aux", warn = FALSE)
+  l <- grep("\\newlabel{sec:repro}", a2, value = TRUE, fixed = TRUE)
+  if (!length(l)) return(NA_integer_)
+  as.integer(strsplit(l[1L], "[{}]+")[[1L]][4L])
+}
+tp <- text_only_pages()
+add("text_only_pages", "pages from the title to the end of section 5 when every figure and table is removed (template: 'maximum six (6) pages in total (excluding metadata, tables, figures, references)', the word limit having priority); layout: elsarticle preprint, 3p", "<= 6", tp, !is.na(tp) && tp <= 6)
 flat <- gsub("[[:space:]]+", " ", paste(main, collapse = " "))
 sections <- sub("^\\\\section\\{([^}]*)\\}$", "\\1", unlist(regmatches(flat, gregexpr("\\\\section\\{[^}]*\\}", flat))))
 required <- c("Motivation and significance", "Software description", "Illustrative examples", "Impact", "Conclusions")

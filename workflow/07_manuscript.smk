@@ -7,8 +7,11 @@
 # results/ while the document is knitted (paper/manuscript.Rmd, chunk
 # `setup`) and written with its source file to numbers.csv.
 #
-#   figures  results/figures/07_software_overview.{pdf,png}   (diagram, no data)
-#            results/figures/07_examples_importance.{pdf,png} (examples; Maternal with group-aware folds)
+#   figures  results/figures/07_software_overview.{pdf,png}     (diagram, no data)
+#            results/figures/07_fold_internal_effect.{pdf,png}  (experiment B5b; paper version of 03_fold_internal_effect)
+#            results/figures/07_examples_importance.{pdf,png}   (examples; Maternal with group-aware folds)
+#            results/figures/07_runtime.{pdf,png}               (experiment D, comparisons A and B; paper version of 05_runtime_scaling)
+#            all drawn 6.5 in wide, the width of the text block; the figures of workflow 06 are not touched
 #   paper    paper/manuscript.pdf, paper/manuscript.tex        (build products, git-ignored)
 #   summary  results/summary/07_manuscript/{numbers,checks}.csv
 #   tables   results/tables/07_manuscript_checks.md
@@ -16,8 +19,7 @@ include: "common.smk"
 
 MANUSCRIPT_CONTAINER = f"docker://{PINS['MANUSCRIPT_IMAGE']}@{PINS['MANUSCRIPT_IMAGE_DIGEST']}"
 SUM = 'results/summary/07_manuscript'
-PAPER_FIGURES = ['07_software_overview', '07_examples_importance']
-USED_FIGURES = ['03_fold_internal_effect', '04_r_python_agreement', '05_runtime_scaling']
+PAPER_FIGURES = ['07_software_overview', '07_fold_internal_effect', '07_examples_importance', '07_runtime']
 
 rule all:
     input:
@@ -48,6 +50,19 @@ rule figure_examples:
     shell:
         'Rscript R/figure_examples.R results/summary results/figures >& {log}'
 
+rule figure_paper:
+    input:
+        'results/summary/03_official_umfi/leak.csv',
+        'results/summary/05_runtime/comparisons.csv'
+    output:
+        expand('results/figures/{name}.{ext}', name=['07_fold_internal_effect', '07_runtime'], ext=['pdf', 'png'])
+    container:
+        EXP_R_CONTAINER
+    log:
+        'logs/07_manuscript/figure_paper.log'
+    shell:
+        'Rscript R/figure_paper.R results/summary results/figures >& {log}'
+
 # tinytex.install_packages = FALSE: nothing is downloaded while building; a
 # missing LaTeX package is an error of the image, not something to fetch.
 rule render:
@@ -55,7 +70,7 @@ rule render:
         'paper/manuscript.Rmd',
         'paper/references.bib',
         'config/pins.env',
-        expand('results/figures/{name}.pdf', name=PAPER_FIGURES + USED_FIGURES),
+        expand('results/figures/{name}.pdf', name=PAPER_FIGURES),
         expand('results/summary/{stage}/checks.csv', stage=['01_environment', '02_validation', '03_official_umfi', '04_real_data', '04b_maternal', '05_runtime']),
         'results/summary/04a_multiclass_pilot/decision.csv',
         'results/summary/04c_null_forest/summary.csv'
@@ -63,6 +78,8 @@ rule render:
         'paper/manuscript.pdf',
         'paper/manuscript.tex',
         'paper/manuscript.log',
+        'paper/manuscript.aux',
+        'paper/manuscript.bbl',
         SUM + '/numbers.csv'
     container:
         MANUSCRIPT_CONTAINER
@@ -75,6 +92,8 @@ rule checks:
     input:
         'paper/manuscript.tex',
         'paper/manuscript.log',
+        'paper/manuscript.aux',
+        'paper/manuscript.bbl',
         'paper/references.bib',
         SUM + '/numbers.csv'
     output:

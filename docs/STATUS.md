@@ -270,7 +270,7 @@ read-only from here.
 `04b_maternal.md`, `04b_maternal_checks.md`, `04b_maternal_jobs_checks.md`,
 `04c_null_forest.md`, `05_runtime.md`, `05_runtime_checks.md`.
 
-## Phase 4 — first draft of the manuscript
+## Phase 4 — manuscript (first draft, then reviewed and revised)
 
 `paper/manuscript.Rmd`, built by `workflow/07_manuscript.smk` in the image
 `sharedimp-manuscript` (pinned in `config/pins.env`); requirements and their
@@ -286,17 +286,40 @@ sources in `docs/softwarex_requirements.md`.
   implementations, fold-internal effect, R–Python agreement, public data,
   runtime); limitations as section 4.3; reproducibility and data
   statement; funding and declarations as headings to be completed.
-- Build checks (`results/tables/07_manuscript_checks.md`): about 3170 words
-  in the main sections (limit 4000), 4 figures (limit 6), abstract 110
-  words, 6 keywords, no unresolved citation or reference, 14 references all
-  cited. Sections 1–5 with figures and tables end on page 8 of 9.
-- 69 values in the text are read from `results/` at build time
+- Build checks (`results/tables/07_manuscript_checks.md`): 3245 words in
+  the main sections (limit 4000), 6 pages of running text when figures and
+  tables are removed (limit 6; `docs/softwarex_requirements.md`, "Reading
+  of the page limit"), 4 figures (limit 6), abstract 111 words, 6 keywords,
+  no unresolved citation or reference, 15 references all cited. The PDF has
+  11 pages; one overfull box of 2 pt remains (page furniture of the class).
+- 85 values in the text are read from `results/` at build time
   (`results/summary/07_manuscript/numbers.csv`, with the source file of
   each). The build stops if any experiment check has failed.
-- Figures: `07_software_overview` (new diagram), `03_fold_internal_effect`,
-  `07_examples_importance` (new; Concrete and Breast Cancer from experiment
-  C, Maternal Health Risk with group-aware folds from 04b),
-  `05_runtime_scaling`. The R–Python agreement is given as a table.
+- Figures, all made by workflow 07 at the width of the text block:
+  `07_software_overview` (diagram), `07_fold_internal_effect` and
+  `07_runtime` (paper versions of `03_fold_internal_effect` and
+  `05_runtime_scaling`, from the same summary files),
+  `07_examples_importance` (Concrete and Breast Cancer from experiment C,
+  Maternal Health Risk with group-aware folds from 04b). The R–Python
+  agreement is given as a table.
+- **Review and revision (2026-11-14, `docs/manuscript_review.md`).** Every
+  claim was compared with the UMFI article (PDF read), the recorded results
+  and the specification. Main corrections: the definition of UMFI is given
+  as a framework and the fixed forest as a choice of the reference code;
+  MCI is cited; the all-rows experiment is no longer attributable to the
+  reference code (it is cross-validated, the reference code scores out of
+  bag); the fold-internal means are reported with their deviation (up to
+  18 %) instead of "near the population values"; the positive small-sample
+  importance of a feature unrelated to the others under unconditional
+  residualization, which the reference dependence test avoids, is reported
+  and listed as a limitation; the closeness of reference and `sharedimp`
+  forest importances on the reference designs (≤ 0.023) is reported; the
+  conditions of R–Python agreement are in the section that claims it; the
+  runtime counts are consistent between text and figure; Impact rewritten.
+  No experiment was run; the results of workflows 01–06 are unchanged.
+  A fix in `R/manuscript_checks.R`: multi-line environments were not
+  removed before counting words (the earlier count of 3168 included table
+  text).
 - Multiclass example in the paper: Maternal Health Risk, all rows,
   group-aware folds, with the random-fold and the deduplicated analyses as
   sensitivity analyses and the failed replacement attempt stated.
@@ -320,14 +343,22 @@ sources in `docs/softwarex_requirements.md`.
    documentation-only commit (`4632626`).
 4. Two GitHub repositories in the metadata table (the template speaks of
    one); license files are not named `Licence.txt`.
-5. Page count under the stricter reading of the six-page limit (body with
-   figures: 8 pages); `preprint, 3p` versus the template's
-   `preprint, 12pt, a4paper`.
+5. Page count: the running text is exactly at six pages in `preprint, 3p`
+   (check `text_only_pages`); the template's own options are
+   `preprint, 12pt, a4paper`, with which it would be longer. The word limit,
+   which the template ranks first, is met.
 6. Everything listed as "Not verified" in
    `docs/softwarex_requirements.md`.
-7. The claim in section 4.1 about the purpose of UMFI paraphrases the
-   UMFI paper and should be checked against it by the author; the
-   manuscript has not been proof-read by a person.
+7. The statements about the UMFI article were checked against its PDF on
+   2026-11-14 (`docs/manuscript_review.md`, section 1); the author should
+   confirm that reading. The manuscript has not been proof-read by a
+   person.
+8. Whether to keep unconditional residualization as the only behaviour of
+   the packages, given the small-sample result for unrelated features
+   (`docs/manuscript_review.md`, 1.4 and 3.2). Nothing was changed in the
+   packages.
+9. Table of author-supplied facts with what is known about each:
+   `docs/manuscript_review.md`, section 4.
 
 ## Open issues
 

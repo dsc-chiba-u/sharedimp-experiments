@@ -13,7 +13,7 @@ UMFI-LR is an existing method. This repository evaluates *software*: it does
 not propose or benchmark a new importance measure, and the importances it
 reports are out-of-sample predictive gains, not causal or conditional effects.
 
-**Status (2026-11-14): Phases 1 to 3 are complete and a first draft of the manuscript exists (Phase 4)** — environment,
+**Status (2026-11-14): Phases 1 to 3 are complete and the manuscript has been drafted, reviewed and revised (Phase 4; `docs/manuscript_review.md`)** — environment,
 runners, smoke tests and a positive control (Phase 1); a study of the
 random-forest settings of the two languages, the comparison with the official
 UMFI-LR code, three public data sets in R and Python (Phase 2); two
@@ -103,7 +103,7 @@ reports.
 | `04c_null_forest.smk` | forest importance when the response is independent of the features, one setting changed at a time | done | `data/null_forest/`, `results/{raw,summary}/04c_null_forest/`, `results/tables/04c_null_forest.md`, `docs/null_forest_investigation.md` |
 | `05_runtime.smk` | D: runtime in n, p, folds, learner, R and Python (pilot, budget of 2 h) | done; 31 of 90 cells skipped by the budget rule | `data/runtime/`, `results/{raw,summary}/05_runtime/`, `results/tables/05_runtime*.md`, `docs/runtime_benchmark.md` |
 | `06_figures.smk` | E: figures of experiments B, C, D and the follow-up studies | done | `results/figures/` |
-| `07_manuscript.smk` | manuscript: overview diagram, example figure, PDF, checks (word limit, sections, references) | first draft | `paper/manuscript.pdf` (not committed), `results/figures/07_*`, `results/summary/07_manuscript/`, `results/tables/07_manuscript_checks.md` |
+| `07_manuscript.smk` | manuscript: four paper figures, PDF, checks (word and page limits, sections, references) | revised draft | `paper/manuscript.pdf` (not committed), `results/figures/07_*`, `results/summary/07_manuscript/`, `results/tables/07_manuscript_checks.md` |
 
 ### Container images
 
