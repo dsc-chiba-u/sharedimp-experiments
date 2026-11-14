@@ -1,0 +1,41 @@
+candidate,criterion,status,observed
+abalone,E1,pass,"stable CSV URL, DOI 10.24432/C55C7W, CC BY 4.0 on the landing page"
+abalone,E2,pass,"three levels of Sex (M, F, I = infant); a row is one abalone of the field study of Nash et al. (1994), Sea Fisheries Division Technical Report 48 (abalone.names: 'Number of Instances: 4177'; examples with missing values were removed by the donor)"
+abalone,E3,pass,"7 features, largest |correlation| 0.987, rank 7"
+abalone,E4,pass,0 of 4177 rows with a missing value
+abalone,E5,pass,0 of 4177 rows share their feature vector with another row
+abalone,E6,pass,F: 1307; I: 1342; M: 1528
+abalone,E7,pass,"n = 4177, p = 7"
+abalone,E8,pass,"training accuracy per fold 0.5621, 0.5681, 0.5563, 0.5616, 0.5592; 0 optimizer warnings (scikit-learn; the R side is checked in workflow 04)"
+vertebral,E1,pass,"stable CSV URL, DOI 10.24432/C5K89B, CC BY 4.0 on the landing page"
+vertebral,E2,pass,"three classes; 'Each patient is represented in the data set by six biomechanical attributes' (310 patients: 100 normal, 60 disk hernia, 150 spondylolisthesis)"
+vertebral,E3,fail,"5 features, largest |correlation| 0.598, rank 5; `pelvic_incidence` dropped (pelvic incidence = pelvic tilt + sacral slope (geometric identity of the three pelvic parameters; Legaye et al., Eur Spine J 7:99-103, 1998); largest deviation in the file 1.0e-08)"
+vertebral,E4,not assessed,-
+vertebral,E5,not assessed,-
+vertebral,E6,not assessed,-
+vertebral,E7,not assessed,-
+vertebral,E8,not assessed,-
+seeds,E1,pass,"zip archive at a stable URL (no single CSV is offered), DOI 10.24432/C5H30K, CC BY 4.0 on the landing page"
+seeds,E2,pass,"three varieties (Kama, Rosa, Canadian), 70 kernels each, 'randomly selected for the experiment'; a row is one kernel"
+seeds,E3,pass,"7 features, largest |correlation| 0.994, rank 7"
+seeds,E4,pass,0 of 210 rows with a missing value
+seeds,E5,pass,0 of 210 rows share their feature vector with another row
+seeds,E6,pass,1: 70; 2: 70; 3: 70
+seeds,E7,pass,"n = 210, p = 7"
+seeds,E8,fail,"training accuracy per fold 1.0000, 1.0000, 1.0000, 1.0000, 0.9821; 0 optimizer warnings (scikit-learn; the R side is checked in workflow 04)"
+dry_bean,E1,pass,"stable CSV URL, DOI 10.24432/C50S4B, CC BY 4.0 on the landing page"
+dry_bean,E2,pass,seven registered varieties; a row is the image of one grain
+dry_bean,E3,not assessed,file not downloaded: E7 fails on the provider's metadata
+dry_bean,E4,not assessed,file not downloaded: E7 fails on the provider's metadata
+dry_bean,E5,not assessed,file not downloaded: E7 fails on the provider's metadata
+dry_bean,E6,not assessed,file not downloaded: E7 fails on the provider's metadata
+dry_bean,E7,fail,"provider: n = 13611, p = 16"
+dry_bean,E8,not assessed,-
+vehicle,E1,pass,"stable CSV URL, DOI 10.24432/C5HG6N, CC BY 4.0 on the landing page"
+vehicle,E2,pass,four vehicle types; a row is one silhouette image
+vehicle,E3,not assessed,file not downloaded: E7 fails on the provider's metadata
+vehicle,E4,not assessed,file not downloaded: E7 fails on the provider's metadata
+vehicle,E5,not assessed,file not downloaded: E7 fails on the provider's metadata
+vehicle,E6,not assessed,file not downloaded: E7 fails on the provider's metadata
+vehicle,E7,fail,"provider: n = 946, p = 18"
+vehicle,E8,not assessed,-

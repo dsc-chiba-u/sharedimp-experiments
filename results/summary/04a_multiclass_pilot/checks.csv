@@ -1,0 +1,11 @@
+check,description,criterion,observed,status
+candidate_abalone_linear_logloss/ran,job completed in R and Python,status ok in both,"r=ok, python=ok",pass
+candidate_abalone_linear_logloss/input,both languages read the same data file,identical sha256,bd65f5246ef0,pass
+candidate_abalone_linear_logloss/schema,common output schema,summary columns equal; per-split common columns present,,pass
+candidate_abalone_linear_logloss/layout,"row order, features, fold labels, split sizes",identical in R and Python,,pass
+candidate_abalone_linear_logloss/parity,max |R - Python| over all numeric columns of both tables (multinomial),<= 0.001,2.82e-06,pass
+candidate_abalone_linear_accuracy/ran,job completed in R and Python,status ok in both,"r=ok, python=ok",pass
+candidate_abalone_linear_accuracy/input,both languages read the same data file,identical sha256,bd65f5246ef0,pass
+candidate_abalone_linear_accuracy/schema,common output schema,summary columns equal; per-split common columns present,,pass
+candidate_abalone_linear_accuracy/layout,"row order, features, fold labels, split sizes",identical in R and Python,,pass
+candidate_abalone_linear_accuracy/parity,max |R - Python| over all numeric columns of both tables (multinomial),<= 0.001,0.0012,FAIL

@@ -1,0 +1,3 @@
+candidate,job,metric,max_abs_diff_r_python,in,max_abs_diff_summary_table,tolerance,warnings_r,warnings_python,status
+abalone,candidate_abalone_linear_logloss,log_loss,2.821564413113542e-06,"per_split table, importance",7.6727995833650309e-07,0.001,0,0,pass
+abalone,candidate_abalone_linear_accuracy,accuracy,0.0011961722488038617,"per_split table, score_reduced",0.00034884983922614868,0.001,0,0,fail

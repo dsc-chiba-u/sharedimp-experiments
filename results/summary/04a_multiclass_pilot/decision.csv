@@ -1,0 +1,6 @@
+candidate,E1_to_E8,E9,eligible,P1_purpose,P2
+abalone,pass,fail,False,repurposed,pass
+vertebral,fail (E3),not assessed,False,documented purpose,not assessed
+seeds,fail (E8),not assessed,False,documented purpose,not assessed
+dry_bean,fail (E7),not assessed,False,documented purpose,not assessed
+vehicle,fail (E7),not assessed,False,documented purpose,not assessed

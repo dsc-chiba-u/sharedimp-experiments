@@ -1,0 +1,312 @@
+{
+  "config": "config/04a_multiclass_selection.json",
+  "verified": "2026-11-14",
+  "thresholds": {
+    "E3_min_features": 4,
+    "E3_min_largest_abs_correlation": 0.7,
+    "E4_max_share_rows_missing": 0.01,
+    "E5_max_share_rows_with_shared_feature_vector": 0.01,
+    "E6_min_rows_per_class": 50,
+    "E7_max_n": 5000,
+    "E7_max_p": 12
+  },
+  "candidates": {
+    "abalone": {
+      "spec": {
+        "title": "Abalone, Sex (M, F, I) as response",
+        "source": "UCI Machine Learning Repository, dataset 1",
+        "landing_page": "https://archive.ics.uci.edu/dataset/1/abalone",
+        "doi": "10.24432/C55C7W",
+        "license": "CC BY 4.0",
+        "provider_n": 4177,
+        "provider_p": 8,
+        "url": "https://archive.ics.uci.edu/static/public/1/data.csv",
+        "sha256": "25f3dc964447fcb3d68cf1048c04ed69d1474771c4fb34318e10778800a4342f",
+        "format": "csv",
+        "target": "Sex",
+        "features": {
+          "Length": "length",
+          "Diameter": "diameter",
+          "Height": "height",
+          "Whole_weight": "whole_weight",
+          "Shucked_weight": "shucked_weight",
+          "Viscera_weight": "viscera_weight",
+          "Shell_weight": "shell_weight"
+        },
+        "seed": 20261205
+      },
+      "facts": {
+        "downloaded": true,
+        "n": 4177,
+        "p": 7,
+        "features": [
+          "length",
+          "diameter",
+          "height",
+          "whole_weight",
+          "shucked_weight",
+          "viscera_weight",
+          "shell_weight"
+        ],
+        "largest_abs_feature_correlation": 0.9868115849253405,
+        "rank": 7,
+        "condition_number": 30.897268400947848,
+        "classes": {
+          "F": 1307,
+          "I": 1342,
+          "M": 1528
+        },
+        "rows_with_shared_feature_vector": 0,
+        "identical_records": 0,
+        "fit": {
+          "training_accuracy_per_fold": [
+            0.5621071535468423,
+            0.5680933852140078,
+            0.5562537402752843,
+            0.56163973668462,
+            0.559245960502693
+          ],
+          "optimizer_warnings": 0,
+          "cv_log_loss": 0.8678978808235279,
+          "cv_log_loss_of_class_proportions": 1.0962200084833496,
+          "cv_accuracy": 0.5559013646157529,
+          "largest_class_share": 0.3658127842949485
+        }
+      },
+      "documentary": {
+        "E1": {
+          "status": "pass",
+          "evidence": "stable CSV URL, DOI 10.24432/C55C7W, CC BY 4.0 on the landing page"
+        },
+        "E2": {
+          "status": "pass",
+          "evidence": "three levels of Sex (M, F, I = infant); a row is one abalone of the field study of Nash et al. (1994), Sea Fisheries Division Technical Report 48 (abalone.names: 'Number of Instances: 4177'; examples with missing values were removed by the donor)"
+        },
+        "P1": {
+          "status": "repurposed",
+          "evidence": "the documented purpose is predicting the number of rings (age); Sex is documented as a nominal attribute, not as a target. A web search on 2026-11-14 found tutorials but no publication to cite for Sex as the response; the uses listed in abalone.names classify ring groups"
+        }
+      }
+    },
+    "vertebral": {
+      "spec": {
+        "title": "Vertebral Column, three classes",
+        "source": "UCI Machine Learning Repository, dataset 212",
+        "landing_page": "https://archive.ics.uci.edu/dataset/212/vertebral+column",
+        "doi": "10.24432/C5K89B",
+        "license": "CC BY 4.0",
+        "provider_n": 310,
+        "provider_p": 6,
+        "url": "https://archive.ics.uci.edu/static/public/212/data.csv",
+        "sha256": "7b98e6802c824d4c20a97f86174ef47db9171875888775a3884245443f7432d5",
+        "format": "csv",
+        "target": "class",
+        "features": {
+          "pelvic_incidence": "pelvic_incidence",
+          "pelvic_tilt": "pelvic_tilt",
+          "lumbar_lordosis_angle": "lumbar_lordosis_angle",
+          "sacral_slope": "sacral_slope",
+          "pelvic_radius": "pelvic_radius",
+          "degree_spondylolisthesis": "degree_spondylolisthesis"
+        },
+        "defined_combination": {
+          "feature": "pelvic_incidence",
+          "equals": [
+            "pelvic_tilt",
+            "sacral_slope"
+          ],
+          "definition": "pelvic incidence = pelvic tilt + sacral slope (geometric identity of the three pelvic parameters; Legaye et al., Eur Spine J 7:99-103, 1998)",
+          "tolerance": 1e-06
+        },
+        "seed": 20261206
+      },
+      "facts": {
+        "downloaded": true,
+        "defined_combination_max_abs_residual": 1.0000007932831068e-08,
+        "n": 310,
+        "p": 5,
+        "features": [
+          "pelvic_tilt",
+          "lumbar_lordosis_angle",
+          "sacral_slope",
+          "pelvic_radius",
+          "degree_spondylolisthesis"
+        ],
+        "largest_abs_feature_correlation": 0.5983868813317861,
+        "rank": 5,
+        "condition_number": 3.148182207937911,
+        "classes": {
+          "Hernia": 60,
+          "Normal": 100,
+          "Spondylolisthesis": 150
+        },
+        "rows_with_shared_feature_vector": 0,
+        "identical_records": 0
+      },
+      "documentary": {
+        "E1": {
+          "status": "pass",
+          "evidence": "stable CSV URL, DOI 10.24432/C5K89B, CC BY 4.0 on the landing page"
+        },
+        "E2": {
+          "status": "pass",
+          "evidence": "three classes; 'Each patient is represented in the data set by six biomechanical attributes' (310 patients: 100 normal, 60 disk hernia, 150 spondylolisthesis)"
+        },
+        "P1": {
+          "status": "documented purpose",
+          "evidence": "'used to classify orthopaedic patients into 3 classes'"
+        }
+      }
+    },
+    "seeds": {
+      "spec": {
+        "title": "Seeds (three wheat varieties)",
+        "source": "UCI Machine Learning Repository, dataset 236",
+        "landing_page": "https://archive.ics.uci.edu/dataset/236/seeds",
+        "doi": "10.24432/C5H30K",
+        "license": "CC BY 4.0",
+        "provider_n": 210,
+        "provider_p": 7,
+        "url": "https://archive.ics.uci.edu/static/public/236/seeds.zip",
+        "sha256": "5033bd71b24592fa70d9b3cc5be02332dc6d03d0b27e6655e6d553f39afab323",
+        "format": "zip_whitespace",
+        "zip_member": "seeds_dataset.txt",
+        "columns": [
+          "area",
+          "perimeter",
+          "compactness",
+          "kernel_length",
+          "kernel_width",
+          "asymmetry",
+          "groove_length",
+          "variety"
+        ],
+        "target": "variety",
+        "features": {
+          "area": "area",
+          "perimeter": "perimeter",
+          "compactness": "compactness",
+          "kernel_length": "kernel_length",
+          "kernel_width": "kernel_width",
+          "asymmetry": "asymmetry",
+          "groove_length": "groove_length"
+        },
+        "seed": 20261207
+      },
+      "facts": {
+        "downloaded": true,
+        "n": 210,
+        "p": 7,
+        "features": [
+          "area",
+          "perimeter",
+          "compactness",
+          "kernel_length",
+          "kernel_width",
+          "asymmetry",
+          "groove_length"
+        ],
+        "largest_abs_feature_correlation": 0.9943409359374988,
+        "rank": 7,
+        "condition_number": 78.69585774917668,
+        "classes": {
+          "1": 70,
+          "2": 70,
+          "3": 70
+        },
+        "rows_with_shared_feature_vector": 0,
+        "identical_records": 0,
+        "fit": {
+          "training_accuracy_per_fold": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            0.9821428571428571
+          ],
+          "optimizer_warnings": 0,
+          "cv_log_loss": 2.362806365813571,
+          "cv_log_loss_of_class_proportions": 1.0986122886681098,
+          "cv_accuracy": 0.9285714285714286,
+          "largest_class_share": 0.3333333333333333
+        }
+      },
+      "documentary": {
+        "E1": {
+          "status": "pass",
+          "evidence": "zip archive at a stable URL (no single CSV is offered), DOI 10.24432/C5H30K, CC BY 4.0 on the landing page"
+        },
+        "E2": {
+          "status": "pass",
+          "evidence": "three varieties (Kama, Rosa, Canadian), 70 kernels each, 'randomly selected for the experiment'; a row is one kernel"
+        },
+        "P1": {
+          "status": "documented purpose",
+          "evidence": "'The data set can be used for the tasks of classification and cluster analysis'"
+        }
+      }
+    },
+    "dry_bean": {
+      "spec": {
+        "title": "Dry Bean (seven varieties)",
+        "source": "UCI Machine Learning Repository, dataset 602",
+        "landing_page": "https://archive.ics.uci.edu/dataset/602/dry+bean+dataset",
+        "doi": "10.24432/C50S4B",
+        "license": "CC BY 4.0",
+        "provider_n": 13611,
+        "provider_p": 16,
+        "download": false
+      },
+      "facts": {
+        "downloaded": false,
+        "n": 13611,
+        "p": 16
+      },
+      "documentary": {
+        "E1": {
+          "status": "pass",
+          "evidence": "stable CSV URL, DOI 10.24432/C50S4B, CC BY 4.0 on the landing page"
+        },
+        "E2": {
+          "status": "pass",
+          "evidence": "seven registered varieties; a row is the image of one grain"
+        },
+        "P1": {
+          "status": "documented purpose",
+          "evidence": "Koklu & Ozkan (2020), Computers and Electronics in Agriculture, doi:10.1016/j.compag.2020.105507"
+        }
+      }
+    },
+    "vehicle": {
+      "spec": {
+        "title": "Statlog (Vehicle Silhouettes), four classes",
+        "source": "UCI Machine Learning Repository, dataset 149",
+        "landing_page": "https://archive.ics.uci.edu/dataset/149/statlog+vehicle+silhouettes",
+        "doi": "10.24432/C5HG6N",
+        "license": "CC BY 4.0",
+        "provider_n": 946,
+        "provider_p": 18,
+        "download": false
+      },
+      "facts": {
+        "downloaded": false,
+        "n": 946,
+        "p": 18
+      },
+      "documentary": {
+        "E1": {
+          "status": "pass",
+          "evidence": "stable CSV URL, DOI 10.24432/C5HG6N, CC BY 4.0 on the landing page"
+        },
+        "E2": {
+          "status": "pass",
+          "evidence": "four vehicle types; a row is one silhouette image"
+        },
+        "P1": {
+          "status": "documented purpose",
+          "evidence": "'The purpose is to classify a given silhouette as one of four types of vehicle'"
+        }
+      }
+    }
+  }
+}

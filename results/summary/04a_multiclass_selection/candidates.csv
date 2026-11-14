@@ -1,0 +1,6 @@
+candidate,title,source,doi,license,n,p,eligible_E1_to_E8,first_failed_criterion,P1_purpose,P2_cv_log_loss,P2_cv_log_loss_of_class_proportions,P2_cv_accuracy,P2_largest_class_share,P2
+abalone,"Abalone, Sex (M, F, I) as response","UCI Machine Learning Repository, dataset 1",10.24432/C55C7W,CC BY 4.0,4177,7,True,-,repurposed,0.86789788082352792,1.0962200084833496,0.5559013646157529,0.36581278429494851,pass
+vertebral,"Vertebral Column, three classes","UCI Machine Learning Repository, dataset 212",10.24432/C5K89B,CC BY 4.0,310,5,False,E3,documented purpose,NA,NA,NA,NA,not assessed
+seeds,Seeds (three wheat varieties),"UCI Machine Learning Repository, dataset 236",10.24432/C5H30K,CC BY 4.0,210,7,False,E8,documented purpose,NA,NA,NA,NA,not assessed
+dry_bean,Dry Bean (seven varieties),"UCI Machine Learning Repository, dataset 602",10.24432/C50S4B,CC BY 4.0,13611,16,False,E7,documented purpose,NA,NA,NA,NA,not assessed
+vehicle,"Statlog (Vehicle Silhouettes), four classes","UCI Machine Learning Repository, dataset 149",10.24432/C5HG6N,CC BY 4.0,946,18,False,E7,documented purpose,NA,NA,NA,NA,not assessed

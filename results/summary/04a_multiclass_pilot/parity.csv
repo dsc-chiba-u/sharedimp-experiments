@@ -1,0 +1,15 @@
+job,parity_class,table,column,max_abs_diff,tolerance
+candidate_abalone_linear_logloss,multinomial,summary,importance,6.1539022894185891e-07,0.001
+candidate_abalone_linear_logloss,multinomial,summary,importance_std,7.6727995833650309e-07,0.001
+candidate_abalone_linear_logloss,multinomial,summary,score_full,3.7636168714882956e-07,0.001
+candidate_abalone_linear_logloss,multinomial,summary,score_reduced,5.2382420245855599e-07,0.001
+candidate_abalone_linear_logloss,multinomial,per_split,score_full,1.2491719928453549e-06,0.001
+candidate_abalone_linear_logloss,multinomial,per_split,score_reduced,2.753367688734798e-06,0.001
+candidate_abalone_linear_logloss,multinomial,per_split,importance,2.821564413113542e-06,0.001
+candidate_abalone_linear_accuracy,multinomial,summary,importance,0.00023923444976076125,0.001
+candidate_abalone_linear_accuracy,multinomial,summary,importance_std,0.00034884983922614868,0.001
+candidate_abalone_linear_accuracy,multinomial,summary,score_full,0,0.001
+candidate_abalone_linear_accuracy,multinomial,summary,score_reduced,0.00023923444976081676,0.001
+candidate_abalone_linear_accuracy,multinomial,per_split,score_full,0,0.001
+candidate_abalone_linear_accuracy,multinomial,per_split,score_reduced,0.0011961722488038617,0.001
+candidate_abalone_linear_accuracy,multinomial,per_split,importance,0.0011961722488038617,0.001

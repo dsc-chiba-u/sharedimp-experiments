@@ -1,0 +1,17 @@
+{
+  "cells": [
+    {
+      "job": "candidate_abalone_linear_accuracy",
+      "dataset": "candidate_abalone",
+      "feature": "whole_weight",
+      "fold": 1,
+      "model": "reduced",
+      "n_test": 836,
+      "score_r": 0.3588516746411483,
+      "score_python": 0.36004784688995217,
+      "id": "cell1",
+      "python_learner": "LogisticRegression(C=inf, solver='lbfgs', tol=1e-12, max_iter=20000)",
+      "python_refit_accuracy": 0.36004784688995217
+    }
+  ]
+}
