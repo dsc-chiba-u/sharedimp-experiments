@@ -354,6 +354,57 @@ No criterion: every number is reported with its Monte Carlo standard error
 over the data sets. The study does not establish that a forest importance
 is zero, non-negative or non-positive in general.
 
+## 5d. Replacement of the multiclass data set of experiment C
+
+Reason: the Maternal Health Risk file contains many repeated records of
+undocumented origin (§5b). The multiclass example of the paper is to be a
+data set whose rows are documented observations. The Maternal results stay
+in the repository as a sensitivity / supplementary analysis.
+
+### Criteria (written on 2026-11-14, before any candidate file was downloaded or analysed)
+
+Candidates named beforehand: UCI Abalone with `Sex` as response (dataset 1),
+UCI Vertebral Column, three-class version (212), UCI Seeds (236), UCI Dry
+Bean (602), UCI Statlog Vehicle Silhouettes (149).
+
+A candidate is **eligible** only if all of the following hold. They are
+assessed in this order; none of them uses an importance.
+
+| | criterion |
+|---|---|
+| E1 | public, downloadable from a stable URL, with a DOI; the provider states a license that allows redistributing a modified version (CC BY 4.0 or more permissive) |
+| E2 | at least three classes; the provider's documentation says what a row is, and rows are distinct observational units |
+| E3 | at least four continuous features, at least one pair with absolute correlation ≥ 0.7, and full column rank. If features are linearly dependent *by their documented definition*, the feature that is the combination of the others is dropped before anything else is computed |
+| E4 | rows with a missing value in the columns used: at most 1 % (they are dropped) |
+| E5 | rows whose feature vector also occurs in another row: at most 1 % of the rows. If there are any, the folds keep identical feature vectors together (as in §5b); the rows stay |
+| E6 | every class has at least 50 rows |
+| E7 | n ≤ 5000 and p ≤ 12 (the forest jobs fit 2·p·5 forests of 500 trees on one thread) |
+| E8 | the separation rule of §5: unpenalized multinomial logistic regression misclassifies at least one training row in every training fold; and neither optimiser reports a failure (no convergence warning from scikit-learn in the check; no warning recorded by the R job) |
+| E9 | pilot with the `linear` learner, the two metrics of the Maternal jobs (log-loss, accuracy), the same file and fold column in both languages: R and Python agree within the existing `multinomial` tolerance (1e-3). The tolerance is not changed |
+
+Among the eligible candidates the choice is made by these preferences, in
+this order:
+
+| | preference |
+|---|---|
+| P1 | predicting the class from the features is the documented purpose of the data set (preferred), or at least a use documented by the provider or in published work; a target that was only repurposed here ranks below |
+| P2 | the classification is neither trivial nor empty: the cross-validated log-loss of the Full multinomial model is lower than that of predicting the class proportions, and the accuracy is below 1. (A score of the model, not an importance) |
+| P3 | more rows; then fewer features |
+
+Rules for the outcome:
+
+- Importances are computed only for the chosen data set, after the choice.
+- If no candidate is eligible, nothing is replaced: the group-aware Maternal
+  analysis (`maternal_grouped`) stays the provisional multiclass example and
+  the reasons are reported.
+- A candidate that fails a criterion is recorded with the criterion and the
+  observed value; a file prepared for it is not kept among the data used.
+- The forest jobs of the chosen data set are run and reported only; no
+  agreement between R and Python is required of them.
+- The results of Phases 1 to 3 are not changed by the replacement: the
+  Maternal jobs keep their job ids, data file, folds and seeds; the runtime
+  benchmark (05) is not re-run.
+
 ## 6. Experiment D — runtime (Phase 3)
 
 Workflow: `workflow/05_runtime.smk`; conditions, protocol, budget rule and
