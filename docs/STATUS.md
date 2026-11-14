@@ -307,8 +307,14 @@ sources in `docs/softwarex_requirements.md`.
 
 1. Author list, affiliations, corresponding email (C8), funding,
    competing-interest and generative-AI declarations, acknowledgements.
+   Only the name and the affiliation address of the first author are
+   filled in (taken from the earlier manuscript `../fbrglm/paper/`); no
+   email address was written, because the repository is public and the
+   address to publish is the author's choice.
 2. Multiclass example: keep Maternal Health Risk with group-aware folds
-   (as drafted) or change it (issue 6).
+   (as drafted) or change it (issue 6). Adopting Abalone instead would
+   first need the agreement rule for thresholded metrics to be amended
+   (issue 16, `docs/multiclass_dataset_selection.md`, section 5).
 3. Code version: no release tag and no DOI exist for either package; C2
    names the commits of `config/pins.env`. The R repository has a later
    documentation-only commit (`4632626`).

@@ -46,3 +46,10 @@ LaTeX installation that has `elsarticle`.
   `MAIN-TEXT-END`; the word limit (4000) is checked on it.
 - Multiclass example: Maternal Health Risk with group-aware folds
   (`docs/maternal_duplicates.md`, `docs/multiclass_dataset_selection.md`).
+
+## Before submission
+
+The list of what the author still has to decide, supply or verify is in
+`docs/STATUS.md` ("To be decided or supplied by the author before
+submission") and `docs/softwarex_requirements.md` ("Not verified", "Open
+points").
