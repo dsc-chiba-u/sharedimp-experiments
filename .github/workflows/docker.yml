@@ -1,10 +1,11 @@
 name: Docker images
 
-# Builds the two images this repository needs beyond the package images and
+# Builds the three images this repository needs beyond the package images and
 # publishes them to
 #   ghcr.io/dsc-chiba-u/<name>   and, if the Docker Hub secrets exist,   docker.io/koki/<name>
 #     sharedimp-experiments-r   docker/experiments-r    (sharedimp-r + deps of the official UMFI R package + plotting)
 #     umfi-official-py          docker/umfi-official-py (deps of the official Python UMFI code; the code is NOT included)
+#     sharedimp-manuscript      docker/manuscript       (sharedimp-experiments-r + pandoc, TeX Live, rticles: builds paper/manuscript.Rmd)
 #
 # * Pull requests: build only (each Dockerfile ends with its own import check).
 # * Push to main touching docker/ or this file, or a manual run: build, then
@@ -47,6 +48,8 @@ jobs:
             context: docker/experiments-r
           - name: umfi-official-py
             context: docker/umfi-official-py
+          - name: sharedimp-manuscript
+            context: docker/manuscript
     env:
       PUBLISH: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
