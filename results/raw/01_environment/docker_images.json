@@ -1,5 +1,5 @@
 {
-  "queried_at_utc": "2026-11-13T12:15:23Z",
+  "queried_at_utc": "2026-11-14T01:07:46Z",
   "images": [
     {
       "image": "ghcr.io/dsc-chiba-u/sharedimp-r",
@@ -53,11 +53,12 @@
       "revision_label_is_pinned_commit": true,
       "tags": [
         "latest",
-        "408e962"
+        "408e962",
+        "eacf27a"
       ],
-      "digest_latest": "sha256:803daedb5ce5b39246eefb63c823e0f0a7b5c8bb869f6d4283884d7142d84c1f",
+      "digest_latest": "sha256:983bb830c607ccaddec5d80026a6d83cd59015cc37318c084281dfdb6932d249",
       "digest_pinned_tag": "sha256:803daedb5ce5b39246eefb63c823e0f0a7b5c8bb869f6d4283884d7142d84c1f",
-      "latest_is_pinned_commit": true,
+      "latest_is_pinned_commit": false,
       "revision_label": "408e962c5c19a34b4d60912555705697cc650399",
       "status": "ok"
     },
@@ -70,11 +71,12 @@
       "revision_label_is_pinned_commit": true,
       "tags": [
         "latest",
-        "408e962"
+        "408e962",
+        "eacf27a"
       ],
-      "digest_latest": "sha256:2e44cc61c15ecd87b679b20025e6c53f8bd7ad3c5fb1efadc8855537ca47bef6",
+      "digest_latest": "sha256:7e6afd76796b6aebc99194e132aef605977a73f00b3f3a76209161d99e553757",
       "digest_pinned_tag": "sha256:2e44cc61c15ecd87b679b20025e6c53f8bd7ad3c5fb1efadc8855537ca47bef6",
-      "latest_is_pinned_commit": true,
+      "latest_is_pinned_commit": false,
       "revision_label": "408e962c5c19a34b4d60912555705697cc650399",
       "status": "ok"
     }

@@ -1,0 +1,32 @@
+{
+  "language": "r",
+  "status": "ok",
+  "design": "null_p4",
+  "variant": "mtry_all",
+  "settings": {
+    "learner": "forest",
+    "trees": 500,
+    "mtry": "all",
+    "max_depth": null,
+    "bootstrap": true,
+    "representation": "standard",
+    "node": {
+      "min.node.size": 5,
+      "min.bucket": 1
+    }
+  },
+  "data_sha256": "81e38bfdb321716a405e5aa3dfd549335013ea1fb827e9cc68f101652ae9c03d",
+  "seconds": 117.254,
+  "ranger_version": "0.18.0",
+  "sharedimp_version": "0.1.0",
+  "threads": 1,
+  "container": {
+    "runtime": "singularity",
+    "runtime_version": "3.8.6",
+    "image": "ghcr.io/dsc-chiba-u/sharedimp-r@sha256:869dbec7077cfbfcea4f0da25d8ce51e1c4e6d4297106d11a965cada1d8a0805"
+  },
+  "in_pinned_image": true,
+  "sharedimp_commit": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
+  "experiments_commit": "e516acd50ca033fba93b08676bcf2d1c663c6d8a",
+  "experiments_code_dirty": false
+}

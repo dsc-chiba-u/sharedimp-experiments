@@ -18,10 +18,10 @@
   },
   "in_pinned_image": true,
   "sharedimp_commit": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
-  "experiments_commit": "9d29abe141966bd881bc6af205ff9d1181cc8ead",
+  "experiments_commit": "e516acd50ca033fba93b08676bcf2d1c663c6d8a",
   "experiments_code_dirty": false,
   "threads": 1,
-  "run_at_utc": "2026-11-13T12:15:49Z",
+  "run_at_utc": "2026-11-14T01:08:06Z",
   "dataset_sha256": "1e9eeb90ec2df782cc725bc6a2a358a74665ba02bd7fbff888747e687d453f61",
   "task": "classification",
   "learner_description": "linear",
@@ -29,6 +29,6 @@
   "n": 60,
   "p": 3,
   "n_splits": 3,
-  "elapsed_seconds": 0.303,
+  "elapsed_seconds": 0.339,
   "warnings": []
 }

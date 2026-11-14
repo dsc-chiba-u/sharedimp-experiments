@@ -1,0 +1,63 @@
+check,description,criterion,observed,status
+maternal_grouped_linear_logloss/ran,job completed in R and Python,status ok in both,"r=ok, python=ok",pass
+maternal_grouped_linear_logloss/input,both languages read the same data file,identical sha256,b1980b739985,pass
+maternal_grouped_linear_logloss/schema,common output schema,summary columns equal; per-split common columns present,NA,pass
+maternal_grouped_linear_logloss/layout,"row order, features, fold labels, split sizes",identical in R and Python,NA,pass
+maternal_grouped_linear_logloss/parity,max |R - Python| over all numeric columns of both tables (multinomial),<= 0.001,9.52e-06,pass
+maternal_grouped_linear_accuracy/ran,job completed in R and Python,status ok in both,"r=ok, python=ok",pass
+maternal_grouped_linear_accuracy/input,both languages read the same data file,identical sha256,b1980b739985,pass
+maternal_grouped_linear_accuracy/schema,common output schema,summary columns equal; per-split common columns present,NA,pass
+maternal_grouped_linear_accuracy/layout,"row order, features, fold labels, split sizes",identical in R and Python,NA,pass
+maternal_grouped_linear_accuracy/parity,max |R - Python| over all numeric columns of both tables (multinomial),<= 0.001,1.11e-16,pass
+maternal_grouped_rf_logloss/ran,job completed in R and Python,status ok in both,"r=ok, python=ok",pass
+maternal_grouped_rf_logloss/input,both languages read the same data file,identical sha256,b1980b739985,pass
+maternal_grouped_rf_logloss/schema,common output schema,summary columns equal; per-split common columns present,NA,pass
+maternal_grouped_rf_logloss/layout,"row order, features, fold labels, split sizes",identical in R and Python,NA,pass
+maternal_grouped_rf_logloss/parity,max |R - Python| over all numeric columns of both tables (none),reported only (language-specific learner),0.241,reported
+maternal_grouped_rf_accuracy/ran,job completed in R and Python,status ok in both,"r=ok, python=ok",pass
+maternal_grouped_rf_accuracy/input,both languages read the same data file,identical sha256,b1980b739985,pass
+maternal_grouped_rf_accuracy/schema,common output schema,summary columns equal; per-split common columns present,NA,pass
+maternal_grouped_rf_accuracy/layout,"row order, features, fold labels, split sizes",identical in R and Python,NA,pass
+maternal_grouped_rf_accuracy/parity,max |R - Python| over all numeric columns of both tables (none),reported only (language-specific learner),0.0743,reported
+maternal_dedup_linear_logloss/ran,job completed in R and Python,status ok in both,"r=ok, python=ok",pass
+maternal_dedup_linear_logloss/input,both languages read the same data file,identical sha256,2fadfbe82a8f,pass
+maternal_dedup_linear_logloss/schema,common output schema,summary columns equal; per-split common columns present,NA,pass
+maternal_dedup_linear_logloss/layout,"row order, features, fold labels, split sizes",identical in R and Python,NA,pass
+maternal_dedup_linear_logloss/parity,max |R - Python| over all numeric columns of both tables (multinomial),<= 0.001,3.08e-06,pass
+maternal_dedup_linear_accuracy/ran,job completed in R and Python,status ok in both,"r=ok, python=ok",pass
+maternal_dedup_linear_accuracy/input,both languages read the same data file,identical sha256,2fadfbe82a8f,pass
+maternal_dedup_linear_accuracy/schema,common output schema,summary columns equal; per-split common columns present,NA,pass
+maternal_dedup_linear_accuracy/layout,"row order, features, fold labels, split sizes",identical in R and Python,NA,pass
+maternal_dedup_linear_accuracy/parity,max |R - Python| over all numeric columns of both tables (multinomial),<= 0.001,1.11e-16,pass
+maternal_dedup_rf_logloss/ran,job completed in R and Python,status ok in both,"r=ok, python=ok",pass
+maternal_dedup_rf_logloss/input,both languages read the same data file,identical sha256,2fadfbe82a8f,pass
+maternal_dedup_rf_logloss/schema,common output schema,summary columns equal; per-split common columns present,NA,pass
+maternal_dedup_rf_logloss/layout,"row order, features, fold labels, split sizes",identical in R and Python,NA,pass
+maternal_dedup_rf_logloss/parity,max |R - Python| over all numeric columns of both tables (none),reported only (language-specific learner),0.0705,reported
+maternal_dedup_rf_accuracy/ran,job completed in R and Python,status ok in both,"r=ok, python=ok",pass
+maternal_dedup_rf_accuracy/input,both languages read the same data file,identical sha256,2fadfbe82a8f,pass
+maternal_dedup_rf_accuracy/schema,common output schema,summary columns equal; per-split common columns present,NA,pass
+maternal_dedup_rf_accuracy/layout,"row order, features, fold labels, split sizes",identical in R and Python,NA,pass
+maternal_dedup_rf_accuracy/parity,max |R - Python| over all numeric columns of both tables (none),reported only (language-specific learner),0.0549,reported
+maternal_grouped/group_integrity,no feature vector occurs in more than one fold,0 groups split,0,pass
+maternal_grouped/rows,"rows are those of the source file, in the same order",identical,1014 rows,pass
+maternal_grouped/separation,unpenalized multinomial logistic regression does not separate a training fold,training accuracy < 1 in every fold,max 0.646,pass
+maternal_dedup/group_integrity,no feature vector occurs in more than one fold,0 groups split,0,pass
+maternal_dedup/rows,exactly one row per identical record of the source file,identical to the distinct records,452 rows,pass
+maternal_dedup/separation,unpenalized multinomial logistic regression does not separate a training fold,training accuracy < 1 in every fold,max 0.690,pass
+maternal_grouped/linear_log_loss/r/rank,Spearman correlation of the importances with those of the original analysis,reported only,1.000,reported
+maternal_dedup/linear_log_loss/r/rank,Spearman correlation of the importances with those of the original analysis,reported only,0.771,reported
+maternal_grouped/linear_log_loss/python/rank,Spearman correlation of the importances with those of the original analysis,reported only,1.000,reported
+maternal_dedup/linear_log_loss/python/rank,Spearman correlation of the importances with those of the original analysis,reported only,0.771,reported
+maternal_grouped/linear_accuracy/r/rank,Spearman correlation of the importances with those of the original analysis,reported only,0.943,reported
+maternal_dedup/linear_accuracy/r/rank,Spearman correlation of the importances with those of the original analysis,reported only,0.086,reported
+maternal_grouped/linear_accuracy/python/rank,Spearman correlation of the importances with those of the original analysis,reported only,0.943,reported
+maternal_dedup/linear_accuracy/python/rank,Spearman correlation of the importances with those of the original analysis,reported only,0.086,reported
+maternal_grouped/rand_forest_log_loss/r/rank,Spearman correlation of the importances with those of the original analysis,reported only,0.886,reported
+maternal_dedup/rand_forest_log_loss/r/rank,Spearman correlation of the importances with those of the original analysis,reported only,0.143,reported
+maternal_grouped/rand_forest_log_loss/python/rank,Spearman correlation of the importances with those of the original analysis,reported only,0.600,reported
+maternal_dedup/rand_forest_log_loss/python/rank,Spearman correlation of the importances with those of the original analysis,reported only,0.829,reported
+maternal_grouped/rand_forest_accuracy/r/rank,Spearman correlation of the importances with those of the original analysis,reported only,0.029,reported
+maternal_dedup/rand_forest_accuracy/r/rank,Spearman correlation of the importances with those of the original analysis,reported only,0.314,reported
+maternal_grouped/rand_forest_accuracy/python/rank,Spearman correlation of the importances with those of the original analysis,reported only,0.086,reported
+maternal_dedup/rand_forest_accuracy/python/rank,Spearman correlation of the importances with those of the original analysis,reported only,-0.638,reported

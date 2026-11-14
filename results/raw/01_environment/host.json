@@ -1,5 +1,5 @@
 {
-  "recorded_at_utc": "2026-11-13T12:15:21Z",
+  "recorded_at_utc": "2026-11-14T01:07:43Z",
   "os": {
     "pretty_name": "Ubuntu 22.04.5 LTS",
     "kernel": "6.8.0-136-generic",
@@ -22,7 +22,7 @@
     "reason": "permission denied while trying to connect to the docker API at unix:///var/run/docker.sock"
   },
   "experiments_repo": {
-    "head": "9d29abe141966bd881bc6af205ff9d1181cc8ead",
+    "head": "e516acd50ca033fba93b08676bcf2d1c663c6d8a",
     "code_dirty": false
   },
   "pins": {

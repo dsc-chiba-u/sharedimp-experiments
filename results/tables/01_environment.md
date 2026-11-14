@@ -11,7 +11,7 @@
 | host | Snakemake | 8.10.0 |
 | host | Singularity | singularity version 3.8.6 |
 | host | Docker daemon usable | False |
-| host | this repository (code) | 9d29abe141966bd881bc6af205ff9d1181cc8ead |
+| host | this repository (code) | e516acd50ca033fba93b08676bcf2d1c663c6d8a |
 | R | container image | ghcr.io/dsc-chiba-u/sharedimp-r@sha256:869dbec7077cfbfcea4f0da25d8ce51e1c4e6d4297106d11a965cada1d8a0805 |
 | R | runs inside the pinned image | True |
 | R | container OS | Ubuntu 24.04.5 LTS |
@@ -39,7 +39,7 @@
 | Python | pandas | 3.1.1 |
 | Python | joblib | 1.6.0 |
 | Python | threadpoolctl | 3.8.0 |
-| Python | BLAS | openblas 0.3.31.dev (libscipy_openblas-5f890258.so) |
+| Python | BLAS | openblas 0.3.34.106.0 (libscipy_openblas64_-f48b354e.so) |
 | registry | ghcr.io/dsc-chiba-u/sharedimp-r: registry query | ok |
 | registry | ghcr.io/dsc-chiba-u/sharedimp-r: pinned digest | sha256:869dbec7077cfbfcea4f0da25d8ce51e1c4e6d4297106d11a965cada1d8a0805 |
 | registry | ghcr.io/dsc-chiba-u/sharedimp-r: pinned digest is tag cf2e1cc | True |
@@ -61,14 +61,14 @@
 | registry | ghcr.io/dsc-chiba-u/sharedimp-experiments-r: pinned digest is tag 408e962 | True |
 | registry | ghcr.io/dsc-chiba-u/sharedimp-experiments-r: revision label of the pinned image | 408e962c5c19a34b4d60912555705697cc650399 |
 | registry | ghcr.io/dsc-chiba-u/sharedimp-experiments-r: revision label is the pinned commit | True |
-| registry | ghcr.io/dsc-chiba-u/sharedimp-experiments-r:latest digest | sha256:803daedb5ce5b39246eefb63c823e0f0a7b5c8bb869f6d4283884d7142d84c1f |
+| registry | ghcr.io/dsc-chiba-u/sharedimp-experiments-r:latest digest | sha256:983bb830c607ccaddec5d80026a6d83cd59015cc37318c084281dfdb6932d249 |
 | registry | ghcr.io/dsc-chiba-u/sharedimp-experiments-r:408e962 digest | sha256:803daedb5ce5b39246eefb63c823e0f0a7b5c8bb869f6d4283884d7142d84c1f |
-| registry | ghcr.io/dsc-chiba-u/sharedimp-experiments-r: latest is the pinned commit | True |
+| registry | ghcr.io/dsc-chiba-u/sharedimp-experiments-r: latest is the pinned commit | False |
 | registry | ghcr.io/dsc-chiba-u/umfi-official-py: registry query | ok |
 | registry | ghcr.io/dsc-chiba-u/umfi-official-py: pinned digest | sha256:2e44cc61c15ecd87b679b20025e6c53f8bd7ad3c5fb1efadc8855537ca47bef6 |
 | registry | ghcr.io/dsc-chiba-u/umfi-official-py: pinned digest is tag 408e962 | True |
 | registry | ghcr.io/dsc-chiba-u/umfi-official-py: revision label of the pinned image | 408e962c5c19a34b4d60912555705697cc650399 |
 | registry | ghcr.io/dsc-chiba-u/umfi-official-py: revision label is the pinned commit | True |
-| registry | ghcr.io/dsc-chiba-u/umfi-official-py:latest digest | sha256:2e44cc61c15ecd87b679b20025e6c53f8bd7ad3c5fb1efadc8855537ca47bef6 |
+| registry | ghcr.io/dsc-chiba-u/umfi-official-py:latest digest | sha256:7e6afd76796b6aebc99194e132aef605977a73f00b3f3a76209161d99e553757 |
 | registry | ghcr.io/dsc-chiba-u/umfi-official-py:408e962 digest | sha256:2e44cc61c15ecd87b679b20025e6c53f8bd7ad3c5fb1efadc8855537ca47bef6 |
-| registry | ghcr.io/dsc-chiba-u/umfi-official-py: latest is the pinned commit | True |
+| registry | ghcr.io/dsc-chiba-u/umfi-official-py: latest is the pinned commit | False |

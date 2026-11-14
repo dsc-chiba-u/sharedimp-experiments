@@ -1,0 +1,69 @@
+{
+  "language": "python",
+  "learner": "linear",
+  "mode": "main",
+  "status": "ok",
+  "learner_description": "sklearn.linear_model.LinearRegression()",
+  "learner_repr": "LinearRegression()",
+  "plan": "results/summary/05_runtime/plan.csv",
+  "started_utc": "2026-11-14T01:42:18Z",
+  "process_seconds": 203.29498071910348,
+  "timer": "time.perf_counter()",
+  "python_version": "3.13.18 (main, Nov  5 2026, 07:59:38) [GCC 14.2.0]",
+  "packages": {
+    "sharedimp": "0.1.0",
+    "scikit-learn": "1.9.1",
+    "numpy": "2.5.4",
+    "pandas": "3.1.1"
+  },
+  "threadpools": [
+    {
+      "user_api": "openmp",
+      "internal_api": "openmp",
+      "num_threads": 1,
+      "prefix": "libgomp",
+      "filepath": "/usr/local/lib/python3.13/site-packages/scikit_learn.libs/libgomp-e985bcbb.so.1.0.0",
+      "version": null
+    },
+    {
+      "user_api": "blas",
+      "internal_api": "openblas",
+      "num_threads": 1,
+      "prefix": "libscipy_openblas",
+      "filepath": "/usr/local/lib/python3.13/site-packages/scipy.libs/libscipy_openblas-5f890258.so",
+      "version": "0.3.31.dev",
+      "threading_layer": "pthreads",
+      "architecture": "SkylakeX"
+    },
+    {
+      "user_api": "blas",
+      "internal_api": "openblas",
+      "num_threads": 1,
+      "prefix": "libscipy_openblas",
+      "filepath": "/usr/local/lib/python3.13/site-packages/numpy.libs/libscipy_openblas64_-f48b354e.so",
+      "version": "0.3.34.106.0",
+      "threading_layer": "pthreads",
+      "architecture": "SkylakeX"
+    }
+  ],
+  "cpu": "Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz",
+  "logical_cpus": 32,
+  "threads": 1,
+  "thread_env": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "SHAREDIMP_EXP_THREADS": "1"
+  },
+  "loadavg_1min_end": 1.02,
+  "fit_count": null,
+  "container": {
+    "runtime": "singularity",
+    "runtime_version": "3.8.6",
+    "image": "ghcr.io/dsc-chiba-u/sharedimp-py@sha256:c88b48a58848d3583d14d60a9b6dabe73e26733c0c24e986153d12981a0edebe"
+  },
+  "in_pinned_image": true,
+  "sharedimp_commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
+  "experiments_commit": "e516acd50ca033fba93b08676bcf2d1c663c6d8a",
+  "experiments_code_dirty": false
+}

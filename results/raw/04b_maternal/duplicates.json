@@ -1,0 +1,43 @@
+{
+  "source_file": "data/real/maternal.csv",
+  "source_sha256": "c06b93e5aa5d20479d8b8bb30e52950014385013e3abfa8c4873277cb3d3cde6",
+  "rows": 1014,
+  "identical_record": {
+    "definition": "rows equal in all six features and in the class label",
+    "distinct_records": 452,
+    "rows_that_repeat_an_earlier_record": 562,
+    "rows_whose_record_occurs_more_than_once": 866,
+    "largest_multiplicity": 27
+  },
+  "identical_features": {
+    "definition": "rows equal in all six features, whatever the label",
+    "distinct_feature_vectors": 416,
+    "rows_that_repeat_an_earlier_feature_vector": 598
+  },
+  "conflicting_groups": {
+    "definition": "a set of rows with identical features that carries more than one class label",
+    "groups": 35,
+    "rows_in_them": 215,
+    "groups_with_three_labels": 1
+  },
+  "classes_all_rows": {
+    "high_risk": 272,
+    "low_risk": 406,
+    "mid_risk": 336
+  },
+  "classes_distinct_records": {
+    "high_risk": 112,
+    "low_risk": 234,
+    "mid_risk": 106
+  },
+  "random_folds_of_experiment_C": {
+    "assessment_rows_whose_feature_vector_is_also_in_the_training_rows": 807,
+    "assessment_rows_whose_record_is_also_in_the_training_rows": 781
+  },
+  "download_check": {
+    "file": "data/real/downloads/maternal.csv",
+    "sha256": "a1f7025719f84715096e0d1f95ae2e56b57809b9b15449e1836c96a7d976ae9b",
+    "rows": 1014,
+    "identical_record_pattern_equals_prepared_file": true
+  }
+}

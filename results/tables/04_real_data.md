@@ -36,18 +36,18 @@ Scores are oriented so that larger is better (errors and losses are negated).
 
 | job | full_score_r | full_score_python | full_score_range_over_anchors_r | full_score_range_over_anchors_python | parity_class | max_abs_diff_r_python | spearman_importance_r_python | top_feature_r | top_feature_python | seconds_r | seconds_python |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| concrete_linear_rmse | -10.45 | -10.45 | 0 | 1.78e-15 | exact | 5.33e-15 | 1.000 | cement | cement | 0.4 | 0.3 |
-| concrete_linear_r2 | 0.6044 | 0.6044 | 0 | 2.22e-16 | exact | 5.55e-16 | 1.000 | cement | cement | 0.4 | 0.3 |
-| concrete_rf_rmse | -5.939 | -6.968 | 0.868 | 0.835 | none | 1.43 | 0.952 | age | age | 32.3 | 60.9 |
-| concrete_rf_r2 | 0.8724 | 0.8247 | 0.0371 | 0.0422 | none | 0.0684 | 0.905 | age | age | 31.8 | 60.4 |
-| wdbc_linear_logloss | -0.1714 | -0.1714 | 1.67e-16 | 1.67e-16 | logistic | 2.54e-09 | 1.000 | concave_points | concave_points | 0.8 | 0.8 |
-| wdbc_linear_auc | 0.9811 | 0.9811 | 0 | 0 | logistic | 2.22e-16 | 1.000 | concave_points | concave_points | 0.9 | 0.9 |
-| wdbc_rf_logloss | -0.1925 | -0.2068 | 0.0495 | 0.0511 | none | 0.27 | 0.988 | concave_points | concave_points | 19.7 | 80.6 |
-| wdbc_rf_auc | 0.9775 | 0.9753 | 0.0106 | 0.0121 | none | 0.0241 | 1.000 | concave_points | concave_points | 19.8 | 86.4 |
-| maternal_linear_logloss | -0.7873 | -0.7873 | 5.4e-07 | 9.33e-09 | multinomial | 5.93e-06 | 1.000 | blood_sugar | blood_sugar | 1.3 | 0.7 |
-| maternal_linear_accuracy | 0.6223 | 0.6223 | 0 | 0 | multinomial | 1.11e-16 | 1.000 | blood_sugar | blood_sugar | 0.9 | 0.8 |
-| maternal_rf_logloss | -0.443 | -0.5474 | 0.0427 | 0.0517 | none | 0.161 | 0.714 | blood_sugar | blood_sugar | 17.5 | 58.4 |
-| maternal_rf_accuracy | 0.8341 | 0.7654 | 0.0227 | 0.0325 | none | 0.119 | -0.429 | blood_sugar | diastolic_bp | 18.0 | 54.3 |
+| concrete_linear_rmse | -10.45 | -10.45 | 0 | 1.78e-15 | exact | 5.33e-15 | 1.000 | cement | cement | 0.5 | 0.4 |
+| concrete_linear_r2 | 0.6044 | 0.6044 | 0 | 2.22e-16 | exact | 5.55e-16 | 1.000 | cement | cement | 0.5 | 0.3 |
+| concrete_rf_rmse | -5.939 | -6.968 | 0.868 | 0.835 | none | 1.43 | 0.952 | age | age | 32.4 | 60.3 |
+| concrete_rf_r2 | 0.8724 | 0.8247 | 0.0371 | 0.0422 | none | 0.0684 | 0.905 | age | age | 31.9 | 60.2 |
+| wdbc_linear_logloss | -0.1714 | -0.1714 | 1.67e-16 | 1.67e-16 | logistic | 2.54e-09 | 1.000 | concave_points | concave_points | 1.1 | 0.9 |
+| wdbc_linear_auc | 0.9811 | 0.9811 | 0 | 0 | logistic | 2.22e-16 | 1.000 | concave_points | concave_points | 1.1 | 1.5 |
+| wdbc_rf_logloss | -0.1925 | -0.2068 | 0.0495 | 0.0511 | none | 0.27 | 0.988 | concave_points | concave_points | 19.2 | 82.6 |
+| wdbc_rf_auc | 0.9775 | 0.9753 | 0.0106 | 0.0121 | none | 0.0241 | 1.000 | concave_points | concave_points | 20.4 | 84.6 |
+| maternal_linear_logloss | -0.7873 | -0.7873 | 5.4e-07 | 9.33e-09 | multinomial | 5.93e-06 | 1.000 | blood_sugar | blood_sugar | 1.1 | 0.9 |
+| maternal_linear_accuracy | 0.6223 | 0.6223 | 0 | 0 | multinomial | 1.11e-16 | 1.000 | blood_sugar | blood_sugar | 1.0 | 1.0 |
+| maternal_rf_logloss | -0.443 | -0.5474 | 0.0427 | 0.0517 | none | 0.161 | 0.714 | blood_sugar | blood_sugar | 18.1 | 57.6 |
+| maternal_rf_accuracy | 0.8341 | 0.7654 | 0.0227 | 0.0325 | none | 0.119 | -0.429 | blood_sugar | diastolic_bp | 17.4 | 56.4 |
 
 ## Importance (mean over 5 splits) and between-split SD
 

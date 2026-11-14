@@ -1,0 +1,4 @@
+variant,description,rows,distinct_feature_vectors,feature_vectors_in_more_than_one_fold,assessment_rows_with_feature_vector_in_training,classes,sha256
+maternal,"original: all rows, random stratified folds (experiment C)",1014,416,250,807,high_risk: 272; low_risk: 406; mid_risk: 336,c06b93e5aa5d
+maternal_grouped,"all rows, group-aware folds",1014,416,0,0,high_risk: 272; low_risk: 406; mid_risk: 336,b1980b739985
+maternal_dedup,"identical records removed, group-aware folds",452,416,0,0,high_risk: 112; low_risk: 234; mid_risk: 106,2fadfbe82a8f

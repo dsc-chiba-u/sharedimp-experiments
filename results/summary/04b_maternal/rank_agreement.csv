@@ -1,0 +1,17 @@
+learner,metric,language,variant,spearman_with_original,top_feature_original,top_feature_variant,largest_abs_change_of_importance
+linear,log_loss,r,maternal_grouped,1,blood_sugar,blood_sugar,0.0029290889990125774
+linear,log_loss,r,maternal_dedup,0.77142857142857146,blood_sugar,blood_sugar,0.044772965507284733
+linear,log_loss,python,maternal_grouped,1,blood_sugar,blood_sugar,0.0029299924468516869
+linear,log_loss,python,maternal_dedup,0.77142857142857146,blood_sugar,blood_sugar,0.044772722418972614
+linear,accuracy,r,maternal_grouped,0.94285714285714295,blood_sugar,blood_sugar,0.021723650197532064
+linear,accuracy,r,maternal_dedup,0.085714285714285729,blood_sugar,blood_sugar,0.056847792462224114
+linear,accuracy,python,maternal_grouped,0.94285714285714295,blood_sugar,blood_sugar,0.021723650197532064
+linear,accuracy,python,maternal_dedup,0.085714285714285729,blood_sugar,blood_sugar,0.056847792462224114
+rand_forest,log_loss,r,maternal_grouped,0.88571428571428579,blood_sugar,diastolic_bp,0.054818111310423835
+rand_forest,log_loss,r,maternal_dedup,0.14285714285714288,blood_sugar,blood_sugar,0.027256601635785804
+rand_forest,log_loss,python,maternal_grouped,0.59999999999999998,blood_sugar,blood_sugar,0.032700521855358433
+rand_forest,log_loss,python,maternal_dedup,0.82857142857142874,blood_sugar,systolic_bp,0.020504507668550366
+rand_forest,accuracy,r,maternal_grouped,0.028571428571428574,blood_sugar,blood_sugar,0.027630102911768997
+rand_forest,accuracy,r,maternal_dedup,0.31428571428571428,blood_sugar,diastolic_bp,0.021623692413578421
+rand_forest,accuracy,python,maternal_grouped,0.085714285714285729,diastolic_bp,age,0.031610008291469538
+rand_forest,accuracy,python,maternal_dedup,-0.63774813921769324,diastolic_bp,blood_sugar,0.028028774293931288

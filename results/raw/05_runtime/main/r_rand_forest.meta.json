@@ -1,0 +1,43 @@
+{
+  "language": "r",
+  "learner": "rand_forest",
+  "mode": "main",
+  "status": "ok",
+  "learner_description": "shared_importance(learner = \"rand_forest\"): built-in forest, parsnip::rand_forest(trees = 500, min_n = 5) with engine ranger (min.node.size = 5, mtry = floor(sqrt(q)), bootstrap, num.threads = 1)",
+  "plan": "results/summary/05_runtime/plan.csv",
+  "started_utc": "2026-11-14T02:52:20Z",
+  "process_seconds": 1047.16,
+  "timer": "proc.time() elapsed, resolution 1 ms",
+  "r_version": "R version 4.5.3 (2026-03-11)",
+  "packages": {
+    "sharedimp": "0.1.0",
+    "parsnip": "1.5.0",
+    "ranger": "0.18.0",
+    "rsample": "1.3.2",
+    "yardstick": "1.4.0"
+  },
+  "blas": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3",
+  "la_library": "/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so",
+  "lapack_version": "3.12.0",
+  "cpu": "Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz",
+  "logical_cpus": 32,
+  "threads": 1,
+  "thread_env": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "R_RANGER_NUM_THREADS": "1",
+    "SHAREDIMP_EXP_THREADS": "1"
+  },
+  "loadavg_1min_end": 1.11,
+  "fit_count": null,
+  "container": {
+    "runtime": "singularity",
+    "runtime_version": "3.8.6",
+    "image": "ghcr.io/dsc-chiba-u/sharedimp-r@sha256:869dbec7077cfbfcea4f0da25d8ce51e1c4e6d4297106d11a965cada1d8a0805"
+  },
+  "in_pinned_image": true,
+  "sharedimp_commit": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
+  "experiments_commit": "e516acd50ca033fba93b08676bcf2d1c663c6d8a",
+  "experiments_code_dirty": false
+}

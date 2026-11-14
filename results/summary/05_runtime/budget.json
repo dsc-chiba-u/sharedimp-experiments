@@ -1,0 +1,83 @@
+{
+  "rule": "A cell costs (warmup_runs + timed_runs) x predicted seconds. A cell whose cost exceeds the per-cell cap is not run and is recorded as 'skipped (budget)'. The cap is the largest candidate for which the cost of all remaining cells of all processes plus the process overheads is at most planned_fraction x total_seconds.",
+  "abort_rule": "If the warm-up run of a cell shows that the cell would cost more than abort_factor x the cap, the cell is stopped and recorded as 'skipped (budget, after warm-up)'. If a process has used more than 1.25 x its planned time, its remaining cells are recorded as 'skipped (budget, process allowance)'.",
+  "total_seconds": 7200,
+  "planned_limit_seconds": 5760.0,
+  "runs_per_cell": 6,
+  "process_overhead_seconds": 150,
+  "candidates": [
+    {
+      "cap_seconds": 30,
+      "planned_total_seconds": 279.13201360807614,
+      "cells_run": 35,
+      "within_limit": true
+    },
+    {
+      "cap_seconds": 60,
+      "planned_total_seconds": 386.18600145547316,
+      "cells_run": 38,
+      "within_limit": true
+    },
+    {
+      "cap_seconds": 90,
+      "planned_total_seconds": 663.1411830761132,
+      "cells_run": 42,
+      "within_limit": true
+    },
+    {
+      "cap_seconds": 120,
+      "planned_total_seconds": 1011.9070969866848,
+      "cells_run": 45,
+      "within_limit": true
+    },
+    {
+      "cap_seconds": 180,
+      "planned_total_seconds": 1460.1058792617616,
+      "cells_run": 48,
+      "within_limit": true
+    },
+    {
+      "cap_seconds": 240,
+      "planned_total_seconds": 2524.516019859554,
+      "cells_run": 53,
+      "within_limit": true
+    },
+    {
+      "cap_seconds": 300,
+      "planned_total_seconds": 2524.516019859554,
+      "cells_run": 53,
+      "within_limit": true
+    },
+    {
+      "cap_seconds": 420,
+      "planned_total_seconds": 3929.383465873012,
+      "cells_run": 57,
+      "within_limit": true
+    },
+    {
+      "cap_seconds": 600,
+      "planned_total_seconds": 4963.703079424673,
+      "cells_run": 59,
+      "within_limit": true
+    },
+    {
+      "cap_seconds": 900,
+      "planned_total_seconds": 9658.775151973725,
+      "cells_run": 65,
+      "within_limit": false
+    },
+    {
+      "cap_seconds": 1200,
+      "planned_total_seconds": 11951.005308696669,
+      "cells_run": 67,
+      "within_limit": false
+    }
+  ],
+  "chosen_cap_seconds": 600,
+  "planned_total_seconds": 4963.703079424673,
+  "cells": {
+    "candidates": 90,
+    "run": 59,
+    "skipped": 31
+  }
+}

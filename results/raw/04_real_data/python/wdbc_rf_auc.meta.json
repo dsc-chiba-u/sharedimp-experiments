@@ -18,10 +18,10 @@
   },
   "in_pinned_image": true,
   "sharedimp_commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
-  "experiments_commit": "9d29abe141966bd881bc6af205ff9d1181cc8ead",
+  "experiments_commit": "e516acd50ca033fba93b08676bcf2d1c663c6d8a",
   "experiments_code_dirty": false,
   "threads": 1,
-  "run_at_utc": "2026-11-13T12:37:33Z",
+  "run_at_utc": "2026-11-14T01:09:12Z",
   "dataset_sha256": "7ff6febfcdf9f6a1d42c97051b9f1efa62e7e7df1409d0dcb47efa3792e1f719",
   "task": "classification",
   "learner_description": "RandomForestClassifier(n_estimators=500, min_samples_leaf=5, max_features='sqrt', bootstrap=True, n_jobs=1)",
@@ -29,6 +29,6 @@
   "n": 569,
   "p": 10,
   "n_splits": 5,
-  "elapsed_seconds": 86.38201666402165,
+  "elapsed_seconds": 84.55920504196547,
   "warnings": []
 }

@@ -1,0 +1,34 @@
+{
+  "job": {
+    "id": "maternal_dedup_rf_logloss",
+    "dataset": "maternal_dedup",
+    "learner": "rand_forest",
+    "metric": "log_loss",
+    "seed": 1,
+    "parity": "none"
+  },
+  "language": "r",
+  "status": "ok",
+  "jobs_file": "config/04b_maternal_jobs.json",
+  "sharedimp_version": "0.1.0",
+  "container": {
+    "runtime": "singularity",
+    "runtime_version": "3.8.6",
+    "image": "ghcr.io/dsc-chiba-u/sharedimp-r@sha256:869dbec7077cfbfcea4f0da25d8ce51e1c4e6d4297106d11a965cada1d8a0805"
+  },
+  "in_pinned_image": true,
+  "sharedimp_commit": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
+  "experiments_commit": "e516acd50ca033fba93b08676bcf2d1c663c6d8a",
+  "experiments_code_dirty": false,
+  "threads": 1,
+  "run_at_utc": "2026-11-14T01:10:55Z",
+  "dataset_sha256": "2fadfbe82a8f8b5c00d04d86bec0a6fb4b04d450bcf5803fb4d848c9190457a0",
+  "task": "classification",
+  "learner_description": "rand_forest",
+  "metric": "log_loss",
+  "n": 452,
+  "p": 6,
+  "n_splits": 5,
+  "elapsed_seconds": 10.783,
+  "warnings": []
+}

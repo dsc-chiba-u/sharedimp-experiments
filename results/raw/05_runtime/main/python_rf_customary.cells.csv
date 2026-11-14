@@ -1,0 +1,19 @@
+language,learner,cell,n,p,v,status,reason,timed_runs,predicted_seconds,data,fold_column,data_sha256
+python,rf_customary,n125_p10_v5,125,10,5,measured,,5,6.0418051945931852,rt_n125_p10,fold_v5,1706432cc858e0e7e1906ef01528f22464e7949b0ba5c79ddd52418fb3a98b08
+python,rf_customary,n250_p10_v5,250,10,5,measured,,5,10.956454330733504,rt_n250_p10,fold_v5,37385f722f384d7460795f9b0dcbac1d96f96b8b313f25bd80264dcf8e6f3ab3
+python,rf_customary,n1000_p5_v5,1000,5,5,measured,,5,11.448192511065425,rt_n1000_p5,fold_v5,a93e8264730a472cc03cf02e6788be0040b6687796e49a138c8904a5a6851831
+python,rf_customary,n1000_p10_v2,1000,10,2,measured,,5,12.138374123803418,rt_n1000_p10,fold_v2,7eab71055239e0081cdd1d7453cc967316c7ebf58d380172a64225cc1c486178
+python,rf_customary,n1000_p10_v3,1000,10,3,measured,,5,19.6450095016021,rt_n1000_p10,fold_v3,7eab71055239e0081cdd1d7453cc967316c7ebf58d380172a64225cc1c486178
+python,rf_customary,n500_p10_v5,500,10,5,measured,,5,19.868878197012421,rt_n500_p10,fold_v5,bc95ce69f39d7886f4df9adfa78da0ed6236ee0bc83afb8242d80edd150b0c66
+python,rf_customary,n1000_p10_v5,1000,10,5,measured,,5,36.031028733479573,rt_n1000_p10,fold_v5,7eab71055239e0081cdd1d7453cc967316c7ebf58d380172a64225cc1c486178
+python,rf_customary,n2000_p10_v5,2000,10,5,measured,,5,65.340127344886511,rt_n2000_p10,fold_v5,ed38c773868fd2e69a36f79f3e8d3f1245472a85dfa805bdd12e677c08528d27
+python,rf_customary,n1000_p10_v10,1000,10,10,measured,,5,82.058075149537615,rt_n1000_p10,fold_v10,7eab71055239e0081cdd1d7453cc967316c7ebf58d380172a64225cc1c486178
+python,rf_customary,n1000_p20_v5,1000,20,5,skipped (budget),per-cell cap of the plan,0,113.4008735735357,rt_n1000_p20,fold_v5,NA
+python,rf_customary,n4000_p10_v5,4000,10,5,skipped (budget),per-cell cap of the plan,0,118.49043425948526,rt_n4000_p10,fold_v5,NA
+python,rf_customary,n1000_p10_v20,1000,10,20,skipped (budget),per-cell cap of the plan,0,186.88136125823263,rt_n1000_p10,fold_v20,NA
+python,rf_customary,n8000_p10_v5,8000,10,5,skipped (budget),per-cell cap of the plan,0,214.87535426574524,rt_n8000_p10,fold_v5,NA
+python,rf_customary,n1000_p40_v5,1000,40,5,skipped (budget),per-cell cap of the plan,0,356.90788132540678,rt_n1000_p40,fold_v5,NA
+python,rf_customary,n16000_p10_v5,16000,10,5,skipped (budget),per-cell cap of the plan,0,389.66367335372865,rt_n16000_p10,fold_v5,NA
+python,rf_customary,n32000_p10_v5,32000,10,5,skipped (budget),per-cell cap of the plan,0,706.63189294262725,rt_n32000_p10,fold_v5,NA
+python,rf_customary,n1000_p80_v5,1000,80,5,skipped (budget),per-cell cap of the plan,0,1123.3003039397918,rt_n1000_p80,fold_v5,NA
+python,rf_customary,n1000_p160_v5,1000,160,5,skipped (budget),per-cell cap of the plan,0,3535.3760419787291,rt_n1000_p160,fold_v5,NA

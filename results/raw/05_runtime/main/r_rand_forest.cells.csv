@@ -1,0 +1,19 @@
+language,learner,cell,n,p,v,status,reason,timed_runs,predicted_seconds,data,fold_column,data_sha256
+r,rand_forest,n125_p10_v5,125,10,5,measured,,5,5.2014441298690279,rt_n125_p10,fold_v5,1706432cc858e0e7e1906ef01528f22464e7949b0ba5c79ddd52418fb3a98b08
+r,rand_forest,n250_p10_v5,250,10,5,measured,,5,11.616175971170984,rt_n250_p10,fold_v5,37385f722f384d7460795f9b0dcbac1d96f96b8b313f25bd80264dcf8e6f3ab3
+r,rand_forest,n1000_p10_v2,1000,10,2,measured,,5,18.613764619814098,rt_n1000_p10,fold_v2,7eab71055239e0081cdd1d7453cc967316c7ebf58d380172a64225cc1c486178
+r,rand_forest,n1000_p5_v5,1000,5,5,measured,,5, 22.71949646973334,rt_n1000_p5,fold_v5,a93e8264730a472cc03cf02e6788be0040b6687796e49a138c8904a5a6851831
+r,rand_forest,n500_p10_v5,500,10,5,measured,,5,25.941938589390951,rt_n500_p10,fold_v5,bc95ce69f39d7886f4df9adfa78da0ed6236ee0bc83afb8242d80edd150b0c66
+r,rand_forest,n1000_p10_v3,1000,10,3,measured,,5,30.763641525013309,rt_n1000_p10,fold_v3,7eab71055239e0081cdd1d7453cc967316c7ebf58d380172a64225cc1c486178
+r,rand_forest,n1000_p10_v5,1000,10,5,measured,,5,57.935088057028686,rt_n1000_p10,fold_v5,7eab71055239e0081cdd1d7453cc967316c7ebf58d380172a64225cc1c486178
+r,rand_forest,n2000_p10_v5,2000,10,5,skipped (budget),per-cell cap of the plan,0,129.38410198643763,rt_n2000_p10,fold_v5,NA
+r,rand_forest,n1000_p10_v10,1000,10,10,skipped (budget),per-cell cap of the plan,0,136.76124951082954,rt_n1000_p10,fold_v10,NA
+r,rand_forest,n1000_p20_v5,1000,20,5,skipped (budget),per-cell cap of the plan,0,147.73542330249794,rt_n1000_p20,fold_v5,NA
+r,rand_forest,n4000_p10_v5,4000,10,5,skipped (budget),per-cell cap of the plan,0,288.94831108841294,rt_n4000_p10,fold_v5,NA
+r,rand_forest,n1000_p10_v20,1000,10,20,skipped (budget),per-cell cap of the plan,0,322.83785172385257,rt_n1000_p10,fold_v20,NA
+r,rand_forest,n1000_p40_v5,1000,40,5,skipped (budget),per-cell cap of the plan,0,376.72774876744813,rt_n1000_p40,fold_v5,NA
+r,rand_forest,n8000_p10_v5,8000,10,5,skipped (budget),per-cell cap of the plan,0,645.29664154254442,rt_n8000_p10,fold_v5,NA
+r,rand_forest,n1000_p80_v5,1000,80,5,skipped (budget),per-cell cap of the plan,0,960.66192872911063,rt_n1000_p80,fold_v5,NA
+r,rand_forest,n16000_p10_v5,16000,10,5,skipped (budget),per-cell cap of the plan,0,1441.1150354800791,rt_n16000_p10,fold_v5,NA
+r,rand_forest,n1000_p160_v5,1000,160,5,skipped (budget),per-cell cap of the plan,0,2449.7036502591682,rt_n1000_p160,fold_v5,NA
+r,rand_forest,n32000_p10_v5,32000,10,5,skipped (budget),per-cell cap of the plan,0,3218.3842465416296,rt_n32000_p10,fold_v5,NA

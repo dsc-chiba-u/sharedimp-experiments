@@ -1,0 +1,32 @@
+{
+  "language": "python",
+  "status": "ok",
+  "design": "null_p5_n1200",
+  "variant": "ols",
+  "settings": {
+    "learner": "ols",
+    "trees": 500,
+    "mtry": "sqrt",
+    "max_depth": null,
+    "bootstrap": true,
+    "representation": "standard",
+    "node": {
+      "min_samples_split": 2,
+      "min_samples_leaf": 5
+    }
+  },
+  "data_sha256": "97cd41fd7f7547f1ca7b54aa967d182aa2683ac0f918dbfaed677565d466beff",
+  "seconds": 1.887547375052236,
+  "scikit_learn_version": "1.9.1",
+  "sharedimp_version": "0.1.0",
+  "threads": 1,
+  "container": {
+    "runtime": "singularity",
+    "runtime_version": "3.8.6",
+    "image": "ghcr.io/dsc-chiba-u/sharedimp-py@sha256:c88b48a58848d3583d14d60a9b6dabe73e26733c0c24e986153d12981a0edebe"
+  },
+  "in_pinned_image": true,
+  "sharedimp_commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
+  "experiments_commit": "e516acd50ca033fba93b08676bcf2d1c663c6d8a",
+  "experiments_code_dirty": false
+}

@@ -18,10 +18,10 @@
   },
   "in_pinned_image": true,
   "sharedimp_commit": "cf2e1cc6716cb76f4acd6d6f49a42a7340c48a10",
-  "experiments_commit": "9d29abe141966bd881bc6af205ff9d1181cc8ead",
+  "experiments_commit": "e516acd50ca033fba93b08676bcf2d1c663c6d8a",
   "experiments_code_dirty": false,
   "threads": 1,
-  "run_at_utc": "2026-11-13T12:15:49Z",
+  "run_at_utc": "2026-11-14T01:08:06Z",
   "dataset_sha256": "74a4b7d52e31d4907b895419ee1f6c331a2245fef8441a58b4dc521a915d1737",
   "task": "classification",
   "learner_description": "rand_forest",
@@ -29,6 +29,6 @@
   "n": 90,
   "p": 3,
   "n_splits": 3,
-  "elapsed_seconds": 1.57,
+  "elapsed_seconds": 1.724,
   "warnings": []
 }

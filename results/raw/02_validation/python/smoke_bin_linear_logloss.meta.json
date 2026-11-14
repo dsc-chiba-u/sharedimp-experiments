@@ -18,10 +18,10 @@
   },
   "in_pinned_image": true,
   "sharedimp_commit": "bacc5d8cabf212a6b6d03e0dd9484951f4fd60e1",
-  "experiments_commit": "9d29abe141966bd881bc6af205ff9d1181cc8ead",
+  "experiments_commit": "e516acd50ca033fba93b08676bcf2d1c663c6d8a",
   "experiments_code_dirty": false,
   "threads": 1,
-  "run_at_utc": "2026-11-13T12:15:46Z",
+  "run_at_utc": "2026-11-14T01:08:07Z",
   "dataset_sha256": "1e9eeb90ec2df782cc725bc6a2a358a74665ba02bd7fbff888747e687d453f61",
   "task": "classification",
   "learner_description": "LogisticRegression(C=inf, solver='newton-cholesky', tol=1e-12, max_iter=1000)",
@@ -29,6 +29,6 @@
   "n": 60,
   "p": 3,
   "n_splits": 3,
-  "elapsed_seconds": 0.10215471300762147,
+  "elapsed_seconds": 0.1309191769687459,
   "warnings": []
 }

@@ -15,6 +15,6 @@
     "runtime_version": "3.8.6",
     "image": "ghcr.io/dsc-chiba-u/umfi-official-py@sha256:2e44cc61c15ecd87b679b20025e6c53f8bd7ad3c5fb1efadc8855537ca47bef6"
   },
-  "experiments_commit": "9d29abe141966bd881bc6af205ff9d1181cc8ead",
+  "experiments_commit": "e516acd50ca033fba93b08676bcf2d1c663c6d8a",
   "experiments_code_dirty": false
 }

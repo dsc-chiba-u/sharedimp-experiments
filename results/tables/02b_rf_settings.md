@@ -31,14 +31,14 @@ Equivalence criterion: same number of leaves, same depth, and max |prediction di
 
 | dataset | language | setting | mtry | leaves_per_tree | depth_per_tree | test_metric | test_score_mean | test_score_sd | n_seeds | seconds_per_importance_run |
 |---|---|---|---|---|---|---|---|---|---|---|
-| rf_reg_n300_p5 | r | spec_node5 | 2 | 80.5 | 13.28 | mse | 1.085 | 0.01979 | 5 | 7.0 |
-| rf_reg_n300_p5 | r | bucket5 | 2 | 37.7 | 9.06 | mse | 1.228 | 0.01203 | 5 | 5.4 |
-| rf_bin_n300_p5 | r | spec_node5 | 2 | 34.3 | 9.73 | log_loss | 0.554 | 0.002897 | 5 | 6.3 |
-| rf_bin_n300_p5 | r | bucket5 | 2 | 35.8 | 13.75 | log_loss | 0.532 | 0.003953 | 5 | 6.6 |
-| rf_reg_n300_p5 | python | spec_leaf5 | 2 | 24.5 | 7.44 | mse | 1.393 | 0.0228 | 5 | 26.6 |
-| rf_reg_n300_p5 | python | split6 | 2 | 53.2 | 11.89 | mse | 1.131 | 0.01881 | 5 | 26.3 |
-| rf_bin_n300_p5 | python | spec_leaf5 | 2 | 19.5 | 6.91 | log_loss | 0.5251 | 0.002669 | 5 | 32.6 |
-| rf_bin_n300_p5 | python | split6 | 2 | 30.1 | 9.39 | log_loss | 0.552 | 0.007748 | 5 | 33.4 |
+| rf_reg_n300_p5 | r | spec_node5 | 2 | 80.5 | 13.28 | mse | 1.085 | 0.01979 | 5 | 7.1 |
+| rf_reg_n300_p5 | r | bucket5 | 2 | 37.7 | 9.06 | mse | 1.228 | 0.01203 | 5 | 5.5 |
+| rf_bin_n300_p5 | r | spec_node5 | 2 | 34.3 | 9.73 | log_loss | 0.554 | 0.002897 | 5 | 6.5 |
+| rf_bin_n300_p5 | r | bucket5 | 2 | 35.8 | 13.75 | log_loss | 0.532 | 0.003953 | 5 | 6.7 |
+| rf_reg_n300_p5 | python | spec_leaf5 | 2 | 24.5 | 7.44 | mse | 1.393 | 0.0228 | 5 | 26.3 |
+| rf_reg_n300_p5 | python | split6 | 2 | 53.2 | 11.89 | mse | 1.131 | 0.01881 | 5 | 26.1 |
+| rf_bin_n300_p5 | python | spec_leaf5 | 2 | 19.5 | 6.91 | log_loss | 0.5251 | 0.002669 | 5 | 32.2 |
+| rf_bin_n300_p5 | python | split6 | 2 | 30.1 | 9.39 | log_loss | 0.552 | 0.007748 | 5 | 33.0 |
 
 ## Importance by setting (mean over seeds)
 

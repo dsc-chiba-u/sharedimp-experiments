@@ -1,0 +1,12 @@
+check,description,criterion,observed,status
+accounted,every candidate cell is measured with the planned number of timed runs or recorded as skipped,all 90 cells,"measured 59, skipped 31, other 0",pass
+same_data,"one data file and one fold column per cell, whatever the language and learner",1 sha256 and 1 fold column per cell,"18 cells, at most 1",pass
+same_work_linear,linear learner: largest |R - Python| of importance and scores over the cells measured in both languages,<= 1e-8,9.99e-15 (18 cells),pass
+fit_count/r,"learner fits in one call (n = 125, p = 5, v = 3)",2 x p x v = 30,30,pass
+fit_count/python,"learner fits in one call (n = 125, p = 5, v = 3)",2 x p x v = 30,30,pass
+threads,threads recorded by every process (setting and environment variables),1,"1, 1",pass
+budget,"wall time of the processes of the main benchmark, in total",<= 7200 s,5239 s,pass
+pinned_image,every process ran in the pinned image,all,10 of 10,pass
+code_state,uncommitted code changes when the processes ran,reported only,False,reported
+load,largest 1-minute load average seen before a timed run,reported only,2.20,reported
+failed,cells that failed,0,0,pass
