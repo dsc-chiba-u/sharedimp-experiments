@@ -9,7 +9,7 @@ referenced by the digests in `config/pins.env`.
 |---|---|---|---|
 | `ghcr.io/dsc-chiba-u/sharedimp-r` (tag `cf2e1cc`) | `sharedimp-r` repository, its CI | R 4.5.3, `sharedimp` (R) at the pinned commit | 01, 02, 02b, 04, 04a, 04b, 04c, 05 |
 | `ghcr.io/dsc-chiba-u/sharedimp-py` (tag `bacc5d8`) | `sharedimp-py` repository, its CI | Python 3.13, `sharedimp` (Python) at the pinned commit | 01, 02, 02b, 03, 04, 04a, 04b, 04c, 05 |
-| `ghcr.io/dsc-chiba-u/sharedimp-experiments-r` (tag `408e962`) | `docker/experiments-r/Dockerfile` | the `sharedimp-r` image (by digest) + `doParallel`, `foreach`, `rje` (Imports of the official R package `HydroML/UMFI`) + `patchwork` | 03, 06 |
+| `ghcr.io/dsc-chiba-u/sharedimp-experiments-r` (tag `408e962`) | `docker/experiments-r/Dockerfile` | the `sharedimp-r` image (by digest) + `doParallel`, `foreach`, `rje` (Imports of the official R package `HydroML/UMFI`) + `patchwork` | 03, 06, 07 |
 | `ghcr.io/dsc-chiba-u/umfi-official-py` (tag `408e962`) | `docker/umfi-official-py/Dockerfile` | Python 3.9 and the packages of the official `umfi.yml` (numpy 1.26.4, pandas 2.2.1, scipy 1.13.1, scikit-learn 1.5.0, minepy 1.2.6, POT 0.9.3, ...) | 03 |
 
 ## Building
@@ -47,6 +47,10 @@ Python code. `umfi-official-py` does not contain sharedimp either
 imports, did not build under Python 3.13 with default `pip` settings), so
 the official Python code and sharedimp-py exchange CSV files.
 
-An image for building the manuscript (R Markdown, `rticles`, LaTeX with the
-Elsevier class) is not defined yet; it will be specified in Phase 4 after
-the SoftwareX template has been checked.
+The manuscript is built in `ghcr.io/dsc-chiba-u/sharedimp-manuscript`
+(`docker/manuscript/Dockerfile`, tag `2aecf91`, digest and commit in
+`config/pins.env` as `MANUSCRIPT_IMAGE*`): the `sharedimp-experiments-r`
+image by digest plus pandoc, TeX Live (Ubuntu packages, with `elsarticle`)
+and the R packages `rticles` and `bookdown`. Its build renders the Elsevier
+skeleton of `rticles` to PDF as a test. It is used by workflow 07 only;
+workflow 01 does not check its digest against the registry.

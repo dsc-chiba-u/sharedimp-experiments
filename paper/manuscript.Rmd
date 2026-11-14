@@ -1,60 +1,338 @@
 ---
-title: "sharedimp: (working title — to be decided in Phase 4)"
+title: "sharedimp: Cross-validated ultra-marginal feature importance with fold-internal residualization in R and Python"
+author:
+  - name: "Koki Tsuyuzaki"
+    affiliation: chibaDSC
+    correspondingauthor: true
+    footnote: 1
+address:
+  - code: chibaDSC
+    organization: "Data Science Core, Chiba University"
+    addressline: "1-33 Yayoi-cho, Inage-ku"
+    city: Chiba
+    postcode: "263-8522"
+    country: Japan
+footnote:
+  - code: 1
+    text: "Author list, affiliations and contact address: to be confirmed by the author before submission."
+abstract: |
+  Ultra-marginal feature importance with linear-regression dependence removal (UMFI-LR) credits a feature with the predictive information it shares with correlated features. Its reference implementations estimate the dependence removal on all rows and score a fixed tree ensemble by out-of-bag error. `sharedimp` is a pair of open-source packages, for R (tidymodels) and Python (scikit-learn), that compute the same quantity as a resampling procedure: residualization is fitted inside each training split, the models with and without a feature are scored on the same held-out rows, and learner, metric and splits are chosen by the user. Both packages follow one written specification and agree within stated numerical tolerances for learners with a unique solution.
+keywords:
+  - feature importance
+  - ultra-marginal feature importance
+  - cross-validation
+  - data leakage
+  - tidymodels
+  - scikit-learn
+journal: "SoftwareX"
+date: ""
+linenumbers: false
+numbersections: true
 bibliography: references.bib
+biblio-style: elsarticle-num
+classoption: "preprint, 3p"
+output:
+  rticles::elsevier_article:
+    keep_tex: true
+    citation_package: natbib
+preamble: |
+  \usepackage{booktabs}
+  \usepackage{array}
+  \usepackage{float}
+  \emergencystretch=3em
 ---
 
-<!--
-SKELETON ONLY (Phase 1). Nothing below is manuscript text.
-Section names are provisional: the SoftwareX guide for authors and template
-are to be checked in Phase 4 before drafting. Do not write numbers or
-conclusions here until the corresponding experiment has been run; numbers
-must be read from ../results/ by code.
--->
+```{r setup, include=FALSE}
+# Every number in the text is read here from files under ../results/ (or from
+# ../config/pins.env) and registered with its source; the register is written
+# to ../results/summary/07_manuscript/numbers.csv when the document is built.
+# Do not type a result into the text.
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, fig.pos = "t", fig.align = "center", out.width = "\\textwidth")
+options(stringsAsFactors = FALSE)
+root <- normalizePath("..")
+res <- function(...) file.path(root, "results", ...)
+rd <- function(...) utils::read.csv(res("summary", ...), stringsAsFactors = FALSE, na.strings = "NA")
+REG <- list()
+reg <- function(id, text, source) {
+  if (!is.null(REG[[id]]) && REG[[id]]$text != text) stop("number id used twice with different values: ", id)
+  REG[[id]] <<- list(id = id, text = text, source = source)
+  text
+}
+sci <- function(x, digits = 1) {
+  if (x == 0) return("0")
+  e <- floor(log10(abs(x))); m <- round(x / 10^e, digits)
+  if (abs(m) >= 10) { m <- m / 10; e <- e + 1 }
+  sprintf("$%s\\times 10^{%d}$", formatC(m, format = "f", digits = digits), e)
+}
+num <- function(id, x, source, digits = 3, how = c("f", "g", "sci", "int", "pct")) {
+  how <- match.arg(how)
+  stopifnot(length(x) == 1L, is.finite(x))
+  text <- switch(how, f = if (x < 0) sprintf("$-%s$", formatC(-x, format = "f", digits = digits)) else formatC(x, format = "f", digits = digits), g = formatC(x, format = "fg", digits = digits),
+                 sci = sci(x), int = formatC(round(x), format = "d", big.mark = ""), pct = paste0(formatC(100 * x, format = "f", digits = digits), "\\%"))
+  reg(id, text, source)
+}
+one <- function(x) { stopifnot(length(x) == 1L); x }
+fig <- function(name) { p <- res("figures", paste0(name, ".pdf")); stopifnot(file.exists(p)); p }
 
-# Code metadata
+# ---- pins and environment
+pins <- readLines(file.path(root, "config", "pins.env")); pins <- pins[grepl("^[A-Z0-9_]+=", pins)]
+PIN <- stats::setNames(sub("^[^=]+=", "", pins), sub("=.*$", "", pins))
+env <- rd("01_environment", "environment.csv")
+envv <- function(group, item) one(env$value[env$group == group & env$item == item])
+short <- function(x) substr(x, 1, 7)
 
-<!-- Table required by the journal: current code version, repository links,
-license, languages, dependencies, documentation, support contact. Fill from
-the released versions only; no DOI until one exists. -->
+# ---- checks with a criterion fixed in advance (experiments; the screening of candidate data sets is reported separately)
+check_files <- c("01_environment/checks.csv", "02_validation/checks.csv", "03_official_umfi/checks.csv", "04_real_data/checks.csv",
+                 "04b_maternal/checks.csv", "04b_maternal/checks_jobs.csv", "05_runtime/checks.csv")
+checks <- do.call(rbind, lapply(check_files, function(f) cbind(file = f, rd(f)[c("check", "status")])))
+stopifnot(!any(toupper(checks$status) == "FAIL"))
+
+# ---- R-Python parity (workflows 01, 02, 04, 04b)
+par <- do.call(rbind, lapply(c("01_environment", "02_validation", "04_real_data", "04b_maternal"), function(s) cbind(stage = s, rd(s, "parity.csv"))))
+par_src <- "results/summary/{01_environment,02_validation,04_real_data,04b_maternal}/parity.csv"
+par_max <- function(cl) max(par$max_abs_diff[par$parity_class == cl])
+par_jobs <- function(cl) length(unique(paste(par$stage, par$job)[par$parity_class == cl]))
+par_tol <- function(cl) unique(par$tolerance[par$parity_class == cl])
+
+# ---- official implementations (workflow 03)
+rz <- rd("03_official_umfi", "residualization.csv")
+rz_fired <- rz[rz$gate_fired %in% c(TRUE, "True", "TRUE"), ]
+ic <- rd("03_official_umfi", "identical_condition.csv")
+ic_same <- ic[grepl("^every dependence test passes", ic$condition), ]
+ic_diff <- ic[!grepl("^every dependence test passes", ic$condition), ]
+gate <- reshape(rz[rz$official %in% c("official_r", "official_py"), c("dataset", "anchor", "feature", "official", "gate_fired")],
+                idvar = c("dataset", "anchor", "feature"), timevar = "official", direction = "wide")
+leak <- rd("03_official_umfi", "leak.csv")
+leak_rel <- function(n) { d <- leak[leak$n == n & leak$population > 0, ]; mean((d$all_rows - d$fold_internal) / d$fold_internal) }
+neg <- rd("03_official_umfi", "negative_importance.csv")
+negv <- function(variant, col) one(neg[[col]][neg$variant == variant])
+nullf <- rd("04c_null_forest", "summary.csv")
+nf <- function(lang, design, variant, col = "mean_importance") one(nullf[[col]][nullf$language == lang & nullf$design == design & nullf$variant == variant])
+pc <- rd("02_validation", "positive_control.csv")
+
+# ---- examples (workflows 04, 04b)
+ds <- rd("04_real_data", "datasets.csv")
+perf <- rd("04_real_data", "performance.csv")
+pf <- function(job, col) one(perf[[col]][perf$job == job])
+msc <- rd("04b_maternal", "scores.csv")
+ms <- function(learner, metric, lang, variant) -one(msc$full_score[msc$learner == learner & msc$metric == metric & msc$language == lang & msc$variant == variant])
+mvar <- rd("04b_maternal", "variants.csv")
+mrank <- rd("04b_maternal", "rank_agreement.csv")
+mimp <- rd("04b_maternal", "importance_by_variant.csv")
+dup <- jsonlite::fromJSON(res("raw", "04b_maternal", "duplicates.json"))
+sel <- rd("04a_multiclass_pilot", "decision.csv")
+e9 <- rd("04a_multiclass_pilot", "e9.csv")
+stopifnot(!any(sel$eligible %in% c(TRUE, "True", "TRUE")))
+
+# ---- runtime (workflow 05)
+cmp <- rd("05_runtime", "comparisons.csv")
+cells <- rd("05_runtime", "cells.csv")
+rt <- function(comparison, n, p, v, col) one(cmp[[col]][cmp$comparison == comparison & cmp$n == n & cmp$p == p & cmp$v == v])
+rtc <- rd("05_runtime", "checks.csv")
+rt_src <- "results/summary/05_runtime/comparisons.csv"
+```
+
+```{=latex}
+\begin{table}[H]
+\footnotesize
+\begin{tabular}{@{}lp{5.2cm}p{9.3cm}@{}}
+\toprule
+Nr & Code metadata description & Metadata \\
+\midrule
+C1 & Current code version & v`r reg("version_r", sub(" @.*$", "", envv("R", "sharedimp (R)")), "results/summary/01_environment/environment.csv")` (both packages) \\
+C2 & Permanent link to code/repository used for this code version & \url{https://github.com/dsc-chiba-u/sharedimp-r} (commit \texttt{`r reg("commit_r", short(PIN[["SHAREDIMP_R_COMMIT"]]), "config/pins.env")`}); \url{https://github.com/dsc-chiba-u/sharedimp-py} (commit \texttt{`r reg("commit_py", short(PIN[["SHAREDIMP_PY_COMMIT"]]), "config/pins.env")`}) \\
+C3 & Legal code license & MIT \\
+C4 & Code versioning system used & git \\
+C5 & Software code languages, tools and services used & R, Python; GitHub Actions, Docker \\
+C6 & Compilation requirements, operating environments and dependencies & R ($\geq$ 4.1): parsnip, rsample, yardstick, ranger, rlang, tibble. Python ($\geq$ 3.10): scikit-learn, NumPy, SciPy, pandas, joblib. No compilation; container images \texttt{ghcr.io/dsc-chiba-u/sharedimp-r} and \texttt{sharedimp-py} \\
+C7 & If available, link to developer documentation/manual & README and \texttt{docs/specification.md} in each repository; vignette of the R package \\
+C8 & Support email for questions & TO BE COMPLETED BY THE AUTHOR \\
+\bottomrule
+\end{tabular}
+\caption{Code metadata.}
+\end{table}
+
+% MAIN-TEXT-START
+```
 
 # Motivation and significance
 
-<!-- UMFI-LR is an existing method [@janssen2023umfi]; the official code
-residualizes on all rows and scores with random-forest OOB estimates.
-State the software gap (fold-internal residualization, paired CV, learner /
-metric / resampling choice, R and Python). No claim of a new importance
-measure. Importances are predictive gains, not causal or conditional effects. -->
+Feature importance measures summarise how much a model relies on each input. Permutation importance [@breiman2001random] is affected by correlation between features, which motivated conditional variants [@strobl2008conditional]; with conditional measures, in turn, a feature whose information is also carried by other features receives little credit. Ultra-marginal feature importance (UMFI) [@janssen2023umfi] takes the opposite stance. For a feature of interest (the *anchor*), the dependence of all other features on the anchor is removed first, and the importance of the anchor is the gain in predictive performance from adding it to the preprocessed remaining features. A feature is thereby credited with everything it shares with the others. In the linear-regression variant, UMFI-LR, each other feature is regressed on the anchor and replaced by its residual.
+
+The reference implementations of UMFI-LR are an R package and a Python module by the authors of the method [@umfi_r; @umfi_python]. We read their source at fixed commits and executed it (Section \ref{sec:official}). Four properties matter to a data analyst. (i) The regressions that remove the dependence are estimated on all rows, so the representation of every row depends on the rows later used to score the model; estimating preprocessing on evaluation rows is a known source of optimistic estimates [@kaufman2012leakage]. (ii) Performance is the out-of-bag score of a tree ensemble fitted on all rows: learner, number of trees and metric ($R^2$ or accuracy) are fixed, and out-of-bag scoring exists only for bagged learners. (iii) A feature is residualized only when a dependence test passes, the R and Python codes use different tests, and negative scores and importances are set to zero. (iv) No seed argument is exposed.
+
+`sharedimp` implements UMFI-LR as an ordinary resampling procedure in the two ecosystems in which most applied modelling is done, tidymodels in R [@tidymodels] and scikit-learn in Python [@pedregosa2011scikit]. It does not propose a new importance measure, and properties that follow from the definition of UMFI-LR are not findings of this software. The contribution is engineering: the dependence removal is fitted inside every training split and applied unchanged to the held-out rows; the models with and without the anchor are scored on the same held-out rows; learner, metric and resampling scheme are arguments; results are signed and kept per split; and the two packages follow one written specification, so that the same analysis gives the same numbers in both languages, within stated tolerances, for learners with a unique solution. The reported quantities are out-of-sample predictive gains. They are not causal or conditional effects, and no confidence intervals or tests are provided.
 
 # Software description
 
 ## Software architecture
 
-<!-- Figure 1: input → fold-internal residualization → Full/Reduced learner →
-paired scoring → importance; one specification, two implementations. -->
+Both packages implement a common specification kept with the R package (`docs/specification.md`): inputs, computation, degenerate cases, metric definitions and result tables. Figure \ref{fig:overview} shows the computation. For a split into training rows $T$ and assessment rows $A$ and an anchor $x_i$, every other feature $x_j$ is regressed on $x_i$ by least squares on the rows in $T$ only, $x_j = a_j + b_j x_i + e_j$, and the residual $r_j = x_j - \hat a_j - \hat b_j x_i$ is computed for $T$ and, with the same coefficients, for $A$. The *Full* representation consists of $x_i$ and the residuals; the *Reduced* representation of the residuals only. The same learner is fitted to both on $T$, both models are scored on $A$ with a metric oriented so that larger is better, and the importance of $x_i$ in that split is the difference of the two scores. The summary is the mean over splits; the between-split standard deviation is a description, not a standard error. One call fits the learner $2pv$ times for $p$ features and $v$ splits.
+
+```{r overview, fig.cap="Computation of \\texttt{shared\\_importance()} for one anchor feature and one split, and the two implementations of the common specification.", out.width="0.92\\textwidth"}
+knitr::include_graphics(fig("07_software_overview"))
+```
+
+The R package builds on parsnip, rsample and yardstick; the Python package on scikit-learn estimators, splitters and scorers, with the residualization also available as a scikit-learn transformer. The specification fixes the points on which two implementations would otherwise drift apart: the residualization is always applied (no dependence test); a constant anchor and exactly collinear features are handled by deterministic rules, without injected noise and without dropping columns; common metric names have one definition (`r2` is $1 - SS_{res}/SS_{tot}$, not a squared correlation); and the result tables have the same columns.
 
 ## Software functionalities
 
-<!-- API in R and Python; learners, metrics, resampling; result tables;
-failure handling; reproducibility. -->
+**Tasks.** Regression, binary and multiclass classification; numeric features without missing values. **Learners.** R: built-in `"linear"` (least squares, logistic or multinomial logistic regression) and `"rand_forest"` (ranger [@wright2017ranger], 500 trees), any parsnip model specification, or a pair of fit and predict functions. Python: any scikit-learn estimator or pipeline. Hyperparameters are fixed; nothing is tuned. **Metrics.** Common names (`mse`, `rmse`, `mae`, `r2`, `log_loss`, `accuracy`, `roc_auc`), any yardstick metric, any scikit-learn scorer; the importance is positive when the anchor improves prediction, for metrics to be maximized and minimized alike. **Resampling.** $v$-fold cross-validation (stratified for classification), repeats, or explicit splits, including grouped ones; the same splits serve every anchor and both models. **Results.** A summary table (`feature`, `importance`, `importance_std`, `score_full`, `score_reduced`, `n_splits`) and a per-split table with the same columns in both languages; negative values are kept. **Robustness.** A failed model fit is recorded for its split or, on request, stops the call; a seed fixes splits and learners. Each package has a unit-test suite run by continuous integration, which also builds and publishes a container image.
+
+Table \ref{tab:official} lists the differences from the reference implementations. `sharedimp` does not implement the optimal-transport variant of UMFI, the automatic choice between variants, or the parallel function of the reference R package.
+
+```{=latex}
+\begin{table}[t]
+\footnotesize
+\begin{tabular}{@{}p{3.3cm}p{6.0cm}p{6.2cm}@{}}
+\toprule
+ & Reference implementations \cite{umfi_r,umfi_python} & \texttt{sharedimp} \\
+\midrule
+Rows used to estimate the residualization & all rows & training rows of each split; coefficients applied to the assessment rows \\
+A feature is residualized & only if a test passes (slope $p < 0.01$ in R; $R^2 > 0.01$ in Python) & always \\
+Near-constant columns & random noise is added & deterministic rules, no noise \\
+Learner & ranger forest (R); extra trees or random forest (Python); 100 trees & argument: any parsnip or scikit-learn learner \\
+Scoring & out-of-bag predictions of the model fitted on all rows & assessment rows of each split, paired \\
+Metric & $R^2$ or accuracy & argument \\
+Negative values & scores floored; negative importances set to 0 & kept \\
+Random seed & global generator only & argument \\
+Other dependence removal & optimal transport & not implemented \\
+\bottomrule
+\end{tabular}
+\caption{Design differences between the reference UMFI-LR implementations and \texttt{sharedimp}; every cell is backed by a source line or an executed check recorded in the companion repository.}
+\label{tab:official}
+\end{table}
+```
+
+## Sample code snippets
+
+The packages are installed from GitHub; the listings then run the same analysis in both languages, with a learner that has a unique solution and explicit splits (`fold` holds one label per row), so that the results can be compared.
+
+```r
+# install: pak::pak("dsc-chiba-u/sharedimp-r")
+res <- sharedimp::shared_importance(x, y, learner = "linear",
+                                    metric = "rmse", resamples = fold)
+res$importance                  # one row per feature
+sharedimp::fold_results(res)    # one row per feature and split
+```
+
+```python
+# install: pip install git+https://github.com/dsc-chiba-u/sharedimp-py.git
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import PredefinedSplit
+from sharedimp import shared_importance
+res = shared_importance(LinearRegression(), X, y, cv=PredefinedSplit(fold),
+                        scoring="neg_root_mean_squared_error")
+res.importances, res.fold_results
+```
 
 # Illustrative examples
 
-<!-- Experiment C (real data). -->
+All results are produced by the workflows of the companion repository (see the reproducibility statement) with version `r reg("version_r", sub(" @.*$", "", envv("R", "sharedimp (R)")), "results/summary/01_environment/environment.csv")` of both packages, on one thread, inside container images referenced by digest (`r reg("r_version", sub(" \\(.*$", "", envv("R", "R")), "results/summary/01_environment/environment.csv")`; Python `r reg("py_version", envv("Python", "Python"), "results/summary/01_environment/environment.csv")`, scikit-learn `r reg("sklearn", envv("Python", "scikit-learn"), "results/summary/01_environment/environment.csv")`). Criteria were written down before the corresponding runs; all `r num("checks_pass", sum(tolower(checks$status) == "pass"), "results/summary/*/checks*.csv (workflows 01-05)", how = "int")` checks that have a criterion pass. Table \ref{tab:validation} summarises the numerical ones.
 
-# Validation
+```{r validation, results="asis"}
+vt <- data.frame(
+  Comparison = c("Residual columns, reference R code vs sharedimp (R)", "Residual columns, reference Python code vs sharedimp (Python)",
+                 "Importance, reference code vs reference scoring rule on sharedimp's all-rows representation",
+                 "sharedimp R vs Python, least squares", "sharedimp R vs Python, binary logistic regression", "sharedimp R vs Python, multinomial logistic regression",
+                 "Model fits per call (counted)"),
+  Scope = c(sprintf("%s feature pairs passing the reference test", num("b1_r_n", sum(rz_fired$official == "official_r"), "results/summary/03_official_umfi/residualization.csv", how = "int")),
+            sprintf("%s feature pairs passing the reference test", num("b1_py_n", sum(rz_fired$official == "official_py"), "results/summary/03_official_umfi/residualization.csv", how = "int")),
+            sprintf("data set on which every test passes; %s seeds; ranger (R), extra trees and random forest (Python)", num("b3_seeds", unique(ic_same$n_seeds), "results/summary/03_official_umfi/identical_condition.csv", how = "int")),
+            sprintf("%s analyses, all result columns", num("par_exact_n", par_jobs("exact"), par_src, how = "int")),
+            sprintf("%s analyses, all result columns", num("par_logistic_n", par_jobs("logistic"), par_src, how = "int")),
+            sprintf("%s analyses, all result columns", num("par_multinomial_n", par_jobs("multinomial"), par_src, how = "int")),
+            "$p = 5$, $v = 3$, both languages"),
+  Criterion = c("$10^{-8}$", "$10^{-8}$", "$10^{-8}$", "$10^{-8}$", "$10^{-6}$", "$10^{-3}$", "$2pv = 30$"),
+  Observed = c(num("b1_r", max(rz_fired$max_abs_diff_official_vs_sharedimp[rz_fired$official == "official_r"]), "results/summary/03_official_umfi/residualization.csv", how = "sci"),
+               num("b1_py", max(rz_fired$max_abs_diff_official_vs_sharedimp[rz_fired$official == "official_py"]), "results/summary/03_official_umfi/residualization.csv", how = "sci"),
+               num("b3_same", max(ic_same$max_abs_diff_official_vs_rule_on_sharedimp), "results/summary/03_official_umfi/identical_condition.csv", how = "sci"),
+               num("par_exact", par_max("exact"), par_src, how = "sci"), num("par_logistic", par_max("logistic"), par_src, how = "sci"),
+               num("par_multinomial", par_max("multinomial"), par_src, how = "sci"),
+               reg("fit_count", paste(unique(rtc$observed[grepl("^fit_count", rtc$check)]), collapse = ", "), "results/summary/05_runtime/checks.csv")))
+stopifnot(par_tol("exact") == 1e-8, par_tol("logistic") == 1e-6, par_tol("multinomial") == 1e-3, REG$fit_count$text == "30")
+cat("\\begin{table}[t]\n\\footnotesize\n\\begin{tabular}{@{}p{6.4cm}p{5.9cm}p{1.4cm}p{1.8cm}@{}}\n\\toprule\nComparison & Scope & Criterion & Largest absolute difference \\\\\n\\midrule\n")
+cat(paste(apply(vt, 1, paste, collapse = " & "), collapse = " \\\\\n"), "\\\\\n")
+cat("\\bottomrule\n\\end{tabular}\n\\caption{Numerical checks with criteria fixed before the runs. Random forests are not compared numerically between the languages.}\n\\label{tab:validation}\n\\end{table}\n")
+```
 
-<!-- Experiments A/02 (R–Python agreement), B (official UMFI-LR: where exact
-agreement holds and where it cannot), D (runtime; measurements separate from
-complexity). -->
+## Agreement with the reference implementations {#sec:official}
+
+Three reference codes were fetched at fixed commits and run unmodified: the R package [@umfi_r], the original R script of the method's authors and the Python module [@umfi_python]. Numerical identity with `sharedimp` cannot be expected in general because the procedures differ (Table \ref{tab:official}); equality was tested where they coincide. For feature pairs on which the reference dependence test passes, the residual columns agree to rounding error (Table \ref{tab:validation}). Where the test fails, the reference code keeps the raw column and `sharedimp` residualizes; the two reference codes themselves disagree on `r num("gate_disagree", sum(gate$gate_fired.official_r != gate$gate_fired.official_py), "results/summary/03_official_umfi/residualization.csv", how = "int")` of `r num("gate_pairs", nrow(gate), "results/summary/03_official_umfi/residualization.csv", how = "int")` feature pairs because their tests differ. On a data set on which every test passes, the reference importance equals the reference scoring rule applied to the representation that `sharedimp` builds from all rows (same seed and order of fits); on a data set on which some tests fail, the two differ by up to `r num("b3_diff", max(ic_diff$max_abs_diff_official_vs_rule_on_sharedimp), "results/summary/03_official_umfi/identical_condition.csv", digits = 3)`. The remaining differences between the two software families are therefore differences of procedure, not of the residualization arithmetic. One of them is the sign: when the response is independent of the features, every reference importance is exactly zero because of the floors, whereas `sharedimp` with least squares returns a mean of `r num("b6_ols", negv("sharedimp_r/linear", "mean"), "results/summary/03_official_umfi/negative_importance.csv", digits = 3)` in $R^2$ with `r num("b6_ols_neg", negv("sharedimp_r/linear", "share_negative"), "results/summary/03_official_umfi/negative_importance.csv", digits = 0, how = "pct")` of the values negative, as expected for a model with one superfluous coefficient.
+
+## Effect of fold-internal residualization
+
+To isolate the effect of the rows used for the residualization, we simulated a linear model with five correlated Gaussian features, for which the population importance under squared error has a closed form, and compared two procedures that differ in one step only: residualization fitted on the training rows of each split (`sharedimp`), or on all rows before the same five-fold cross-validation with the same learner (least squares) and metric (Figure \ref{fig:leak}; `r num("leak_seeds", unique(leak$n_seeds), "results/summary/03_official_umfi/leak.csv", how = "int")` data sets per sample size). Residualizing on all rows raised the importance of the four informative features by `r num("leak30", leak_rel(30), "results/summary/03_official_umfi/leak.csv", digits = 0, how = "pct")` on average at $n = 30$, `r num("leak60", leak_rel(60), "results/summary/03_official_umfi/leak.csv", digits = 0, how = "pct")` at $n = 60$, `r num("leak120", leak_rel(120), "results/summary/03_official_umfi/leak.csv", digits = 0, how = "pct")` at $n = 120$ and `r num("leak2000", leak_rel(2000), "results/summary/03_official_umfi/leak.csv", digits = 1, how = "pct")` at $n = 2000$, while the fold-internal values stay near the population values (first feature, $n = 30$: `r num("leak30_x1_fold", one(leak$fold_internal[leak$n == 30 & leak$feature == "x1"]), "results/summary/03_official_umfi/leak.csv", digits = 2)` against `r num("leak30_x1_all", one(leak$all_rows[leak$n == 30 & leak$feature == "x1"]), "results/summary/03_official_umfi/leak.csv", digits = 2)`; population value `r num("leak_x1_pop", one(leak$population[leak$n == 30 & leak$feature == "x1"]), "results/summary/03_official_umfi/leak.csv", digits = 0)`). This is a small-sample effect and was measured with least squares only.
+
+```{r leak, fig.cap="Importance (reduction in mean squared error) of five features of a linear Gaussian model when the residualization is fitted on the training rows of each split (\\texttt{sharedimp}) or on all rows before the same five-fold cross-validation. Least squares; means over simulated data sets; dashed: population values."}
+knitr::include_graphics(fig("03_fold_internal_effect"))
+```
+
+## Agreement between R and Python {#sec:parity}
+
+Both packages were run on the same data files with the same fold labels and metrics, and every numeric column of both result tables was compared (Table \ref{tab:validation}). The largest difference is at rounding level for least squares and below the tolerances fixed in advance for binary and multinomial logistic regression, where the two languages use different iterative optimisers. Random forests are not compared numerically: ranger and scikit-learn define their node-size parameters differently and count node sizes differently under bootstrap sampling, so equal settings do not give equal trees. Forest results are reported per language as usage examples.
+
+## Public data sets {#sec:data}
+
+Figure \ref{fig:examples} shows three data sets from the UCI Machine Learning Repository: Concrete Compressive Strength [@uci_concrete] (regression, $n$ = `r num("n_concrete", one(ds$n[ds$dataset == "concrete"]), "results/summary/04_real_data/datasets.csv", how = "int")`, `r num("p_concrete", as.numeric(one(ds$p[ds$dataset == "concrete"])), "results/summary/04_real_data/datasets.csv", how = "int")` features), the ten mean features of Breast Cancer Wisconsin (Diagnostic) [@uci_wdbc] (binary, $n$ = `r num("n_wdbc", one(ds$n[ds$dataset == "wdbc"]), "results/summary/04_real_data/datasets.csv", how = "int")`) and Maternal Health Risk [@uci_maternal] (three classes, $n$ = `r num("n_maternal", one(ds$n[ds$dataset == "maternal"]), "results/summary/04_real_data/datasets.csv", how = "int")`, `r num("p_maternal", as.numeric(one(ds$p[ds$dataset == "maternal"])), "results/summary/04_real_data/datasets.csv", how = "int")` features), each with a linear and a forest learner and five folds. The cross-validated $R^2$ of the Full model on Concrete is `r num("concrete_r2_lin", pf("concrete_linear_r2", "full_score_r"), "results/summary/04_real_data/performance.csv", digits = 3)` with least squares and `r num("concrete_r2_rf_r", pf("concrete_rf_r2", "full_score_r"), "results/summary/04_real_data/performance.csv", digits = 3)` with the R forest; the log-loss on Breast Cancer is `r num("wdbc_ll_lin", -pf("wdbc_linear_logloss", "full_score_r"), "results/summary/04_real_data/performance.csv", digits = 3)` with logistic regression. Several forest importances on Concrete are negative in both languages: the model with the anchor predicted worse than the model without it, which truncation at zero would hide.
+
+```{r examples, fig.cap="Importances (mean and standard deviation over five splits) on three public data sets. Left: linear, logistic and multinomial logistic regression, which agree between R and Python within the tolerances of Table \\ref{tab:validation}. Right: random forests with language-specific settings. For Maternal Health Risk the folds keep rows with identical feature values together.", out.width="0.72\\textwidth"}
+knitr::include_graphics(fig("07_examples_importance"))
+```
+
+The Maternal Health Risk file required a decision. Of its `r num("mat_rows", dup$rows, "results/raw/04b_maternal/duplicates.json", how = "int")` rows only `r num("mat_distinct", dup$identical_record$distinct_records, "results/raw/04b_maternal/duplicates.json", how = "int")` are distinct records; `r num("mat_repeat", dup$identical_record$rows_that_repeat_an_earlier_record, "results/raw/04b_maternal/duplicates.json", how = "int")` rows repeat an earlier row in all features and the label, and the provider's documentation does not say whether they are repeated observations or copies. With random folds, `r num("mat_leak", dup$random_folds_of_experiment_C$assessment_rows_whose_feature_vector_is_also_in_the_training_rows, "results/raw/04b_maternal/duplicates.json", how = "int")` assessment rows have their feature values among the training rows, and the forest then appears far better than the multinomial model (log-loss `r num("mat_rf_random", ms("rand_forest", "log_loss", "r", "maternal"), "results/summary/04b_maternal/scores.csv", digits = 3)` against `r num("mat_lin_random", ms("linear", "log_loss", "r", "maternal"), "results/summary/04b_maternal/scores.csv", digits = 3)` in R). The analysis reported as the main one therefore keeps all rows and uses group-aware folds, in which rows with identical feature values share a fold; it needs no assumption about what the repeated rows are. There the forest has no advantage (`r num("mat_rf_grouped", ms("rand_forest", "log_loss", "r", "maternal_grouped"), "results/summary/04b_maternal/scores.csv", digits = 3)` against `r num("mat_lin_grouped", ms("linear", "log_loss", "r", "maternal_grouped"), "results/summary/04b_maternal/scores.csv", digits = 3)`), while the importances of the multinomial model hardly change (largest change `r num("mat_change", max(mrank$largest_abs_change_of_importance[mrank$learner == "linear" & mrank$metric == "log_loss" & mrank$variant == "maternal_grouped"]), "results/summary/04b_maternal/rank_agreement.csv", digits = 3)`). As a sensitivity analysis, removing identical records (`r num("mat_dedup_n", one(mvar$rows[mvar$variant == "maternal_dedup"]), "results/summary/04b_maternal/variants.csv", how = "int")` rows) gives `r num("mat_lin_dedup", ms("linear", "log_loss", "r", "maternal_dedup"), "results/summary/04b_maternal/scores.csv", digits = 3)` and `r num("mat_rf_dedup", ms("rand_forest", "log_loss", "r", "maternal_dedup"), "results/summary/04b_maternal/scores.csv", digits = 3)`, which is the right analysis only if the copies are not observations; blood sugar ranks first in all three analyses. We also screened `r num("sel_n", nrow(sel), "results/summary/04a_multiclass_pilot/decision.csv", how = "int")` other public multiclass data sets against criteria fixed beforehand, and none met all of them, so the data set was kept. The example illustrates that the resampling design is the analyst's responsibility and that `sharedimp` accepts the splits such a design requires.
+
+## Runtime
+
+Single calls were timed on one thread of an `r reg("cpu", sub("\\(R\\)", "", sub("\\(R\\) Xeon\\(R\\)", " Xeon", sub(" CPU.*$", "", one(unique(rd("05_runtime", "environment.csv")$cpu))))), "results/summary/05_runtime/environment.csv")` processor (one warm-up and five timed calls per condition; medians reported; interquartile range at most `r num("rt_iqr", max(cells$iqr[cells$status == "measured"] / cells$median[cells$status == "measured"]), "results/summary/05_runtime/cells.csv", digits = 1, how = "pct")` of the median) on synthetic regression data, varying the number of rows $n$, features $p$ and folds $v$ one at a time around $n = 1000$, $p = 10$, $v = 5$ (Figure \ref{fig:runtime}). A budget of two hours was fixed in advance: `r num("rt_measured", sum(cells$status == "measured"), "results/summary/05_runtime/cells.csv", how = "int")` of `r num("rt_cells", nrow(cells), "results/summary/05_runtime/cells.csv", how = "int")` conditions were measured and the others, all with forests, were skipped by a rule set before the measurements. With least squares the base condition took `r num("rt_lin_r", rt("A_linear", 1000, 10, 5, "r_median"), rt_src, digits = 2)` s in R and `r num("rt_lin_py", rt("A_linear", 1000, 10, 5, "python_median"), rt_src, digits = 2)` s in Python, and `r num("rt_lin_r_p160", rt("A_linear", 1000, 160, 5, "r_median"), rt_src, digits = 1)` s and `r num("rt_lin_py_p160", rt("A_linear", 1000, 160, 5, "python_median"), rt_src, digits = 1)` s with 160 features (1600 model fits); up to $n = 1000$ the time hardly depended on $n$, the fixed cost of a model fit being dominant. With the R built-in forest the base condition took `r num("rt_rf_r", rt("B_forest_aligned", 1000, 10, 5, "r_median"), rt_src, digits = 1)` s, and `r num("rt_rf_py", rt("B_forest_aligned", 1000, 10, 5, "python_median"), rt_src, digits = 1)` s with a scikit-learn forest of 500 trees whose settings have the same definitions. The runtime is governed by the learner. The timings include differences between the learner implementations and linear-algebra libraries of the two environments; they do not rank the languages, and no order of growth is claimed.
+
+```{r runtime, fig.cap="Wall-clock time of one call of \\texttt{shared\\_importance()} on one thread (median of five timed calls) against the number of rows, features and folds, one factor varied at a time. Rows: least squares; random forests with settings of the same definition in ranger and scikit-learn; R built-in forest against scikit-learn's default forest. Conditions excluded by the time budget are absent.", out.width="0.8\\textwidth"}
+knitr::include_graphics(fig("05_runtime_scaling"))
+```
 
 # Impact
 
-# Limitations
+## Users and research questions
 
-<!-- UMFI-LR only (no UMFI-OT); linear dependence only; numeric features, no
-missing values; no inference; fixed hyperparameters; rank-deficient designs
-and learner-dependent agreement across languages. -->
+UMFI was proposed for analyses whose aim is to learn from data rather than to optimise a predictor [@janssen2023umfi], where correlated measurements are the rule. Analysts doing such work usually operate inside tidymodels or scikit-learn, where the learner, the metric and the resampling scheme of a study are already defined. `sharedimp` lets them compute UMFI-LR with exactly those objects (a penalized regression, a boosting model, a pipeline, grouped or repeated cross-validation, a probability metric) instead of adopting a fixed forest with out-of-bag scoring for the importance step only. Because the dependence removal is part of the resampling loop, the importance is an out-of-sample quantity in the same sense as the cross-validated performance reported next to it, and questions such as "does this feature add predictive information for this model class, under this validation design?" can be asked directly.
+
+## Changes in practice
+
+Three behaviours differ from the reference implementations and are documented with executed comparisons. Estimating the residualization on all rows inflated importances in small samples, by about a third at $n = 30$ in our simulation; fold-internal estimation removed this. Importances are signed, so the analyst sees when a model with the feature predicted worse on new rows. And no data-dependent switch decides whether a feature is residualized, a switch on which the two reference codes differ from each other. Groups that mix R and Python can run the same analysis in either language and obtain the same numbers for learners with a unique solution, within the tolerances of Table \ref{tab:validation}. This rests on a written specification with executable checks rather than on a port: the specification names every case in which the implementations had to make the same choice, and the comparison on identical data and splits is part of the public record.
+
+## Limitations
+
+Only the linear-regression variant is implemented: dependence that is not linear in the anchor remains in the representation. Features must be numeric and complete. The importances are descriptive; no intervals or tests are given, and one five-fold split per data set was used in the examples. Agreement between the languages is established for learners with a unique solution on full-rank designs; it is neither expected nor tested for random forests, and for a thresholded metric such as accuracy one observation with nearly tied class probabilities can be classified differently although the fitted probabilities agree (observed once, on a candidate data set, with probabilities agreeing within `r num("flip_prob", one(rd("04a_multiclass_pilot", "flips.csv")$largest_abs_probability_difference), "results/summary/04a_multiclass_pilot/flips.csv", how = "sci")`). With flexible learners the importance under a response independent of the features is not centred at zero: it is the difference in overfitting of two models with different numbers of columns. In a small simulation its mean was `r num("null_r", nf("r", "null_p5", "baseline"), "results/summary/04c_null_forest/summary.csv", digits = 3)` in $R^2$ for the R built-in forest with five features, and `r num("null_r_padded", nf("r", "null_p5", "padded_reduced"), "results/summary/04c_null_forest/summary.csv", digits = 3)` when both models had the same number of columns, so small positive forest importances should not be read as evidence of information. Finally, the cost is $2pv$ model fits, and forest runtime was measured for small problems only ($n \le 1000$, $p \le 10$).
 
 # Conclusions
 
-# References
+`sharedimp` provides UMFI-LR as a resampling procedure in R and in Python. It does not alter the definition of the measure; it changes how the measure is estimated and delivered: residualization inside each training split, paired scoring on held-out rows, free choice of learner, metric and splits, signed per-split results, and two implementations bound by one specification that are checked against each other and, where the procedures coincide, against the reference code.
+
+```{=latex}
+% MAIN-TEXT-END
+```
+
+# Reproducibility and data availability {#sec:repro .unnumbered}
+
+The experiments, their configuration, the recorded results and the source of this manuscript are in \url{https://github.com/dsc-chiba-u/sharedimp-experiments}. The workflows run with Snakemake `r reg("snakemake", envv("host", "Snakemake"), "results/summary/01_environment/environment.csv")` [@molder2021snakemake] and Singularity `r reg("singularity", sub("^singularity version ", "", envv("host", "Singularity")), "results/summary/01_environment/environment.csv")` [@kurtzer2017singularity] inside container images pinned by digest; every number in this article is read from the recorded results when the manuscript is built. The reference UMFI code is not redistributed; it is fetched at the cited commits when the comparison is run. No new data were collected: the three public data sets are available from the UCI Machine Learning Repository under CC BY 4.0, and the prepared files, their checksums and the simulated data are in the repository.
+
+# Funding {-}
+
+TO BE COMPLETED BY THE AUTHOR.
+
+# Declaration of competing interest {-}
+
+TO BE COMPLETED BY THE AUTHOR.
+
+# Declaration of generative AI and AI-assisted technologies in the manuscript preparation process {-}
+
+TO BE COMPLETED BY THE AUTHOR. Draft for the author to confirm or rewrite: during the preparation of this work the author used Anthropic's Claude Code to develop the experiment workflows and to draft the manuscript text; the author reviewed and edited the output and takes full responsibility for the content of the published article.
+
+# References {-}
+
+```{r numbers, include=FALSE}
+out <- file.path(root, "results", "summary", "07_manuscript")
+dir.create(out, recursive = TRUE, showWarnings = FALSE)
+tab <- do.call(rbind, lapply(REG, function(x) data.frame(id = x$id, text_in_manuscript = x$text, source = x$source)))
+utils::write.csv(tab[order(tab$id), ], file.path(out, "numbers.csv"), row.names = FALSE, eol = "\n")
+```

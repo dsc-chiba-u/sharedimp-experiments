@@ -13,14 +13,17 @@ UMFI-LR is an existing method. This repository evaluates *software*: it does
 not propose or benchmark a new importance measure, and the importances it
 reports are out-of-sample predictive gains, not causal or conditional effects.
 
-**Status (2026-11-14): Phases 1 to 3 of 4 are complete** — environment,
+**Status (2026-11-14): Phases 1 to 3 are complete and a first draft of the manuscript exists (Phase 4)** — environment,
 runners, smoke tests and a positive control (Phase 1); a study of the
 random-forest settings of the two languages, the comparison with the official
 UMFI-LR code, three public data sets in R and Python (Phase 2); two
 follow-up studies (duplicated rows of the Maternal Health Risk data, forest
 importance under a null design) and the runtime benchmark (Phase 3), with
-figures and tables. The manuscript (Phase 4) has not been started. Current
-state, results and open issues: `docs/STATUS.md`.
+figures and tables. The manuscript draft is `paper/manuscript.Rmd`; it
+builds with `bash scripts/07_manuscript.sh` and reads every number from
+`results/` (`paper/README.md`, `docs/softwarex_requirements.md`). Items the
+author must complete before submission are listed in `docs/STATUS.md`,
+with the current state, results and open issues.
 
 ## Layout
 
@@ -31,11 +34,11 @@ R/           R helpers, job runner, experiment B (R side), figures
 python/      sharedimp_exp/: Python helpers, job runner, checks, data generators, experiment B, summaries
 workflow/    one Snakefile per stage (NN_*.smk), common.smk
 scripts/     thin wrappers around the workflows
-docker/      Dockerfiles of the two Phase 2 images (built by .github/workflows/docker.yml)
+docker/      Dockerfiles of the two Phase 2 images and of the manuscript image (built by .github/workflows/docker.yml)
 external/    official UMFI sources, fetched at pinned commits at run time (git-ignored)
 results/     raw/ (per-run output), summary/ (derived CSV), tables/ (derived Markdown), figures/
-docs/        experiment_plan.md, STATUS.md, random_forest_comparison.md, package_change_proposal.md, maternal_duplicates.md, multiclass_dataset_selection.md, null_forest_investigation.md, runtime_benchmark.md
-paper/       manuscript (skeleton), references.bib
+docs/        experiment_plan.md, STATUS.md, random_forest_comparison.md, package_change_proposal.md, maternal_duplicates.md, multiclass_dataset_selection.md, null_forest_investigation.md, runtime_benchmark.md, softwarex_requirements.md
+paper/       manuscript.Rmd (SoftwareX draft), references.bib, README.md
 ```
 
 Every file under `results/` is written by a script; nothing there is edited by
@@ -63,6 +66,7 @@ bash scripts/04b_maternal.sh        # duplicated rows of Maternal Health Risk (n
 bash scripts/04c_null_forest.sh     # forest importance under a null design                  (~40 min)
 bash scripts/05_runtime.sh          # D: runtime benchmark, pilot + main, always 1 core      (~2 h)
 bash scripts/06_figures.sh          # figures from the summaries of 01-05                    (~1 min)
+bash scripts/07_manuscript.sh       # paper figures, paper/manuscript.pdf, manuscript checks (~1 min)
 ```
 
 The durations in the comments were observed with 16 cores
@@ -99,6 +103,7 @@ reports.
 | `04c_null_forest.smk` | forest importance when the response is independent of the features, one setting changed at a time | done | `data/null_forest/`, `results/{raw,summary}/04c_null_forest/`, `results/tables/04c_null_forest.md`, `docs/null_forest_investigation.md` |
 | `05_runtime.smk` | D: runtime in n, p, folds, learner, R and Python (pilot, budget of 2 h) | done; 31 of 90 cells skipped by the budget rule | `data/runtime/`, `results/{raw,summary}/05_runtime/`, `results/tables/05_runtime*.md`, `docs/runtime_benchmark.md` |
 | `06_figures.smk` | E: figures of experiments B, C, D and the follow-up studies | done | `results/figures/` |
+| `07_manuscript.smk` | manuscript: overview diagram, example figure, PDF, checks (word limit, sections, references) | first draft | `paper/manuscript.pdf` (not committed), `results/figures/07_*`, `results/summary/07_manuscript/`, `results/tables/07_manuscript_checks.md` |
 
 ### Container images
 
@@ -106,10 +111,11 @@ reports.
 |---|---|---|
 | `ghcr.io/dsc-chiba-u/sharedimp-r` (tag `cf2e1cc`, by digest) | R 4.5.3, `sharedimp` (R) at the pinned commit | 01, 02, 02b, 04, 04a, 04b, 04c, 05 |
 | `ghcr.io/dsc-chiba-u/sharedimp-py` (tag `bacc5d8`, by digest) | Python 3.13, `sharedimp` (Python) at the pinned commit | 01, 02, 02b, 03, 04, 04a, 04b, 04c, 05 |
-| `ghcr.io/dsc-chiba-u/sharedimp-experiments-r` (by digest) | the R image plus the dependencies of the official UMFI R package and `patchwork` | 03, 06 |
+| `ghcr.io/dsc-chiba-u/sharedimp-experiments-r` (by digest) | the R image plus the dependencies of the official UMFI R package and `patchwork` | 03, 06, 07 |
 | `ghcr.io/dsc-chiba-u/umfi-official-py` (by digest) | Python 3.9 with the dependencies of the official Python UMFI code at its own versions | 03 |
+| `ghcr.io/dsc-chiba-u/sharedimp-manuscript` (by digest) | the experiments R image plus pandoc, TeX Live and rticles | 07 |
 
-The last two are built from `docker/` by `.github/workflows/docker.yml`. No
+The last three are built from `docker/` by `.github/workflows/docker.yml`. No
 official UMFI code is contained in any image or in this repository: workflow
 03 fetches it at pinned commits into `external/` and runs it unmodified.
 

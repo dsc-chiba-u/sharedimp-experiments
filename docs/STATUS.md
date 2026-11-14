@@ -1,6 +1,6 @@
 # Status and open issues
 
-Last updated: 2026-11-14 (end of Phase 3; multiclass data-set selection attempted). Plan: `docs/experiment_plan.md`.
+Last updated: 2026-11-14 (Phase 4: first draft of the manuscript). Plan: `docs/experiment_plan.md`.
 Numbers quoted here are copied from generated files, which are authoritative;
 the file is named next to each number. Nothing here is a conclusion of the
 paper: Phase 4 decides what is reported and how.
@@ -270,6 +270,59 @@ read-only from here.
 `04b_maternal.md`, `04b_maternal_checks.md`, `04b_maternal_jobs_checks.md`,
 `04c_null_forest.md`, `05_runtime.md`, `05_runtime_checks.md`.
 
+## Phase 4 — first draft of the manuscript
+
+`paper/manuscript.Rmd`, built by `workflow/07_manuscript.smk` in the image
+`sharedimp-manuscript` (pinned in `config/pins.env`); requirements and their
+sources in `docs/softwarex_requirements.md`.
+
+- Journal requirements were taken from the current templates (version 6,
+  March 2026) and from the author's earlier SoftwareX submission
+  (`../fbrglm/paper/`, including its reviewer reports). The Guide for
+  Authors page could not be read (HTTP 403); what only it states is listed
+  as not verified.
+- Structure: code metadata table (C1–C8); the five mandatory sections;
+  validation and examples as subsections of section 3 (reference
+  implementations, fold-internal effect, R–Python agreement, public data,
+  runtime); limitations as section 4.3; reproducibility and data
+  statement; funding and declarations as headings to be completed.
+- Build checks (`results/tables/07_manuscript_checks.md`): about 3170 words
+  in the main sections (limit 4000), 4 figures (limit 6), abstract 110
+  words, 6 keywords, no unresolved citation or reference, 14 references all
+  cited. Sections 1–5 with figures and tables end on page 8 of 9.
+- 69 values in the text are read from `results/` at build time
+  (`results/summary/07_manuscript/numbers.csv`, with the source file of
+  each). The build stops if any experiment check has failed.
+- Figures: `07_software_overview` (new diagram), `03_fold_internal_effect`,
+  `07_examples_importance` (new; Concrete and Breast Cancer from experiment
+  C, Maternal Health Risk with group-aware folds from 04b),
+  `05_runtime_scaling`. The R–Python agreement is given as a table.
+- Multiclass example in the paper: Maternal Health Risk, all rows,
+  group-aware folds, with the random-fold and the deduplicated analyses as
+  sensitivity analyses and the failed replacement attempt stated.
+- The experiment workflows 01–06 and their results were not changed. Added
+  to `config/pins.env`: the three `MANUSCRIPT_IMAGE*` entries.
+
+### To be decided or supplied by the author before submission
+
+1. Author list, affiliations, corresponding email (C8), funding,
+   competing-interest and generative-AI declarations, acknowledgements.
+2. Multiclass example: keep Maternal Health Risk with group-aware folds
+   (as drafted) or change it (issue 6).
+3. Code version: no release tag and no DOI exist for either package; C2
+   names the commits of `config/pins.env`. The R repository has a later
+   documentation-only commit (`4632626`).
+4. Two GitHub repositories in the metadata table (the template speaks of
+   one); license files are not named `Licence.txt`.
+5. Page count under the stricter reading of the six-page limit (body with
+   figures: 8 pages); `preprint, 3p` versus the template's
+   `preprint, 12pt, a4paper`.
+6. Everything listed as "Not verified" in
+   `docs/softwarex_requirements.md`.
+7. The claim in section 4.1 about the purpose of UMFI paraphrases the
+   UMFI paper and should be checked against it by the author; the
+   manuscript has not been proof-read by a person.
+
 ## Open issues
 
 1. **Docker Hub.** The Phase 2 images are on GHCR only. This repository has
@@ -319,8 +372,9 @@ read-only from here.
     there, and the 2-hour budget excluded everything larger. Runtime with
     several threads was not measured.
 12. Parity is checked on full-rank designs only (common specification §8.1).
-13. **SoftwareX guide and template not yet checked**; `paper/manuscript.Rmd`
-    is a skeleton and has not been built. No manuscript image is defined.
+13. **SoftwareX Guide for Authors not read** (HTTP 403 for automated
+    access); templates and an earlier submission were used instead
+    (`docs/softwarex_requirements.md`). To be checked in a browser.
 14. The checker's own failure modes (tampered value, failed job) were
     verified in the conda-based run of Phase 1 (`6c094a1`), not again since.
 
@@ -335,7 +389,8 @@ read-only from here.
     The checks that passed are unaffected; a rule for thresholded metrics
     would be a change of criterion and is left to the authors.
 
-## Next (Phase 4, not started)
+## Next
 
-Manuscript. Before it: decide issue 6 (multiclass data set; with it issue 16) and issue 2
-(specification §8.2); check the SoftwareX guide and template (issue 13).
+Author's decisions listed under Phase 4; then proof-reading, a tagged
+release of both packages (and a DOI if wanted), and submission files
+(cover letter, highlights if required).

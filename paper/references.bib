@@ -1,5 +1,6 @@
 % Only verified entries. Add an entry when its details have been checked
 % against the publisher's page; never add a DOI that has not been resolved.
+% How each entry was verified is recorded in docs/softwarex_requirements.md.
 
 @inproceedings{janssen2023umfi,
   title     = {Ultra-marginal Feature Importance: Learning from Data with Causal Guarantees},
@@ -11,4 +12,125 @@
   year      = {2023},
   publisher = {PMLR},
   url       = {https://proceedings.mlr.press/v206/janssen23a.html}
+}
+
+@misc{umfi_r,
+  author       = {Janssen, Joseph},
+  title        = {{UMFI}: {R} package implementing ultra-marginal feature importance},
+  howpublished = {GitHub repository \url{https://github.com/HydroML/UMFI}, commit 54b9647},
+  year         = {2024},
+  note         = {Accessed 13 November 2026}
+}
+
+@misc{umfi_python,
+  author       = {{guanton}},
+  title        = {umfi\_python: {Python} implementation of ultra-marginal feature importance},
+  howpublished = {GitHub repository \url{https://github.com/guanton/umfi_python}, commit 4db1c23},
+  year         = {2024},
+  note         = {Accessed 13 November 2026}
+}
+
+@article{breiman2001random,
+  author  = {Breiman, Leo},
+  title   = {Random Forests},
+  journal = {Machine Learning},
+  volume  = {45},
+  number  = {1},
+  pages   = {5--32},
+  year    = {2001},
+  doi     = {10.1023/A:1010933404324}
+}
+
+@article{strobl2008conditional,
+  author  = {Strobl, Carolin and Boulesteix, Anne-Laure and Kneib, Thomas and Augustin, Thomas and Zeileis, Achim},
+  title   = {Conditional variable importance for random forests},
+  journal = {BMC Bioinformatics},
+  volume  = {9},
+  pages   = {307},
+  year    = {2008},
+  doi     = {10.1186/1471-2105-9-307}
+}
+
+@article{kaufman2012leakage,
+  author  = {Kaufman, Shachar and Rosset, Saharon and Perlich, Claudia and Stitelman, Ori},
+  title   = {Leakage in data mining},
+  journal = {ACM Transactions on Knowledge Discovery from Data},
+  volume  = {6},
+  number  = {4},
+  pages   = {1--21},
+  year    = {2012},
+  doi     = {10.1145/2382577.2382579}
+}
+
+@article{pedregosa2011scikit,
+  author  = {Pedregosa, Fabian and Varoquaux, Ga{\"e}l and Gramfort, Alexandre and Michel, Vincent and Thirion, Bertrand and Grisel, Olivier and Blondel, Mathieu and Prettenhofer, Peter and Weiss, Ron and Dubourg, Vincent and Vanderplas, Jake and Passos, Alexandre and Cournapeau, David and Brucher, Matthieu and Perrot, Matthieu and Duchesnay, {\'E}douard},
+  title   = {Scikit-learn: Machine Learning in {P}ython},
+  journal = {Journal of Machine Learning Research},
+  volume  = {12},
+  number  = {85},
+  pages   = {2825--2830},
+  year    = {2011},
+  url     = {http://jmlr.org/papers/v12/pedregosa11a.html}
+}
+
+@manual{tidymodels,
+  author = {Kuhn, Max and Wickham, Hadley},
+  title  = {Tidymodels: a collection of packages for modeling and machine learning using tidyverse principles},
+  year   = {2020},
+  url    = {https://www.tidymodels.org}
+}
+
+@article{wright2017ranger,
+  author  = {Wright, Marvin N. and Ziegler, Andreas},
+  title   = {{ranger}: A Fast Implementation of Random Forests for High Dimensional Data in {C++} and {R}},
+  journal = {Journal of Statistical Software},
+  volume  = {77},
+  number  = {1},
+  year    = {2017},
+  doi     = {10.18637/jss.v077.i01}
+}
+
+@article{molder2021snakemake,
+  author  = {M{\"o}lder, Felix and Jablonski, Kim Philipp and Letcher, Brice and Hall, Michael B. and Tomkins-Tinch, Christopher H. and Sochat, Vanessa and Forster, Jan and Lee, Soohyun and Twardziok, Sven O. and Kanitz, Alexander and Wilm, Andreas and Holtgrewe, Manuel and Rahmann, Sven and Nahnsen, Sven and K{\"o}ster, Johannes},
+  title   = {Sustainable data analysis with {S}nakemake},
+  journal = {F1000Research},
+  volume  = {10},
+  pages   = {33},
+  year    = {2021},
+  doi     = {10.12688/f1000research.29032.2}
+}
+
+@article{kurtzer2017singularity,
+  author  = {Kurtzer, Gregory M. and Sochat, Vanessa and Bauer, Michael W.},
+  title   = {Singularity: Scientific containers for mobility of compute},
+  journal = {PLOS ONE},
+  volume  = {12},
+  number  = {5},
+  pages   = {e0177459},
+  year    = {2017},
+  doi     = {10.1371/journal.pone.0177459}
+}
+
+@misc{uci_concrete,
+  author       = {Yeh, I-Cheng},
+  title        = {Concrete Compressive Strength [dataset]},
+  howpublished = {UCI Machine Learning Repository},
+  year         = {1998},
+  doi          = {10.24432/C5PK67}
+}
+
+@misc{uci_wdbc,
+  author       = {Wolberg, William and Mangasarian, Olvi and Street, Nick and Street, W.},
+  title        = {Breast Cancer Wisconsin (Diagnostic) [dataset]},
+  howpublished = {UCI Machine Learning Repository},
+  year         = {1993},
+  doi          = {10.24432/C5DW2B}
+}
+
+@misc{uci_maternal,
+  author       = {Ahmed, Marzia},
+  title        = {Maternal Health Risk [dataset]},
+  howpublished = {UCI Machine Learning Repository},
+  year         = {2020},
+  doi          = {10.24432/C5DP5D}
 }

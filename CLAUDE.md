@@ -53,7 +53,13 @@ naively), then the two package
   records commit and checksums; the code is sourced / imported unmodified.
   Do not paste official code into scripts, docs or commit messages.
 - **The manuscript lives only in `paper/`.** No number, DOI, release or
-  conclusion goes into it before it exists. Manuscript text is English;
+  conclusion goes into it before it exists. Numbers are never typed into
+  `paper/manuscript.Rmd`: they are computed in its `setup` chunk from
+  `results/` with `num()` / `reg()` (`paper/README.md`). Journal
+  requirements and their sources: `docs/softwarex_requirements.md`; items
+  marked `TO BE COMPLETED BY THE AUTHOR` are not to be guessed. Limits
+  checked by workflow 07: 4000 words for the five main sections, six
+  figures. Manuscript text is English;
   progress reports to the user are in Japanese.
 - **Do not start a later phase, or a large benchmark, without being asked.**
   Run a pilot first and set a time budget.
@@ -71,7 +77,7 @@ computing rule, `benchmark:` and `log:` per rule.
 conda activate snakemake      # Snakemake 8.10.0 + Singularity 3.8.6 (environment.yml)
 snakemake -s workflow/01_environment.smk --use-singularity -c4
 snakemake -s workflow/02_validation.smk  --use-singularity -c4
-snakemake -s workflow/<stage>.smk -n                      # dry run (other stages: 02b_rf_settings, 03_official_umfi, 04_real_data, 04a_multiclass_selection, 04b_maternal, 04c_null_forest, 05_runtime, 06_figures)
+snakemake -s workflow/<stage>.smk -n                      # dry run (other stages: 02b_rf_settings, 03_official_umfi, 04_real_data, 04a_multiclass_selection, 04b_maternal, 04c_null_forest, 05_runtime, 06_figures, 07_manuscript)
 snakemake -s workflow/02_validation.smk --use-singularity -c4 results/raw/02_validation/r/pc_linear_mse.meta.json
 ```
 
@@ -165,7 +171,7 @@ recompute. Logs: `logs/<stage>/<rule>.log`.
   duplicates in parity data unless that learner is used.
 - Stage numbers: `01` environment (experiment A), `02`
   validation / positive control, `02b` random-forest settings, `03` official UMFI (B), `04` real data (C),
-  `04a` multiclass data-set selection (screening + pilot; outcome in `docs/multiclass_dataset_selection.md`), `04b` Maternal duplicates, `04c` null-design forest, `05` runtime (D), `06` figures (E).
+  `04a` multiclass data-set selection (screening + pilot; outcome in `docs/multiclass_dataset_selection.md`), `04b` Maternal duplicates, `04c` null-design forest, `05` runtime (D), `06` figures (E), `07` manuscript (paper figures, PDF, checks; image `MANUSCRIPT_IMAGE` in `config/pins.env`, defined in the workflow itself).
 
 ## Before committing
 
