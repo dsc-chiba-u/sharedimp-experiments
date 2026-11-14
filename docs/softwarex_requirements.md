@@ -53,7 +53,7 @@ Nothing in this file is filled in from memory.
 | Front matter | title "Name of your software: then a short title"; authors with affiliations, addresses, email; abstract; keywords | T | yes; author block to be confirmed |
 | Abstract | "ca. 100 words" | T | 111 words (workflow 07 check) |
 | Keywords | maximum of six | T (Word template) | six |
-| Length | main text (sections 1–5) "maximum six (6) pages in total (excluding metadata, tables, figures, references) with a 4000-word limit (we ask that more priority is placed on the word limit versus the page count)" | T | 3245 words (check `main_text_words`); **6 pages** from the title to the end of section 5 when figures and tables are removed (check `text_only_pages`, see "Reading of the page limit"); with figures and tables the same text ends on page 10 of 11 |
+| Length | main text (sections 1–5) "maximum six (6) pages in total (excluding metadata, tables, figures, references) with a 4000-word limit (we ask that more priority is placed on the word limit versus the page count)" | T | 3249 words (check `main_text_words`); **6 pages** from the title to the end of section 5 when figures and tables are removed (check `text_only_pages`, see "Reading of the page limit"); with figures and tables the same text ends on page 10 of 11 |
 | Figures | at most six; a pictorial overview of the architecture is encouraged | T | four, the first is the overview; all drawn at the width of the text block |
 | Tables | no numerical limit stated | T | three (metadata, comparison, validation) |
 | Code metadata table | rows C1–C8: current code version; permanent link to code/repository used for this code version; legal code license; code versioning system used; software code languages, tools and services used; compilation requirements, operating environments and dependencies; link to developer documentation/manual; support email | T | Table 1 |
@@ -103,7 +103,7 @@ includes the title block and the abstract, which the template does not
 mention, so it is an upper bound. Result: 6 pages in the `preprint, 3p`
 layout. With the template's `12pt, a4paper` options the same text would
 take more pages; the word limit, which has priority, is met with a margin
-(3245 of 4000). Nothing was cut or compressed to reach a page number.
+(3249 of 4000). Nothing was cut or compressed to reach a page number.
 
 ## Not verified (Guide for Authors not readable)
 

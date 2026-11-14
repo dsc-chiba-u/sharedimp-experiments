@@ -286,7 +286,7 @@ sources in `docs/softwarex_requirements.md`.
   implementations, fold-internal effect, R–Python agreement, public data,
   runtime); limitations as section 4.3; reproducibility and data
   statement; funding and declarations as headings to be completed.
-- Build checks (`results/tables/07_manuscript_checks.md`): 3245 words in
+- Build checks (`results/tables/07_manuscript_checks.md`): 3249 words in
   the main sections (limit 4000), 6 pages of running text when figures and
   tables are removed (limit 6; `docs/softwarex_requirements.md`, "Reading
   of the page limit"), 4 figures (limit 6), abstract 111 words, 6 keywords,
