@@ -27,6 +27,7 @@ paper/*.aux
 paper/*.bbl
 paper/*.blg
 paper/*.out
+paper/*.spl
 paper/*_files/
 paper/*_cache/
 # OS / editors
