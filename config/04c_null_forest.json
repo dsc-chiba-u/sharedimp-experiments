@@ -1,0 +1,38 @@
+{
+  "description": "workflow/04c_null_forest.smk: why is the importance of a random forest positive on average when the response is independent of the features (experiment B6)? A small simulation: same data and folds for every setting, one factor changed at a time from the baseline. Nothing is asserted about the sign or size of a forest importance; every row of the summary is 'reported'. Reading: docs/null_forest_investigation.md.",
+  "folds": 5,
+  "datasets_per_design": 20,
+  "feature_correlation": 0.5,
+  "designs": {
+    "null_p5": {"n": 300, "p": 5, "seed": 20261401, "variants": "all",
+                "note": "p = 5 as in B6: floor(sqrt(q)) is 2 for the Full (q = 5) and for the Reduced model (q = 4)"},
+    "null_p4": {"n": 300, "p": 4, "seed": 20261402, "variants": "all",
+                "note": "floor(sqrt(q)) is 2 for the Full (q = 4) and 1 for the Reduced model (q = 3)"},
+    "null_p5_n1200": {"n": 1200, "p": 5, "seed": 20261403, "variants": ["baseline", "padded_reduced", "ols"],
+                      "note": "four times the rows: size of the effect and of the evaluation noise with more data"}
+  },
+  "model": "features: p-variate normal, unit variances, all correlations feature_correlation; y ~ N(0, 1) independent of the features; z ~ N(0, 1) independent of everything (an extra column, used by the variants padded_reduced and placebo_full only)",
+  "metric": "mean squared error on the assessment rows; importance = MSE(Reduced) - MSE(Full), per split and anchor",
+  "seeding": "forest for data set d, fold f, anchor index a (1-based), model m (0 Full, 1 Reduced): seed 100000 d + 1000 f + 10 a + m, the same in every variant and in both languages (the random number generators differ)",
+  "baseline": {
+    "learner": "forest", "trees": 500, "mtry": "sqrt", "max_depth": null, "bootstrap": true, "representation": "standard",
+    "r": {"min.node.size": 5, "min.bucket": 1},
+    "python": {"min_samples_split": 2, "min_samples_leaf": 5},
+    "note": "the forests of experiment B6: R = settings of the built-in \"rand_forest\" learner (ranger called directly), Python = python/sharedimp_exp/learners.py"
+  },
+  "variants": {
+    "baseline": {"factor": "-", "change": {}},
+    "mtry_as_full": {"factor": "candidates per split", "change": {"mtry": "as_full"}, "note": "both models draw floor(sqrt(p)) candidates, the number of the Full model"},
+    "mtry_all": {"factor": "candidates per split", "change": {"mtry": "all"}, "note": "every column is a candidate at every split (bagging)"},
+    "mtry_one": {"factor": "candidates per split", "change": {"mtry": "one"}, "note": "one candidate per split"},
+    "depth2": {"factor": "tree depth", "change": {"max_depth": 2}},
+    "large_nodes": {"factor": "tree depth", "change": {"r": {"min.node.size": 50, "min.bucket": 1}, "python": {"min_samples_split": 2, "min_samples_leaf": 50}}, "note": "each language's own node-size parameter raised from 5 to 50"},
+    "no_bootstrap": {"factor": "bootstrap sampling", "change": {"bootstrap": false}, "note": "every tree sees every training row once; trees differ by the candidate draws only"},
+    "trees50": {"factor": "learner variance (number of trees)", "change": {"trees": 50}},
+    "trees2000": {"factor": "learner variance (number of trees)", "change": {"trees": 2000}},
+    "padded_reduced": {"factor": "number of columns", "change": {"representation": "padded_reduced"}, "note": "the Reduced model also gets the independent noise column z: both models have p columns"},
+    "placebo_full": {"factor": "number of columns", "change": {"representation": "placebo_full"}, "note": "the Full model is the Reduced representation plus the noise column z (the anchor itself is not used): the 'importance' of pure noise"},
+    "split6": {"factor": "node-size rule (Python only)", "languages": ["python"], "change": {"python": {"min_samples_split": 6, "min_samples_leaf": 1}}, "note": "the scikit-learn setting closest to the R built-in (docs/random_forest_comparison.md)"},
+    "ols": {"factor": "learner", "change": {"learner": "ols"}, "note": "ordinary least squares: the Full model estimates one coefficient more"}
+  }
+}

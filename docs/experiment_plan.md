@@ -1,8 +1,9 @@
 # Experiment plan — sharedimp SoftwareX paper
 
-Status: **Phases 1 and 2 complete (2026-11-13): experiments A, B, C, the
-random-forest settings study and the Phase 2 figures. Phase 3 (runtime) and
-Phase 4 (manuscript) are planned, not run.**
+Status: **Phases 1 to 3 complete (2026-11-14): experiments A, B, C, the
+random-forest settings study, the two follow-ups of Phase 2 (duplicated rows
+of the Maternal Health Risk data, forest importance under a null design) and
+experiment D (runtime). Phase 4 (manuscript) is planned, not started.**
 This file states what each experiment is for, what is run, what is checked and
 which criteria were fixed *before* looking at the results. Results live in
 `results/`; this file contains no result numbers except where a section is
@@ -295,47 +296,134 @@ Health Risk contains many duplicated rows (count in the data-set table), so
 identical rows occur in training and assessment folds and the scores of
 flexible learners on it are optimistic; it is used as distributed.
 
+## 5b. Follow-up of experiment C — duplicated rows of the Maternal Health Risk data (Phase 3)
+
+Workflow: `workflow/04b_maternal.smk`; configuration and criteria
+`config/04b_maternal.json`; jobs `config/04b_maternal_jobs.json`. Reading
+and recommendation: `docs/maternal_duplicates.md`.
+
+Question: experiment C used the file as distributed, with random stratified
+folds; many rows are identical, so identical rows are in training and
+assessment folds. How much do the score of the Full model and the
+importances depend on that?
+
+- Definitions (config file): *identical record* = equal in the six features
+  and the label; *identical features* = equal in the six features;
+  *conflicting group* = identical features with more than one label.
+- The data file of experiment C is not changed. Two derived files are
+  written to `data/derived/` (own `manifest.json` with sha256):
+  `maternal_grouped` (all rows; folds from scikit-learn's
+  `StratifiedGroupKFold`, group = identical features) and `maternal_dedup`
+  (first occurrence of every identical record; the same kind of folds).
+  Feature values are those of the source file (not standardized again).
+- The four Maternal jobs of experiment C (linear and forest, log-loss and
+  accuracy) are run on both files in R and Python with the same fold column;
+  the results of experiment C for the original file are read, not recomputed.
+
+Criteria (fixed before the run): no feature vector occurs in more than one
+fold of a derived file; `maternal_grouped` has the rows of the source in the
+same order and `maternal_dedup` exactly one row per identical record; the
+separation rule of §5 holds for both; `linear` jobs agree between R and
+Python within the multinomial tolerance of §3 (1e-3); every job completes in
+both languages with identical input and layout. Changes of scores and
+importances between the three files are reported, not judged.
+
+## 5c. Follow-up of experiment B6 — forest importance under a null design (Phase 3)
+
+Workflow: `workflow/04c_null_forest.smk`; configuration
+`config/04c_null_forest.json`. Reading: `docs/null_forest_investigation.md`.
+
+Question: in B6 the forest importances were positive on average although
+the response was independent of the features. Which ingredient produces
+that? A small simulation, deliberately not a benchmark: 20 data sets per
+design (n = 300, p = 5 as in B6; n = 300, p = 4, where `floor(sqrt(q))`
+differs between the Full and the Reduced model; n = 1200, p = 5 for three
+settings), equicorrelated normal features, `y ~ N(0, 1)`, 5 folds, MSE.
+The same data, folds and seeds are used in every setting and one setting is
+changed at a time from the baseline (the forests of B6): candidates per
+split (as in the Full model / all / one), tree depth (depth 2; large
+nodes), no bootstrap, number of trees (50, 2000), number of columns (the
+Reduced model padded with an independent noise column; the Full model built
+from the Reduced representation plus that noise column), the closest
+scikit-learn setting (Python), and OLS as a reference. Representations come
+from the packages (`build_representations()`, `AnchorResidualizer`); the
+forests are called directly (`ranger`, `RandomForestRegressor`) so that
+single settings can be changed.
+
+No criterion: every number is reported with its Monte Carlo standard error
+over the data sets. The study does not establish that a forest importance
+is zero, non-negative or non-positive in general.
+
 ## 6. Experiment D — runtime (Phase 3)
 
-Workflow: `workflow/05_runtime.smk` (placeholder). Timing cells are run one
-at a time (`-c1`), never in parallel with other jobs.
+Workflow: `workflow/05_runtime.smk`; conditions, protocol, budget rule and
+criteria `config/05_runtime.json` (**written before the pilot was run**).
+Protocol, complexity and reading: `docs/runtime_benchmark.md`.
 
-Forest learner (decided in Phase 2, see `docs/random_forest_comparison.md`):
-two separate comparisons, never mixed in one curve. (i) *Aligned settings*:
-the R built-in forest against a scikit-learn forest whose split rule has the
-same definition (`min_samples_split = 6`), both with 500 trees, sqrt(q)
-candidates, bootstrap, 1 thread; even then the implementations count node
-sizes differently under bootstrap, which is stated with the result.
-(ii) *Customary learners*: each language's forest as a user would call it
-(R built-in `"rand_forest"`; scikit-learn `RandomForestRegressor` /
-`RandomForestClassifier` with their defaults), reported as a practical
-comparison, not as a comparison of equal work.
+- **Data.** Synthetic regression (features with correlation `0.5^|j-k|`,
+  response with three main effects and one interaction), one file per
+  (n, p), one fold column per number of folds; generated by
+  `python/sharedimp_exp/runtime_data.py`, sha256 in
+  `data/runtime/manifest.json` (tracked; the CSV files, several MB, are
+  regenerated). Both languages verify the checksum and use the same fold
+  column.
+- **Factors**, one at a time around the base cell (n = 1000, p = 10, v = 5):
+  n ∈ {125, …, 32000}, p ∈ {5, …, 160}, v ∈ {2, 3, 5, 10, 20}; language;
+  learner. These are *candidate* cells; which of them are run is decided by
+  the budget rule from the pilot.
+- **Learners, three comparisons, never mixed in one curve.**
+  A. linear regression: R built-in `"linear"` (`lm.fit`) against
+  `LinearRegression()`.
+  B. random forest, *aligned settings*: R built-in `"rand_forest"` against
+  `RandomForestRegressor(n_estimators=500, min_samples_split=6,
+  min_samples_leaf=1, max_features="sqrt", bootstrap=True, n_jobs=1)`. The
+  stopping rules have the same definition; the trees are not the same
+  (`docs/random_forest_comparison.md`).
+  C. random forest, *customary settings*: R built-in against
+  `RandomForestRegressor()` with scikit-learn's defaults; a practical
+  comparison, not one of equal work. The R forest is measured once and used
+  in B and C.
+- **Protocol.** One process per language and learner; the processes run one
+  after the other and nothing else is run by the workflow at the same time.
+  1 thread. Per cell: data read and fold list built (not timed), 1 warm-up
+  call (discarded), 5 timed calls of `shared_importance()` with the same
+  seed; garbage collected before each call, outside the timed region.
+  Reported: median, quartiles (IQR) and minimum.
+- **Pilot.** Seven cells (base and two values per factor), one warm-up on
+  the first cell and one timed run per cell and process. Per process a
+  least-squares fit of log(seconds) on log n, log p, log v predicts the
+  candidate cells; it is a planning device, not a complexity estimate.
+- **Budget.** Main benchmark ≤ 2 h in total. A cell costs 6 × its predicted
+  time; cells above the per-cell cap are recorded as `skipped (budget)`; the
+  cap is the largest of a fixed list for which the planned total is at most
+  80 % of 2 h. A cell whose warm-up shows that it would cost more than twice
+  the cap is stopped (`skipped (budget, after warm-up)`); a process that has
+  used 1.25 × its planned time skips its remaining cells.
+- **Recorded** with every process: language and runtime version, package
+  versions, BLAS/LAPACK library, CPU, threads and thread variables, timer,
+  container image, package commit, commit of this repository, load average
+  before every run.
 
-- Data: synthetic regression, generated once per (n, p) cell and stored;
-  identical files and fold labels for both languages.
-- Factors, one at a time around a base cell (n = 1000, p = 10, v = 5):
-  n, p, v, learner (`linear`, `rand_forest`). The grid is fixed **after** a
-  pilot (two values per factor, one repetition).
-- Protocol: 1 thread; 1 warm-up run discarded, then ≥ 5 timed runs per cell;
-  median and IQR (and min) reported; wall-clock of the
-  `shared_importance()` call only (no data loading, no process start-up).
-- Budget: a cell whose pilot-predicted time exceeds the per-cell cap is not
-  run and is recorded as `skipped (budget)`; total budget for the main
-  benchmark ≤ 2 h. Phase 1 gives one reference point: random forest,
-  n = 2000, p = 5, v = 5 took ≈ 46 s in each language (single thread), so
-  large-p forest cells will have to be capped.
-- Recorded with every timing: language, package commit, learner
-  implementation and version, BLAS, threads, CPU.
-- Interpretation: differences between R and Python include learner
-  implementation (ranger vs scikit-learn; `lm.fit` vs LAPACK `gelsd`) and
-  runtime overheads; they are not attributed to "the language". Complexity
-  (2·v·p learner fits; residualization O(v·n·p²) in total) is discussed
-  separately from the measurements.
+Criteria (fixed before the pilot; `config/05_runtime.json`): every candidate
+cell is measured with 5 timed runs or recorded as skipped with a reason;
+both languages read the same file and fold column in every cell; for the
+linear learner the importances of the timed calls agree between R and Python
+within 1e-8 (the two languages did the same work); one call fits the learner
+exactly 2·p·v times (counted with a counting learner); 1 thread everywhere;
+the main processes took at most 2 h; every process ran in the pinned image.
+Timings themselves are reported, never judged.
+
+Interpretation: differences between R and Python include the learner
+implementation (`lm.fit` vs LAPACK `gelsd`; ranger vs scikit-learn), the
+linear-algebra libraries and the overhead of each framework; they are not
+attributed to "the language". The complexity argument (2·v·p learner fits;
+residualization O(v·n·p²) in total) is given separately from the
+measurements, and no order of growth is read off the measured times.
 
 ## 7. Experiment E — figures and tables (Phases 2–3)
 
-Workflow: `workflow/06_figures.smk` (`R/figures.R`, in the
-`sharedimp-experiments-r` image). Every figure is drawn from files in
+Workflow: `workflow/06_figures.smk` (`R/figures.R` for Phase 2,
+`R/figures_phase3.R` for Phase 3, in the `sharedimp-experiments-r` image). Every figure is drawn from files in
 `results/summary/` only, as `.pdf` and `.png` in `results/figures/`.
 
 | file | content | source | status |
@@ -344,8 +432,11 @@ Workflow: `workflow/06_figures.smk` (`R/figures.R`, in the
 | `03_fold_internal_effect` | B5b: all-rows vs fold-internal residualization as a function of n | `03_official_umfi/leak.csv` | done |
 | `04_real_data_importance` | C: importance on the public data sets, R and Python, linear and forest | `04_real_data/importance_wide.csv` | done |
 | `04_r_python_agreement` | R vs Python importance for every job of 01, 02, 04; largest difference against the tolerance | `{01,02,04}_*/{importance_long,parity}.csv` | done |
+| `04b_maternal_duplicates` | Maternal Health Risk: score of the Full model and importances with random folds, group-aware folds, identical records removed | `04b_maternal/{scores,importance_by_variant}.csv` | done |
+| `04c_null_forest` | null design: mean forest importance per setting | `04c_null_forest/summary.csv` | done |
+| `05_runtime_scaling` | D: runtime against n, p and the number of folds for the three comparisons, R and Python | `05_runtime/comparisons.csv` | done |
+| `05_runtime_learners` | D: every learner at the base cell; Python / R along the sweeps | `05_runtime/{cells,comparisons}.csv` | done |
 | (workflow diagram) | input → fold-internal residualization → Full/Reduced learner → paired scoring → importance | drawn (no data) | Phase 4 |
-| (runtime) | scaling in n, p, v | `05_runtime` | Phase 3 |
 
 Tables: `results/tables/03_official_umfi.md` (sources, residualization,
 identical condition, designs, null design, all-rows effect, design

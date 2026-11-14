@@ -1,16 +1,18 @@
-# Figures of Phase 2 (experiments B and C), drawn from summary files only.
+# Figures of Phases 2 and 3, drawn from summary files only.
 #
 #   snakemake -s workflow/06_figures.smk --use-singularity -c1
 #
-# The summaries are inputs: run workflows 01-04 first. Figure 4 (runtime) and
-# the workflow diagram belong to Phase 3 and are not produced yet.
+# The summaries are inputs: run workflows 01-05 first. The workflow diagram of
+# the paper (no data) belongs to Phase 4 and is not produced here.
 include: "common.smk"
 
 FIGURES = ['03_official_designs', '03_fold_internal_effect', '04_real_data_importance', '04_r_python_agreement']
 
+FIGURES_PHASE3 = ['04b_maternal_duplicates', '04c_null_forest', '05_runtime_scaling', '05_runtime_learners']
+
 rule all:
     input:
-        expand('results/figures/{name}.{ext}', name=FIGURES, ext=['pdf', 'png'])
+        expand('results/figures/{name}.{ext}', name=FIGURES + FIGURES_PHASE3, ext=['pdf', 'png'])
 
 rule figures:
     input:
@@ -26,3 +28,17 @@ rule figures:
         'logs/06_figures/figures.log'
     shell:
         'Rscript R/figures.R results/summary results/figures >& {log}'
+
+rule figures_phase3:
+    input:
+        expand('results/summary/04b_maternal/{name}.csv', name=['scores', 'importance_by_variant']),
+        'results/summary/04c_null_forest/summary.csv',
+        expand('results/summary/05_runtime/{name}.csv', name=['cells', 'comparisons'])
+    output:
+        expand('results/figures/{name}.{ext}', name=FIGURES_PHASE3, ext=['pdf', 'png'])
+    container:
+        EXP_R_CONTAINER
+    log:
+        'logs/06_figures/figures_phase3.log'
+    shell:
+        'Rscript R/figures_phase3.R results/summary results/figures >& {log}'

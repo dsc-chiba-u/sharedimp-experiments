@@ -95,8 +95,8 @@ def load_manifest(group: str) -> dict[str, Any]:
 
 
 def find_dataset(dataset_id: str, manifest_dir: Path | None = None) -> tuple[dict[str, Any], Path]:
-    """Look a data set up in `manifest_dir` (if given), then in data/synthetic and data/real."""
-    dirs = ([Path(manifest_dir)] if manifest_dir is not None else []) + [DATA / "synthetic", DATA / "real"]
+    """Look a data set up in `manifest_dir` (if given), then in data/synthetic, data/real and data/derived."""
+    dirs = ([Path(manifest_dir)] if manifest_dir is not None else []) + [DATA / "synthetic", DATA / "real", DATA / "derived"]
     for d in dirs:
         mpath = d / "manifest.json"
         if not mpath.exists():

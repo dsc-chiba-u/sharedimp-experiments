@@ -1,0 +1,74 @@
+{
+  "description": "workflow/05_runtime.smk (experiment D): wall-clock time of shared_importance() as a function of n, p, the number of folds, the learner and the language. Everything in this file was fixed before the pilot was looked at; the pilot decides only which candidate cells are run, by the rule under 'budget'. Protocol and reading: docs/runtime_benchmark.md.",
+  "base": {"n": 1000, "p": 10, "v": 5},
+  "sweeps": {
+    "n": [125, 250, 500, 1000, 2000, 4000, 8000, 16000, 32000],
+    "p": [5, 10, 20, 40, 80, 160],
+    "v": [2, 3, 5, 10, 20]
+  },
+  "sweep_rule": "one factor at a time around the base cell: the n sweep at p = 10, v = 5; the p sweep at n = 1000, v = 5; the v sweep at n = 1000, p = 10",
+  "data": {
+    "model": "x1 ~ N(0, 1), x_j = 0.5 x_{j-1} + sqrt(0.75) e_j (unit variances, correlation 0.5^|j-k|); y = 2 x1 + x2 - x3 + 0.5 x4 x5 + N(0, 1); values rounded to 6 decimals",
+    "seed": 20261501,
+    "folds": "one column fold_v<v> per value of the v sweep: labels 1..v from a seeded permutation, balanced",
+    "task": "regression", "metric": "mse"
+  },
+  "learners": {
+    "linear": {
+      "r": "shared_importance(learner = \"linear\"): built-in OLS, stats::lm.fit",
+      "python": "sklearn.linear_model.LinearRegression()"
+    },
+    "rand_forest": {
+      "r": "shared_importance(learner = \"rand_forest\"): built-in forest, parsnip::rand_forest(trees = 500, min_n = 5) with engine ranger (min.node.size = 5, mtry = floor(sqrt(q)), bootstrap, num.threads = 1)"
+    },
+    "rf_aligned": {
+      "python": "RandomForestRegressor(n_estimators=500, min_samples_split=6, min_samples_leaf=1, max_features='sqrt', bootstrap=True, n_jobs=1)"
+    },
+    "rf_customary": {
+      "python": "RandomForestRegressor() with scikit-learn's defaults (n_estimators=100, max_features=1.0, min_samples_split=2, min_samples_leaf=1, bootstrap=True, n_jobs=None)"
+    }
+  },
+  "comparisons": {
+    "A_linear": {"r": "linear", "python": "linear", "title": "A. linear regression (lm.fit vs LinearRegression)"},
+    "B_forest_aligned": {"r": "rand_forest", "python": "rf_aligned", "title": "B. random forest, aligned settings (stopping rules of the same definition; not the same trees)"},
+    "C_forest_customary": {"r": "rand_forest", "python": "rf_customary", "title": "C. random forest, customary settings (R built-in vs scikit-learn defaults; not equal work)"}
+  },
+  "comparison_note": "The R forest is measured once and used in B and C.",
+  "protocol": {
+    "threads": 1,
+    "timed": "the shared_importance() call only (elapsed wall-clock time); reading the data, building the fold list, process and container start-up are outside the timed region",
+    "warmup_runs": 1,
+    "timed_runs": 5,
+    "seed": "the same seed (1) in every run of a cell, so that the repetitions do the same work",
+    "order": "one process per language and learner; the processes run one after the other, nothing else is run by the workflow at the same time; within a process the cells are run in increasing order of predicted time",
+    "garbage_collection": "collected before every run, outside the timed region"
+  },
+  "pilot": {
+    "cells": [
+      {"n": 500, "p": 10, "v": 5}, {"n": 1000, "p": 10, "v": 5}, {"n": 2000, "p": 10, "v": 5},
+      {"n": 1000, "p": 5, "v": 5}, {"n": 1000, "p": 20, "v": 5},
+      {"n": 1000, "p": 10, "v": 3}, {"n": 1000, "p": 10, "v": 10}
+    ],
+    "runs": "one discarded warm-up run on the first cell, then one timed run per cell",
+    "prediction": "per language and learner, least squares of log(seconds) on log(n), log(p), log(v) over the seven pilot cells; used only to plan the main benchmark, not as a complexity estimate",
+    "fit_count_cell": {"n": 125, "p": 5, "v": 3}
+  },
+  "budget": {
+    "total_seconds": 7200,
+    "planned_fraction": 0.8,
+    "per_cell_cap_candidates_seconds": [30, 60, 90, 120, 180, 240, 300, 420, 600, 900, 1200],
+    "process_overhead_seconds": 30,
+    "rule": "A cell costs (warmup_runs + timed_runs) x predicted seconds. A cell whose cost exceeds the per-cell cap is not run and is recorded as 'skipped (budget)'. The cap is the largest candidate for which the cost of all remaining cells of all processes plus the process overheads is at most planned_fraction x total_seconds.",
+    "abort_factor": 2,
+    "abort_rule": "If the warm-up run of a cell shows that the cell would cost more than abort_factor x the cap, the cell is stopped and recorded as 'skipped (budget, after warm-up)'. If a process has used more than 1.25 x its planned time, its remaining cells are recorded as 'skipped (budget, process allowance)'."
+  },
+  "criteria": {
+    "accounted": "every candidate cell of every language and learner is either measured with timed_runs timed runs or recorded as skipped with a reason",
+    "same_data": "both languages read the same data file (sha256) and the same fold column in every cell",
+    "same_work_linear": "linear learner: the importances returned in R and Python differ by at most 1e-8 in every cell measured in both (parity class 'exact')",
+    "fit_count": "the learner is fitted exactly 2 x p x v times in one call (counted with a counting learner on fit_count_cell)",
+    "threads": "1 thread recorded by every process",
+    "budget": "the processes of the main benchmark took at most total_seconds in total",
+    "pinned_image": "every process ran in the pinned image"
+  }
+}

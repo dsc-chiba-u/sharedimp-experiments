@@ -71,9 +71,9 @@ write_csv_exact <- function(df, path) {
   utils::write.csv(df, path, row.names = FALSE, quote = FALSE, na = "NA", eol = "\n")
 }
 
-# Looks a data set up in `manifest_dir` (if given), then in data/synthetic and data/real.
+# Looks a data set up in `manifest_dir` (if given), then in data/synthetic, data/real and data/derived.
 find_dataset <- function(id, manifest_dir = NULL) {
-  for (d in c(manifest_dir, file.path(exp_root(), "data", c("synthetic", "real")))) {
+  for (d in c(manifest_dir, file.path(exp_root(), "data", c("synthetic", "real", "derived")))) {
     mpath <- file.path(d, "manifest.json")
     if (!file.exists(mpath)) next
     entry <- read_json(mpath)$datasets[[id]]

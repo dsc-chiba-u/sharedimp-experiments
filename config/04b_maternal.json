@@ -1,0 +1,29 @@
+{
+  "description": "workflow/04b_maternal.smk: the duplicated rows of the Maternal Health Risk data (experiment C). The data file of experiment C (data/real/maternal.csv) is not changed; two derived files are written to data/derived/. Background, definitions and the recommendation: docs/maternal_duplicates.md.",
+  "source_dataset": "maternal",
+  "source_download": "data/real/downloads/maternal.csv",
+  "folds": 5,
+  "definitions": {
+    "identical record": "rows equal in all six features and in the class label",
+    "identical features": "rows equal in all six features, whatever the label",
+    "conflicting group": "a set of rows with identical features that carries more than one class label"
+  },
+  "variants": {
+    "maternal_grouped": {
+      "rows": "all",
+      "folds": "sklearn StratifiedGroupKFold(n_splits = 5, shuffle = True, random_state = seed); group = identical features, so no feature vector occurs in more than one fold",
+      "seed": 20261301
+    },
+    "maternal_dedup": {
+      "rows": "first occurrence of every identical record (rows with identical features and different labels are all kept)",
+      "folds": "as maternal_grouped, on the remaining rows",
+      "seed": 20261302
+    }
+  },
+  "criteria": {
+    "group integrity": "in both derived files no feature vector occurs in more than one fold (0 groups split)",
+    "row counts": "maternal_grouped has the rows of the source in the same order; maternal_dedup has exactly one row per identical record",
+    "separation": "the separation rule of config/04_real_data.json holds for both derived files",
+    "parity": "linear jobs: multinomial class of the job file (1e-3), as in experiment C; rand_forest: reported only"
+  }
+}

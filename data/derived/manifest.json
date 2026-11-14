@@ -1,0 +1,170 @@
+{
+  "description": "Files derived from data sets of data/real/ by python/sharedimp_exp/maternal_variants.py (config/04b_maternal.json). Modified versions of a CC BY 4.0 data set; see data/derived/README.md.",
+  "scikit_learn_version": "1.9.1",
+  "datasets": {
+    "maternal_grouped": {
+      "file": "maternal_grouped.csv",
+      "task": "classification",
+      "target": "y",
+      "fold": "fold",
+      "features": [
+        "age",
+        "systolic_bp",
+        "diastolic_bp",
+        "blood_sugar",
+        "body_temp",
+        "heart_rate"
+      ],
+      "n": 1014,
+      "p": 6,
+      "n_folds": 5,
+      "sha256": "b1980b739985c6c8f931430902664e02c89c1b3f0438f4eb8dc79ee150dde18d",
+      "derived_from": {
+        "dataset": "maternal",
+        "file": "data/real/maternal.csv",
+        "sha256": "c06b93e5aa5d20479d8b8bb30e52950014385013e3abfa8c4873277cb3d3cde6"
+      },
+      "rows": "all",
+      "folds": "sklearn StratifiedGroupKFold(n_splits = 5, shuffle = True, random_state = seed); group = identical features, so no feature vector occurs in more than one fold",
+      "seed": 20261301,
+      "fold_sizes": {
+        "1": 203,
+        "2": 203,
+        "3": 202,
+        "4": 203,
+        "5": 203
+      },
+      "classes": {
+        "high_risk": 272,
+        "low_risk": 406,
+        "mid_risk": 336
+      },
+      "classes_per_fold": {
+        "1": {
+          "high_risk": 54,
+          "low_risk": 81,
+          "mid_risk": 68
+        },
+        "2": {
+          "high_risk": 54,
+          "low_risk": 82,
+          "mid_risk": 67
+        },
+        "3": {
+          "high_risk": 55,
+          "low_risk": 81,
+          "mid_risk": 66
+        },
+        "4": {
+          "high_risk": 55,
+          "low_risk": 81,
+          "mid_risk": 67
+        },
+        "5": {
+          "high_risk": 54,
+          "low_risk": 81,
+          "mid_risk": 68
+        }
+      },
+      "feature_vectors_in_more_than_one_fold": 0,
+      "identical_records_removed": 0,
+      "separation_check": {
+        "training_accuracy_per_fold": [
+          0.6461159062885327,
+          0.5992601726263872,
+          0.6120689655172413,
+          0.6337854500616523,
+          0.6399506781750924
+        ],
+        "completely_separated_in_some_fold": false
+      },
+      "title": "Maternal Health Risk (maternal_grouped)",
+      "source": "UCI Machine Learning Repository, dataset 863",
+      "doi": "10.24432/C5DP5D",
+      "citation": "Ahmed, M. (2020). Maternal Health Risk [Dataset]. UCI Machine Learning Repository.",
+      "license": "CC BY 4.0"
+    },
+    "maternal_dedup": {
+      "file": "maternal_dedup.csv",
+      "task": "classification",
+      "target": "y",
+      "fold": "fold",
+      "features": [
+        "age",
+        "systolic_bp",
+        "diastolic_bp",
+        "blood_sugar",
+        "body_temp",
+        "heart_rate"
+      ],
+      "n": 452,
+      "p": 6,
+      "n_folds": 5,
+      "sha256": "2fadfbe82a8f8b5c00d04d86bec0a6fb4b04d450bcf5803fb4d848c9190457a0",
+      "derived_from": {
+        "dataset": "maternal",
+        "file": "data/real/maternal.csv",
+        "sha256": "c06b93e5aa5d20479d8b8bb30e52950014385013e3abfa8c4873277cb3d3cde6"
+      },
+      "rows": "first occurrence of every identical record (rows with identical features and different labels are all kept)",
+      "folds": "as maternal_grouped, on the remaining rows",
+      "seed": 20261302,
+      "fold_sizes": {
+        "1": 90,
+        "2": 90,
+        "3": 91,
+        "4": 92,
+        "5": 89
+      },
+      "classes": {
+        "high_risk": 112,
+        "low_risk": 234,
+        "mid_risk": 106
+      },
+      "classes_per_fold": {
+        "1": {
+          "high_risk": 22,
+          "low_risk": 47,
+          "mid_risk": 21
+        },
+        "2": {
+          "high_risk": 22,
+          "low_risk": 47,
+          "mid_risk": 21
+        },
+        "3": {
+          "high_risk": 23,
+          "low_risk": 47,
+          "mid_risk": 21
+        },
+        "4": {
+          "high_risk": 23,
+          "low_risk": 47,
+          "mid_risk": 22
+        },
+        "5": {
+          "high_risk": 22,
+          "low_risk": 46,
+          "mid_risk": 21
+        }
+      },
+      "feature_vectors_in_more_than_one_fold": 0,
+      "identical_records_removed": 562,
+      "separation_check": {
+        "training_accuracy_per_fold": [
+          0.6795580110497238,
+          0.6712707182320442,
+          0.6897506925207756,
+          0.6861111111111111,
+          0.6804407713498623
+        ],
+        "completely_separated_in_some_fold": false
+      },
+      "title": "Maternal Health Risk (maternal_dedup)",
+      "source": "UCI Machine Learning Repository, dataset 863",
+      "doi": "10.24432/C5DP5D",
+      "citation": "Ahmed, M. (2020). Maternal Health Risk [Dataset]. UCI Machine Learning Repository.",
+      "license": "CC BY 4.0"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "description": "workflow/04b_maternal.smk: the jobs of experiment C for the Maternal Health Risk data, repeated on the two derived files of config/04b_maternal.json (group-aware folds; identical records removed). Same learners, metrics, seed and parity classes as config/04_real_data_jobs.json.",
+  "parity_classes": {
+    "exact": {"tolerance": 1e-08, "meaning": "closed-form learner (OLS); common specification section 14"},
+    "logistic": {"tolerance": 1e-06, "meaning": "iteratively fitted binary logistic regression (glm.fit IRLS vs newton-cholesky)"},
+    "multinomial": {"tolerance": 0.001, "meaning": "nnet::multinom (BFGS) vs L-BFGS; agreement limited by R's optimiser"},
+    "none": {"tolerance": null, "meaning": "language-specific learner; difference reported, not checked"}
+  },
+  "jobs": [
+    {"id": "maternal_grouped_linear_logloss", "dataset": "maternal_grouped", "learner": "linear", "metric": "log_loss", "seed": 1, "parity": "multinomial"},
+    {"id": "maternal_grouped_linear_accuracy", "dataset": "maternal_grouped", "learner": "linear", "metric": "accuracy", "seed": 1, "parity": "multinomial"},
+    {"id": "maternal_grouped_rf_logloss", "dataset": "maternal_grouped", "learner": "rand_forest", "metric": "log_loss", "seed": 1, "parity": "none"},
+    {"id": "maternal_grouped_rf_accuracy", "dataset": "maternal_grouped", "learner": "rand_forest", "metric": "accuracy", "seed": 1, "parity": "none"},
+    {"id": "maternal_dedup_linear_logloss", "dataset": "maternal_dedup", "learner": "linear", "metric": "log_loss", "seed": 1, "parity": "multinomial"},
+    {"id": "maternal_dedup_linear_accuracy", "dataset": "maternal_dedup", "learner": "linear", "metric": "accuracy", "seed": 1, "parity": "multinomial"},
+    {"id": "maternal_dedup_rf_logloss", "dataset": "maternal_dedup", "learner": "rand_forest", "metric": "log_loss", "seed": 1, "parity": "none"},
+    {"id": "maternal_dedup_rf_accuracy", "dataset": "maternal_dedup", "learner": "rand_forest", "metric": "accuracy", "seed": 1, "parity": "none"}
+  ]
+}

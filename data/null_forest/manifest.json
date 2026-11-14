@@ -1,0 +1,67 @@
+{
+  "description": "Simulated data of workflow 04c (response independent of the features).",
+  "designs": {
+    "null_p5": {
+      "file": "null_p5.csv",
+      "sha256": "dcb9e235b023238f76d637ceff478bc3641ac8b4fe8ae73bfeaa0e844f2eb15d",
+      "n": 300,
+      "p": 5,
+      "datasets": 20,
+      "folds": 5,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5"
+      ],
+      "generator": {
+        "script": "python/sharedimp_exp/null_forest_data.py",
+        "seed": 20261401,
+        "model": "features: p-variate normal, unit variances, all correlations feature_correlation; y ~ N(0, 1) independent of the features; z ~ N(0, 1) independent of everything (an extra column, used by the variants padded_reduced and placebo_full only)",
+        "feature_correlation": 0.5
+      }
+    },
+    "null_p4": {
+      "file": "null_p4.csv",
+      "sha256": "81e38bfdb321716a405e5aa3dfd549335013ea1fb827e9cc68f101652ae9c03d",
+      "n": 300,
+      "p": 4,
+      "datasets": 20,
+      "folds": 5,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4"
+      ],
+      "generator": {
+        "script": "python/sharedimp_exp/null_forest_data.py",
+        "seed": 20261402,
+        "model": "features: p-variate normal, unit variances, all correlations feature_correlation; y ~ N(0, 1) independent of the features; z ~ N(0, 1) independent of everything (an extra column, used by the variants padded_reduced and placebo_full only)",
+        "feature_correlation": 0.5
+      }
+    },
+    "null_p5_n1200": {
+      "file": "null_p5_n1200.csv",
+      "sha256": "97cd41fd7f7547f1ca7b54aa967d182aa2683ac0f918dbfaed677565d466beff",
+      "n": 1200,
+      "p": 5,
+      "datasets": 20,
+      "folds": 5,
+      "features": [
+        "x1",
+        "x2",
+        "x3",
+        "x4",
+        "x5"
+      ],
+      "generator": {
+        "script": "python/sharedimp_exp/null_forest_data.py",
+        "seed": 20261403,
+        "model": "features: p-variate normal, unit variances, all correlations feature_correlation; y ~ N(0, 1) independent of the features; z ~ N(0, 1) independent of everything (an extra column, used by the variants padded_reduced and placebo_full only)",
+        "feature_correlation": 0.5
+      }
+    }
+  }
+}
